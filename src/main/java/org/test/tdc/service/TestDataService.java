@@ -5,7 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.test.tdc.dao.DataAccess;
+import org.test.tdc.dao.ExcelDataProcesser;
 import org.test.tdc.pojo.TestCaseData;
 import org.test.tdc.utils.PropFileRead;
 
@@ -13,7 +13,7 @@ public class TestDataService {
 	private final static String DATA_FILE_DIR_KEY = "test_case_db_dir";
 	private final static String DATA_FILE_HEAD_KEY = "test_case_head";
 	
-	private DataAccess dataAccess;
+	private ExcelDataProcesser dataAccess;
 	
 	public void addTestData(TestCaseData testCaseData){
 		
