@@ -5,13 +5,25 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 
 import org.springframework.stereotype.Component;
 
 @Component
 public class AccessDataProcessor {
-	public Connection conn = null;
-
+	public static Connection conn = null;
+	public static Statement stmt;
+	
+	private static ResourceBundle bundle = PropertyResourceBundle.getBundle("config");
+	static {
+		String dbPath = bundle.getString("db_path");
+		String password = bundle.getString("db_pwd");
+		try {
+			stmt = getStatement(dbPath, password);
+		} catch (Exception e) {
+		}
+	}
 	/**
 	 * 连接未加密的数据库
 	 * 
@@ -19,7 +31,7 @@ public class AccessDataProcessor {
 	 * @return
 	 * @throws Exception
 	 */
-	public Statement getStatement(String dbPath) throws Exception {
+	public static Statement getStatement(String dbPath) throws Exception {
 		Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
 		String dburl = "jdbc:odbc:driver={Microsoft Access Driver (*.mdb)};"
 				+ "DBQ=" + dbPath;// 此为NO-DSN方式
@@ -35,7 +47,7 @@ public class AccessDataProcessor {
 	 * @return
 	 * @throws Exception
 	 */
-	public Statement getStatement(String dbPath, String password)
+	public static Statement getStatement(String dbPath, String password)
 			throws Exception {
 		Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
 		String dburl = "jdbc:odbc:driver={Microsoft Access Driver (*.mdb)};"
@@ -53,7 +65,7 @@ public class AccessDataProcessor {
 	 * @return
 	 * @throws Exception
 	 */
-	public ResultSet executeQuery(Statement stmt, String query)
+	public ResultSet executeQuery(String query)
 			throws Exception {
 		ResultSet rs = stmt.executeQuery(query);
 		return rs;
@@ -66,7 +78,7 @@ public class AccessDataProcessor {
 	 * @param query
 	 * @throws SQLException
 	 */
-	public void executeUpdate(Statement stmt, String query) throws SQLException {
+	public void executeUpdate(String query) throws SQLException {
 		stmt.executeUpdate(query);
 	}
 
