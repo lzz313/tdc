@@ -17,7 +17,27 @@
 	<mvc:annotation-driven />
 	<context:annotation-config/>
 	<context:component-scan base-package="org.test.tdc" />	
+
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="dataSource"/>
+	</bean>
+	<bean id="namedParameterJdbcTemplate" class="org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate">
+		<constructor-arg ref="dataSource" />
+	</bean>
+	
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+		<property name="driverClassName" value="sun.jdbc.odbc.JdbcOdbcDriver" />
+		<property name="connectionProperties" ref="properies"/>
+		<property name="url" value="jdbc:odbc:;DRIVER=Microsoft Access Driver (*.mdb, *.accdb);pwd=654321;DBQ=D:\\tdc\\tdc\\src\\main\\resources\\db.accdb" />
+	</bean>
+	
+	<bean id="properies" class="java.util.Properties">
+		<constructor-arg>
+			<map>
+				<entry key="charSet" value="GB2312" />
+			</map>
+		</constructor-arg>
+	</bean>
 	
 	<task:annotation-driven/> 
-	
 </beans>

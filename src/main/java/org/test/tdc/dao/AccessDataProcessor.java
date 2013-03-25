@@ -2,6 +2,7 @@ package org.test.tdc.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Component;
 public class AccessDataProcessor {
 	public static Connection conn = null;
 	public static Statement stmt;
+	private PreparedStatement preparedStatement;
 	
 	private static ResourceBundle bundle = PropertyResourceBundle.getBundle("config");
 	
@@ -28,8 +30,7 @@ public class AccessDataProcessor {
 	public static Statement getStatement(String dbPath) throws Exception {
 		Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
 		String dburl = "jdbc:odbc:driver={Microsoft Access Driver (*.mdb, *.accdb)};"
-				+ "DBQ=" + dbPath;// 此为NO-DSN方式
-		// String dburl ="jdbc:odbc:odbcName";//此为ODBC连接方式
+				+ "DBQ=" + dbPath;
 		
 		Properties pro = new Properties();
 	    pro.setProperty("charSet","GB2312");
@@ -47,14 +48,35 @@ public class AccessDataProcessor {
 	public static Statement getStatement(String dbPath, String password)
 			throws Exception {
 		Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
-		String dburl = "jdbc:odbc:driver={Microsoft Access Driver (*.mdb, *.accdb)};"
-				+ "pwd=" + password + ";DBQ=" + dbPath;// 此为NO-DSN方式
+		String dburl = "jdbc:odbc:driver={Microsoft Access Driver (*.mdb, *.accdb)}"
+				+ ";pwd=" + password + ";DBQ=" + dbPath;// 此为NO-DSN方式
 		// String dburl ="jdbc:odbc:odbcName";//此为ODBC连接方式
 		
 		Properties pro = new Properties();
 	    pro.setProperty("charSet","GB2312");
 		conn = DriverManager.getConnection(dburl,pro);
+		
 		return conn.createStatement();
+	}
+	
+	/**
+	 * @param dbPath
+	 * @param password
+	 * @return
+	 * @throws Exception
+	 */
+	public static Connection getConnection(String dbPath,String password) throws Exception {
+		Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+		String dburl = "jdbc:odbc:driver={Microsoft Access Driver (*.mdb, *.accdb)};"
+				+ "pwd=" + password + ";DBQ=" + dbPath; 
+		
+		Properties pro = new Properties();
+	    pro.setProperty("charSet","GB2312");
+	    
+	    if(conn == null){
+	    	conn = DriverManager.getConnection(dburl,pro);
+	    }
+		return conn;
 	}
 
 	/**
@@ -85,9 +107,14 @@ public class AccessDataProcessor {
 	 * @param query
 	 * @throws SQLException
 	 */
-	public void update(String query) throws SQLException {
-		stmt.executeUpdate(query);
+	public void update(String updateSql) throws SQLException {
+		preparedStatement = conn.prepareStatement(updateSql);
+		
+		
+//		stmt.executeUpdate(query);
 	}
+	
+	
 
 	/**
 	 * 关闭链接
