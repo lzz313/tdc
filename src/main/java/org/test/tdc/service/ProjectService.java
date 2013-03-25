@@ -11,45 +11,22 @@ import javax.annotation.Resource;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
-import org.test.tdc.dao.AccessDataProcessor;
 import org.test.tdc.dao.JdbcTemplateProcessor;
 import org.test.tdc.pojo.ProjectTO;
 
 @Service
-public class TestDataService {
-	
-	@Resource
-	private AccessDataProcessor accessDataProcessor;
+public class ProjectService {
 	
 	@Resource
 	private JdbcTemplateProcessor jdbcTemplateProcessor;
 	
-	public List<ProjectTO> queryProject(){
-		List<ProjectTO> projects = new ArrayList<ProjectTO>();
-		
-		String queryProeject = "select * from project";
-		try {
-			ResultSet query = accessDataProcessor.query(queryProeject);
-			
-			
-			ProjectTO projectTO = null;
-			while(query.next()){
-				projectTO = new ProjectTO();
-				projectTO.setId(query.getLong("N_ID"));
-				projectTO.setName(query.getString("S_NAME"));
-				//projectTO.setName(new String(query.getBytes("S_NAME"),"gbk"));
-				
-				projects.add(projectTO);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return projects;
-	}
-	
+	/**
+	 * 查询所有项目
+	 * 
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
-	public List<ProjectTO> queryProject2(){
+	public List<ProjectTO> queryProject(){
 		String queryProeject = "select * from project";
 		List<ProjectTO> projects = new ArrayList<ProjectTO>();
 		try {
@@ -70,6 +47,12 @@ public class TestDataService {
 		return projects;
 	}
 	
+	/**
+	 * 根据项目查找
+	 * 
+	 * @param projectName
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public List<ProjectTO> queryProject(String projectName){
 		String queryProeject = "select * from project where s_name = :name";
@@ -95,6 +78,12 @@ public class TestDataService {
 		return projects;
 	}
 	
+	/**
+	 * 创建项目
+	 * 
+	 * @param projectName
+	 * @return
+	 */
 	public int createProject(String projectName){
 		String updateProject = "insert into project (s_name,d_create) values (:name,now())";
 		
@@ -103,6 +92,12 @@ public class TestDataService {
 		return jdbcTemplateProcessor.update(updateProject, params);
 	}
 	
+	/**
+	 * 删除项目
+	 * 
+	 * @param id
+	 * @return
+	 */
 	public int deleteProject(int id){
 		String updateProject = "delete from project where n_id = :id";
 		
@@ -111,6 +106,13 @@ public class TestDataService {
 		return jdbcTemplateProcessor.update(updateProject, params);
 	}
 	
+	/**
+	 * 更新项目
+	 * 
+	 * @param id
+	 * @param projectName
+	 * @return
+	 */
 	public int updateProject(int id,String projectName){
 		String updateProject = "update project set s_name=:name where n_id = :id";
 		
