@@ -36,6 +36,7 @@ public class ProjectService {
 					ProjectTO projectTO = new ProjectTO();
 					projectTO.setId(query.getLong("N_ID"));
 					projectTO.setName(query.getString("S_NAME"));
+					projectTO.setCreate(query.getDate("D_CREATE"));
 					return projectTO;
 				}
 				
@@ -68,6 +69,7 @@ public class ProjectService {
 					ProjectTO projectTO = new ProjectTO();
 					projectTO.setId(query.getLong("N_ID"));
 					projectTO.setName(query.getString("S_NAME"));
+					projectTO.setCreate(query.getDate("D_CREATE"));
 					return projectTO;
 				}
 			});

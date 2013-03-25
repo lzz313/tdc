@@ -31,7 +31,6 @@ public class TestDataService {
 		try {
 			ResultSet query = accessDataProcessor.query(queryProeject);
 			
-			
 			ProjectTO projectTO = null;
 			while(query.next()){
 				projectTO = new ProjectTO();
@@ -48,75 +47,5 @@ public class TestDataService {
 		return projects;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<ProjectTO> queryProject2(){
-		String queryProeject = "select * from project";
-		List<ProjectTO> projects = new ArrayList<ProjectTO>();
-		try {
-			projects = (List<ProjectTO>) jdbcTemplateProcessor.findAll(queryProeject, new HashMap<String,Object>(), new RowMapper<ProjectTO>(){
-				public ProjectTO mapRow(ResultSet query, int rowNum)
-						throws SQLException {
-					ProjectTO projectTO = new ProjectTO();
-					projectTO.setId(query.getLong("N_ID"));
-					projectTO.setName(query.getString("S_NAME"));
-					return projectTO;
-				}
-				
-			});
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return projects;
-	}
 	
-	@SuppressWarnings("unchecked")
-	public List<ProjectTO> queryProject(String projectName){
-		String queryProeject = "select * from project where s_name = :name";
-		
-		Map<String,Object> params = new HashMap<String,Object>();
-		params.put("name", projectName);
-		
-		List<ProjectTO> projects = new ArrayList<ProjectTO>();
-		try {
-			projects = (List<ProjectTO>) jdbcTemplateProcessor.findAll(queryProeject, params, new RowMapper<ProjectTO>(){
-				public ProjectTO mapRow(ResultSet query, int rowNum)
-						throws SQLException {
-					ProjectTO projectTO = new ProjectTO();
-					projectTO.setId(query.getLong("N_ID"));
-					projectTO.setName(query.getString("S_NAME"));
-					return projectTO;
-				}
-			});
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return projects;
-	}
-	
-	public int createProject(String projectName){
-		String updateProject = "insert into project (s_name,d_create) values (:name,now())";
-		
-		Map<String,Object> params = new HashMap<String,Object>();
-		params.put("name", projectName);
-		return jdbcTemplateProcessor.update(updateProject, params);
-	}
-	
-	public int deleteProject(int id){
-		String updateProject = "delete from project where n_id = :id";
-		
-		Map<String,Object> params = new HashMap<String,Object>();
-		params.put("id", id);
-		return jdbcTemplateProcessor.update(updateProject, params);
-	}
-	
-	public int updateProject(int id,String projectName){
-		String updateProject = "update project set s_name=:name where n_id = :id";
-		
-		Map<String,Object> params = new HashMap<String,Object>();
-		params.put("id", id);
-		params.put("name", projectName);
-		return jdbcTemplateProcessor.update(updateProject, params);
-	}
 }
