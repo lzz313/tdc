@@ -3,12 +3,48 @@
 <head>
     <meta charset="utf-8"/>
     <title>study page</title>
-    <link rel="stylesheet" type="text/css" href="css/keyvalueeditor.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/keyvalueeditor.css">
 </head>
 <body>
+	<div id="formdata-keyvaleditor-container" class="row"
+		style="margin-left: 0px; display: block;">
+		<div id="formdata-keyvaleditor">
+			<div class="keyvalueeditor-row">
+				<input type="text" class="keyvalueeditor-key" placeholder="Key" name="keyvalueeditor-paymentId" value="paymentId">
+				<input type="text" class="keyvalueeditor-value keyvalueeditor-value-text" placeholder="Value" name="keyvalueeditor-171" value="171">
+				<input type="file" multiple="" class="keyvalueeditor-value keyvalueeditor-value-file" placeholder="Value" name="keyvalueeditor-171" value="171" style="display: none;">
+				<select class="keyvalueeditor-valueTypeSelector">
+					<option value="text" selected="">Text</option>
+					<option value="file">File</option>
+				</select>
+				<a tabindex="-1" class="keyvalueeditor-delete">
+					<img class="deleteButton" src="/img/delete.png">
+				</a>
+			</div>
+			<div class="keyvalueeditor-row">
+				<input type="text" class="keyvalueeditor-key" placeholder="Key" name="keyvalueeditor-paymentProductType" value="paymentProductType">
+				<input type="text" class="keyvalueeditor-value keyvalueeditor-value-text" placeholder="Value" name="keyvalueeditor-2" value="2">
+				<input type="file" multiple="" class="keyvalueeditor-value keyvalueeditor-value-file" placeholder="Value" name="keyvalueeditor-2" value="2" style="display: none;">
+				<select class="keyvalueeditor-valueTypeSelector">
+					<option value="text" selected="">Text</option>
+					<option value="file">File</option>
+				</select>
+				<a tabindex="-1" class="keyvalueeditor-delete"><img class="deleteButton" src="/img/delete.png"></a>
+			</div>
+			<div class="keyvalueeditor-row keyvalueeditor-last">
+				<input type="text" class="keyvalueeditor-key" placeholder="Key" name="keyvalueeditor-key""="">
+				<input type="text" class="keyvalueeditor-value keyvalueeditor-value-text" placeholder="Value" name="keyvalueeditor-value""="">
+				<input type="file" multiple="" class="keyvalueeditor-value keyvalueeditor-value-file" placeholder="Value" name="keyvalueeditor-value" value="" style="display: none;">
+				<select class="keyvalueeditor-valueTypeSelector">
+					<option value="text" selected="">Text</option>
+					<option value="file">File</option>
+				</select>
+			</div>
+		</div>
+	</div>
 
-
-<script type="text/javascript" src="js/jquery.min.js"></script>
-<script type="text/javascript" src="js/jquery.keyvalueeditor.js"></script>
+	<script type="text/javascript" src="/js/jquery.min.js"></script>
+<script type="text/javascript" src="/js/jquery.keyvalueeditor.js"></script>
 </body>
 </html>
