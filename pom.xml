@@ -49,9 +49,9 @@
 			<artifactId>spring-orm</artifactId>
 			<version>3.1.1.RELEASE</version>
 			<scope>compile</scope>
-		</dependency> 
+		</dependency>
 		<!-- spring -->
-		
+
 		<!-- jackson -->
 		<dependency>
 			<groupId>org.codehaus.jackson</groupId>
@@ -65,9 +65,9 @@
 			<version>${jackson.version}</version>
 		</dependency>
 		<!-- jackson -->
-		
+
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<!-- jetty-maven-plugin主要用来帮助日常的快速开发和测试 -->
@@ -133,4 +133,23 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<repositories>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>Maven Repository Switchboard</name>
+			<url>http://repo1.maven.org/maven2</url>
+		</repository>
+		<repository>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>ibiblio</id>
+			<name>Maven Repository</name>
+			<url>http://mirrors.ibiblio.org/maven2/</url>
+		</repository>
+	</repositories>
 </project>
