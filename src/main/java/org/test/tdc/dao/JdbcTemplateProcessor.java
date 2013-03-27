@@ -6,6 +6,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 import javax.sql.DataSource;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -14,7 +15,9 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class JdbcTemplateProcessor {
+	@Autowired
 	protected JdbcTemplate jdbcTemplate;
+	@Autowired
 	protected NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
 	public JdbcTemplate getJdbcTemplate() {
@@ -34,11 +37,11 @@ public class JdbcTemplateProcessor {
 		this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
 	}
 	
-	@Resource
-	public void setDataSource(DataSource dataSource) {
-		this.jdbcTemplate = new JdbcTemplate(dataSource);
-		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
-	}
+//	@Resource
+//	public void setDataSource(DataSource dataSource) {
+//		this.jdbcTemplate = new JdbcTemplate(dataSource);
+//		this.namedParameterJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
+//	}
 
 	public List<Map<String, Object>> findAll(String queryString, Map<String, Object> paramValues)
 			throws DataAccessException {
