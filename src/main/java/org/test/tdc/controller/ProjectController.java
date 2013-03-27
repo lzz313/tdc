@@ -102,9 +102,13 @@ public class ProjectController {
 		}
 		
 		int createProject = projectService.createProject(projectName);
+		if(createProject != 1){
+			return new JsonResponse(JsonResponse.CODE_FAILED,"创建项目失败");
+		}
 		
+		queryProject = projectService.queryProject(projectName);
 		Map<String,Object> result = new HashMap<String,Object>();
-		result.put("result", createProject);
+		result.put("projects", queryProject);
 		return new JsonResponse(JsonResponse.CODE_SUCCESS,"创建项目成功",result);
 	}
 	

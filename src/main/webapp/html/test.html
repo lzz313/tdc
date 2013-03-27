@@ -7,6 +7,10 @@
     <link rel="stylesheet" type="text/css" href="/css/keyvalueeditor.css">
 </head>
 <body>
+	<div>
+		<input type="text" id="projectName"/><a id='createProject'>创建项目</a>
+	</div>
+	
 	<div id="formdata-keyvaleditor-container" class="row" style="margin-left: 0px; display: block;">
 		
 	</div>
@@ -63,8 +67,8 @@
 		var projectTemplate = [
 						'<div id=@{id} class="keyvalueeditor-row">',
 							'@{name}',
-						'</div>' ].join('');
-		var url = "http://localhost:8080/project/test2";
+						'</div><a pid=@{id} onclick="del($(this))">删除</a>' ].join('');
+		var url = "/project/test2";
 		$.getJSON(url,function(data){
 			if(data.code == 1){
 				var projects = data.data.projects
@@ -74,7 +78,45 @@
 			}
 		});
 		
-		
+		function del(obj){
+			var delProject = $.ajax({
+				url : "/project/delete/"+obj.attr("pid"),
+				type : "POST",
+				async:false,
+				dataType : "json"
+			});
+			
+			delProject.done(function(data){
+				if(data.code == 1){
+					obj.prev().hide();
+					obj.hide();
+				}else{
+					alert(data.msg);
+				}
+			});
+		}
+		$(document).ready(function(){
+			$("#createProject").click(function(){
+				var create = $.ajax({
+					url : "/project/create/"+$("#projectName").val(),
+					type : "POST",
+					async:false,
+					dataType : "json"
+				});
+				
+				create.done(function(data){
+					if(data.code == 1){
+						var projects = data.data.projects;
+						$.each(projects,function(i){
+							$("#formdata-keyvaleditor-container").append(projectTemplate.format({name:projects[i].name,id:projects[i].id}))
+						});
+						$("#projectName").val('');
+					}else{
+						alert(data.msg);
+					}
+				});
+			});	
+		});
 	</script>
 </body>
 </html>
