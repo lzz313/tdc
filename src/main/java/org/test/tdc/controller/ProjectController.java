@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -65,6 +66,22 @@ public class ProjectController {
 		result.put("projects", queryProject);
 		
 		return new JsonResponse(JsonResponse.CODE_SUCCESS,"查询项目成功",result);
+	}
+	
+	/**
+	 * 访问路径
+	 * http://localhost:8080/project/test2
+	 * 
+	 * 返回json数据格式
+	 * 
+	 * @return
+	 */
+	@RequestMapping("")
+	public String index3(ModelMap modelMap){
+		List<ProjectTO> queryProject = projectService.queryProject();
+		
+		modelMap.put("projects", queryProject);
+		return "/index";//访问 WEB-INF/jsp/index.jsp
 	}
 	
 	/**
