@@ -145,4 +145,22 @@ public class ProjectController {
 		result.put("result", updateProject);
 		return new JsonResponse(JsonResponse.CODE_SUCCESS,"更新项目成功",result);
 	}
+	
+	/**
+	 * 访问路径
+	 * http://localhost:8080/project/query/func
+	 * 
+	 * 返回json数据格式
+	 * 
+	 * @return
+	 */
+	@RequestMapping("/query/func")
+	public @ResponseBody JsonResponse queryProjectWithFunc(){
+		List<Map<String,Object>> queryProjectAndFunc = projectService.queryProjectWithFunction();
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("projWithFunc", queryProjectAndFunc);
+		
+		return new JsonResponse(JsonResponse.CODE_SUCCESS,"查询项目成功",result);
+	}
 }

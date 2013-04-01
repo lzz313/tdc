@@ -114,4 +114,18 @@ public class ProjectService {
 		params.put("name", projectName);
 		return jdbcTemplateProcessor.update(updateProject, params);
 	}
+	
+	public List<Map<String, Object>> queryProjectWithFunction(){
+		String projectsWithFuncSql = "select p.n_id as id," +
+										  "p.s_name as pname," +
+										  "f.n_id as fid," +
+										  "f.s_name as fname," +
+										  "f.d_create as fcreate " +
+								  "from (project p left join function f " +
+								  "on p.n_id = f.n_project_id)";
+		
+		List<Map<String, Object>> results = jdbcTemplateProcessor.findAll(projectsWithFuncSql, new HashMap<String,Object>());
+		
+		return results;
+	}
 }
