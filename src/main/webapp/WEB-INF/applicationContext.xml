@@ -28,7 +28,7 @@
 	<bean id="dataSource" class="org.test.tdc.datasource.TdcDriverManagerDataSource">
 		<property name="driverClassName" value="sun.jdbc.odbc.JdbcOdbcDriver" />
 		<property name="connectionProperties" ref="properies"/>
-		<property name="dbq" value="db.accdb"/>
+		<property name="dbq" value="db.mdb"/>
 		<property name="url" value="jdbc:odbc:;DRIVER=Microsoft Access Driver (*.mdb, *.accdb);pwd=654321;" />
 	</bean>
 	
