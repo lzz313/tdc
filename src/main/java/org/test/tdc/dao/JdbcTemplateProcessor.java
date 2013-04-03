@@ -3,9 +3,6 @@ package org.test.tdc.dao;
 import java.util.List;
 import java.util.Map;
 
-import javax.annotation.Resource;
-import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
