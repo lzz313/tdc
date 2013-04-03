@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.test.tdc.dao.JdbcTemplateProcessor;
+import org.test.tdc.dao.rowmapper.ProjectRowMapper;
 import org.test.tdc.pojo.FunctionTO;
 
 @Service
@@ -19,7 +20,29 @@ public class FunctionService {
 	
 	@Resource
 	private JdbcTemplateProcessor jdbcTemplateProcessor;
-	
+	/**
+	 * 查询所有项目
+	 * 
+	 * @return
+	 */	
+	@SuppressWarnings("unchecked")
+	public List<FunctionTO> queryFunction(){
+		String queryFunction = "select * from function";
+		List<FunctionTO> functions = new ArrayList<FunctionTO>();
+		try{
+			functions = (List<FunctionTO>)jdbcTemplateProcessor.findAll(queryFunction, new HashMap<String, Object>(), new ProjectRowMapper());
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		return functions;
+	}
+
+	/**
+	 * 根据项目查找
+	 * 
+	 * @param projectId
+	 * @return
+	 */
 	@SuppressWarnings("unchecked")
 	public List<FunctionTO> queryFunction(int projectId){
 		String queryProeject = "select * from function where n_project_id = :pid";
