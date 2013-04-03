@@ -12,6 +12,7 @@ import javax.annotation.Resource;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.test.tdc.dao.JdbcTemplateProcessor;
+import org.test.tdc.dao.rowmapper.FunctionRowMapper;
 import org.test.tdc.dao.rowmapper.ProjectRowMapper;
 import org.test.tdc.pojo.ProjectTO;
 
@@ -31,11 +32,10 @@ public class ProjectService {
 		String queryProeject = "select * from project";
 		List<ProjectTO> projects = new ArrayList<ProjectTO>();
 		try {
-			projects = (List<ProjectTO>) jdbcTemplateProcessor.findAll(queryProeject, new HashMap<String,Object>(), new ProjectRowMapper());
+			projects = (List<ProjectTO>) jdbcTemplateProcessor.findAll(queryProeject, new HashMap<String,Object>(), new FunctionRowMapper());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		return projects;
 	}
 	

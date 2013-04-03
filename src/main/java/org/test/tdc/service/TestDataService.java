@@ -1,18 +1,15 @@
 package org.test.tdc.service;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Resource;
 
-import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.test.tdc.dao.AccessDataProcessor;
 import org.test.tdc.dao.JdbcTemplateProcessor;
+import org.test.tdc.pojo.FunctionTO;
 import org.test.tdc.pojo.ProjectTO;
 
 @Service
@@ -47,5 +44,25 @@ public class TestDataService {
 		return projects;
 	}
 	
-	
+	public List<FunctionTO> queryFunction(){
+		List<FunctionTO> functions = new ArrayList<FunctionTO>();
+		
+		String queryFunction = "select * from function";
+		try{
+			ResultSet query = accessDataProcessor.query(queryFunction);
+			
+			FunctionTO functionTO = null;
+			while(query.next()){
+				functionTO = new FunctionTO();
+				functionTO.setId(query.getLong("N_ID"));
+				functionTO.setProjectId(query.getLong("N_PROJECT_ID"));
+				functionTO.setName(query.getString("S_NAME"));
+				
+				functions.add(functionTO);
+			}
+		} catch(Exception e){
+			e.printStackTrace();
+		}
+		return functions;
+	}
 }
