@@ -32,7 +32,7 @@ public class ProjectService {
 		String queryProeject = "select * from project";
 		List<ProjectTO> projects = new ArrayList<ProjectTO>();
 		try {
-			projects = (List<ProjectTO>) jdbcTemplateProcessor.findAll(queryProeject, new HashMap<String,Object>(), new FunctionRowMapper());
+			projects = (List<ProjectTO>) jdbcTemplateProcessor.findAll(queryProeject, new HashMap<String,Object>(), new ProjectRowMapper());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -12,7 +12,7 @@ import javax.annotation.Resource;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.test.tdc.dao.JdbcTemplateProcessor;
-import org.test.tdc.dao.rowmapper.ProjectRowMapper;
+import org.test.tdc.dao.rowmapper.FunctionRowMapper;
 import org.test.tdc.pojo.FunctionTO;
 
 @Service
@@ -30,7 +30,7 @@ public class FunctionService {
 		String queryFunction = "select * from function";
 		List<FunctionTO> functions = new ArrayList<FunctionTO>();
 		try{
-			functions = (List<FunctionTO>)jdbcTemplateProcessor.findAll(queryFunction, new HashMap<String, Object>(), new ProjectRowMapper());
+			functions = (List<FunctionTO>)jdbcTemplateProcessor.findAll(queryFunction, new HashMap<String, Object>(), new FunctionRowMapper());
 		} catch(Exception e){
 			e.printStackTrace();
 		}
@@ -48,12 +48,14 @@ public class FunctionService {
 		String queryProeject = "select * from function where n_project_id = :pid";
 		List<FunctionTO> functions = new ArrayList<FunctionTO>();
 		try {
-			functions = (List<FunctionTO>) jdbcTemplateProcessor.findAll(queryProeject, new HashMap<String,Object>(), new RowMapper<FunctionTO>(){
+			Map<String,Object> params = new HashMap<String,Object>();
+			params.put("pid", projectId);
+			functions = (List<FunctionTO>) jdbcTemplateProcessor.findAll(queryProeject, params, new RowMapper<FunctionTO>(){
 				public FunctionTO mapRow(ResultSet query, int rowNum)
 						throws SQLException {
 					FunctionTO functionTO = new FunctionTO();
 					functionTO.setId(query.getLong("N_ID"));
-					functionTO.setName(query.getString("N_PROJECT_ID"));
+					functionTO.setProjectId(query.getLong("N_PROJECT_ID"));
 					functionTO.setName(query.getString("S_NAME"));
 					functionTO.setCreate(query.getDate("D_CREATE"));
 					return functionTO;

@@ -29,7 +29,7 @@ public class FunctionController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/test")
+	@RequestMapping("/test/")
 	public @ResponseBody JsonResponse index(){
 		List<FunctionTO> queryFunction = functionService.queryFunction();
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -48,10 +48,10 @@ public class FunctionController {
 	@RequestMapping("/create/{projectId}/{functionName}")
 	public @ResponseBody JsonResponse createFunction(@PathVariable("projectId") int projectId, @PathVariable("functionName") String functionName){
 		List<FunctionTO> queryFunction = functionService.queryFunction(projectId);
-		if (! queryFunction.isEmpty()){
+		if (queryFunction.isEmpty()){
 			Map<String, Object> result = new HashMap<String, Object>();
 			result.put("functions", queryFunction);
-			return new JsonResponse(JsonResponse.CODE_FAILED, "创建功能或模块失败,已存在", result);
+			return new JsonResponse(JsonResponse.CODE_FAILED, "项目不存在，请先创建项目", result);
 		}
 		
 		int createFunction = functionService.createFunction(projectId, functionName);
@@ -61,7 +61,7 @@ public class FunctionController {
 		
 		queryFunction = functionService.queryFunction(projectId);
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("functions", queryFunction );
+		result.put("functions", queryFunction);
 		return new JsonResponse(JsonResponse.CODE_SUCCESS, "创建功能或模块成功",result);
 	}
 	
