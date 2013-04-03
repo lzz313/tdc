@@ -94,6 +94,7 @@ public class ProjectController {
 	 */
 	@RequestMapping("/create/{projectName}")
 	public @ResponseBody JsonResponse createProject(@PathVariable("projectName") String projectName){
+		//查询该项目是否存在，不存在则创建，存在直接返回创建失败
 		List<ProjectTO> queryProject = projectService.queryProject(projectName);
 		if(!queryProject.isEmpty()){
 			Map<String,Object> result = new HashMap<String,Object>();
@@ -105,7 +106,7 @@ public class ProjectController {
 		if(createProject != 1){
 			return new JsonResponse(JsonResponse.CODE_FAILED,"创建项目失败");
 		}
-		
+		//查询创建成功后的项目
 		queryProject = projectService.queryProject(projectName);
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("projects", queryProject);
