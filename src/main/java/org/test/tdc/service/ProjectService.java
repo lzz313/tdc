@@ -67,10 +67,39 @@ public class ProjectService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
 		return projects;
 	}
 	
+	/**
+	 * 根据项目查找
+	 * 
+	 * @param projectId
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public List<ProjectTO> queryProject(int projectId){
+		String queryProject = "select * from project where n_id = :pid";
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("pid", projectId);
+		
+		List<ProjectTO> projects = new ArrayList<ProjectTO>();
+		try{
+			projects = (List<ProjectTO>) jdbcTemplateProcessor.findAll(queryProject, params, new RowMapper<ProjectTO>(){
+				public ProjectTO mapRow(ResultSet query, int rowNum)
+						throws SQLException{
+					ProjectTO projectTO = new ProjectTO();
+					projectTO.setId(query.getLong("N_ID"));
+					projectTO.setName(query.getString("S_NAME"));
+					projectTO.setCreate(query.getDate("D_CREATE"));
+					return projectTO;
+				}
+			});
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		return projects;
+	}
+
 	/**
 	 * 创建项目
 	 * 

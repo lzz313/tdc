@@ -45,12 +45,12 @@ public class FunctionService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<FunctionTO> queryFunction(int projectId){
-		String queryProeject = "select * from function where n_project_id = :pid";
+		String queryProject = "select * from function where n_project_id = :pid";
 		List<FunctionTO> functions = new ArrayList<FunctionTO>();
 		try {
 			Map<String,Object> params = new HashMap<String,Object>();
 			params.put("pid", projectId);
-			functions = (List<FunctionTO>) jdbcTemplateProcessor.findAll(queryProeject, params, new RowMapper<FunctionTO>(){
+			functions = (List<FunctionTO>) jdbcTemplateProcessor.findAll(queryProject, params, new RowMapper<FunctionTO>(){
 				public FunctionTO mapRow(ResultSet query, int rowNum)
 						throws SQLException {
 					FunctionTO functionTO = new FunctionTO();
@@ -60,12 +60,35 @@ public class FunctionService {
 					functionTO.setCreate(query.getDate("D_CREATE"));
 					return functionTO;
 				}
-				
 			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
+		return functions;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<FunctionTO> queryFunction(int projectId, String funcName){
+		String queryFunction = "select * from function where n_project_id = :pid and s_name = :name";
+		List<FunctionTO> functions = new ArrayList<FunctionTO>();
+		try{
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("pid", projectId);
+			params.put("name", funcName);
+			functions = (List<FunctionTO>) jdbcTemplateProcessor.findAll(queryFunction, params, new RowMapper<FunctionTO>(){
+				public FunctionTO mapRow(ResultSet query, int rowNum) throws SQLException{
+					FunctionTO functionTO = new FunctionTO();
+					functionTO.setId(query.getLong("N_ID"));
+					functionTO.setProjectId(query.getLong("N_PROJECT_ID"));
+					functionTO.setName(query.getString("S_NAME"));
+					functionTO.setCreate(query.getDate("D_CREATE"));
+					return functionTO;
+				}
+			});
+		} catch (Exception e){
+			e.printStackTrace();
+		}
 		return functions;
 	}
 	
@@ -115,4 +138,12 @@ public class FunctionService {
 		return jdbcTemplateProcessor.update(updateFunction, params);
 	}
 	
+	public List<Map<String, Object>> queryFunctionWithProject(){
+		String funcWithProSql = "select f.*, p.* from function f left join project p " +
+								  "on f.n_project_id = p.n_id";
+		
+		List<Map<String, Object>> results = jdbcTemplateProcessor.findAll(funcWithProSql, new HashMap<String,Object>());
+		
+		return results;
+	}
 }
