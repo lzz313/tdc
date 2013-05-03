@@ -29,9 +29,6 @@ public class ProjectController {
 	@Resource
 	private ProjectService projectService;
 	
-	@Resource
-	private TestDataService testDataService;
-	
 	/**
 	 * 访问路径
 	 * http://localhost:8080/project/test
@@ -42,7 +39,7 @@ public class ProjectController {
 	 */
 	@RequestMapping("/test")
 	public @ResponseBody JsonResponse index(){
-		List<ProjectTO> queryProject = testDataService.queryProject();
+		List<ProjectTO> queryProject = projectService.queryProject();
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("projects", queryProject);

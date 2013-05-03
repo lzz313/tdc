@@ -13,8 +13,6 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.test.tdc.dao.AccessDataProcessor;
 import org.test.tdc.dao.JdbcTemplateProcessor;
-import org.test.tdc.pojo.FunctionTO;
-import org.test.tdc.pojo.ProjectTO;
 import org.test.tdc.pojo.TestCaseTO;
 
 @Service
@@ -25,51 +23,6 @@ public class TestDataService {
 	
 	@Resource
 	private JdbcTemplateProcessor jdbcTemplateProcessor;
-	
-	public List<ProjectTO> queryProject(){
-		List<ProjectTO> projects = new ArrayList<ProjectTO>();
-		
-		String queryProeject = "select * from project";
-		try {
-			ResultSet query = accessDataProcessor.query(queryProeject);
-			
-			ProjectTO projectTO = null;
-			while(query.next()){
-				projectTO = new ProjectTO();
-				projectTO.setId(query.getLong("N_ID"));
-				projectTO.setName(query.getString("S_NAME"));
-				//projectTO.setName(new String(query.getBytes("S_NAME"),"gbk"));
-				
-				projects.add(projectTO);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return projects;
-	}
-	
-	public List<FunctionTO> queryFunction(){
-		List<FunctionTO> functions = new ArrayList<FunctionTO>();
-		
-		String queryFunction = "select * from function";
-		try{
-			ResultSet query = accessDataProcessor.query(queryFunction);
-			
-			FunctionTO functionTO = null;
-			while(query.next()){
-				functionTO = new FunctionTO();
-				functionTO.setId(query.getLong("N_ID"));
-				functionTO.setProjectId(query.getLong("N_PROJECT_ID"));
-				functionTO.setName(query.getString("S_NAME"));
-				
-				functions.add(functionTO);
-			}
-		} catch(Exception e){
-			e.printStackTrace();
-		}
-		return functions;
-	}
 	
 	public List<TestCaseTO> queryTestCase(){
 		List<TestCaseTO> testCases = new ArrayList<TestCaseTO>();
@@ -122,5 +75,35 @@ public class TestDataService {
 			e.printStackTrace();
 		}
 		return testcases;
+	}
+	
+	public TestCaseTO queryTestCaseById(int id){
+		List<TestCaseTO> testcases = new ArrayList<TestCaseTO>();
+		String queryTestCase = "select * from testcase where n_id = :id ";
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("id", id);
+		try{
+			testcases = (List<TestCaseTO>) jdbcTemplateProcessor.findAll(queryTestCase, params, new RowMapper<TestCaseTO>(){
+				public TestCaseTO mapRow(ResultSet query, int rowNum) throws SQLException{
+					TestCaseTO testCaseTO = new TestCaseTO();
+					testCaseTO.setId(query.getLong("N_ID"));
+					testCaseTO.setName(query.getString("S_NAME"));
+					testCaseTO.setStep(query.getString("S_STEP"));
+					testCaseTO.setUrl(query.getString("S_URL"));
+					testCaseTO.setType(query.getString("S_TYPE"));
+					testCaseTO.setData(query.getString("S_DATA"));
+					testCaseTO.setCreate(query.getDate("D_DATE"));
+					testCaseTO.setStatus(query.getString("S_STATUS"));
+					return testCaseTO;
+				}
+			});
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		
+		if(testcases != null && !testcases.isEmpty()){
+			return testcases.get(0);
+		}
+		return null;
 	}
 }
