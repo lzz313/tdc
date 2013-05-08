@@ -1,16 +1,21 @@
 表结构
-表名 	PROJECT
+表名		ENVIRONMENT   项目环境
+		N_ID
+		S_NAME     环境名称
+		S_DOMAIN   环境域名
+
+表名 	PROJECT  项目
 		N_ID
 		S_NAME 项目名称
 		D_CREATE 创建日期
 
-表名		FUNCTION
+表名		FUNCTION  功能
 		N_ID
 		N_PROJECT_ID  项目id
 		S_NAME  功能或模块名称
 		D_CREATE  创建时间
 
-表名		TESTCASE
+表名		TESTCASE  测试用例
 		N_ID 
 		N_FUNCTION_ID 功能或模块id
 		S_NAME  测试名称，说明
@@ -19,4 +24,4 @@
 		S_TYPE  接口访问类型(get/post)
 		S_DATA  测试参数及数据
 		D_CREATE 创建时间
-		S_STATUS  状态
+		S_STATUS  状态(1 启用，0禁用)

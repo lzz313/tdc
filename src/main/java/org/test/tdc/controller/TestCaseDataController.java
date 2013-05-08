@@ -9,13 +9,14 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.test.tdc.common.JsonResponse;
 import org.test.tdc.pojo.TestCaseTO;
 import org.test.tdc.service.TestDataService;
 
 @Controller
-@RequestMapping("/tdc")
+@RequestMapping("/testcase")
 public class TestCaseDataController {
 	
 	@Resource
@@ -23,7 +24,7 @@ public class TestCaseDataController {
 	
 	/**
 	 * 访问路径
-	 * http://localhost:8080/tdc/query/all
+	 * http://localhost:8080/tdc/testcasequery/all/{模块id}
 	 * 
 	 * 返回json数据格式
 	 * 
@@ -36,7 +37,7 @@ public class TestCaseDataController {
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("testCases", queryTestCases);
 		
-		return new JsonResponse(JsonResponse.CODE_SUCCESS,"查询项目成功",result);
+		return new JsonResponse(JsonResponse.CODE_SUCCESS,"查询测试用例成功",result);
 	}
 	
 	@RequestMapping("/query/{id}")
@@ -46,6 +47,73 @@ public class TestCaseDataController {
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("testCase", queryTestCase);
 		
-		return new JsonResponse(JsonResponse.CODE_SUCCESS,"查询项目成功",result);
+		return new JsonResponse(JsonResponse.CODE_SUCCESS,"查询测试用例成功",result);
+	}
+	
+	@RequestMapping("/add")
+	public @ResponseBody JsonResponse addTestCase(@RequestParam(value = "functionId") final long functionId,
+												  @RequestParam(value = "name") final String name,
+												  @RequestParam(value = "step") final String step,
+												  @RequestParam(value = "url") final String url,
+												  @RequestParam(value = "type") final String type,
+												  @RequestParam(value = "data") final String data){
+		
+		TestCaseTO testCaseTO = new TestCaseTO();
+		testCaseTO.setFunctionId(functionId);
+		testCaseTO.setName(name);
+		testCaseTO.setStep(step);
+		testCaseTO.setUrl(url);
+		testCaseTO.setType(type);
+		testCaseTO.setData(data);
+		
+		int affectRows = testDataService.createTestCase(testCaseTO);
+		if(affectRows == 1){
+			Map<String,Object> result = new HashMap<String,Object>();
+			result.put("testCase", testCaseTO);
+			return new JsonResponse(JsonResponse.CODE_SUCCESS,"添加测试用例成功",result);
+		} else {
+			return new JsonResponse(JsonResponse.CODE_FAILED,"添加测试用例失败");
+		}
+	}
+	
+	@RequestMapping("/update")
+	public @ResponseBody JsonResponse updateTestCase(@RequestParam(value = "id") final long id,
+													  @RequestParam(value = "functionId") final long functionId,
+													  @RequestParam(value = "name") final String name,
+													  @RequestParam(value = "step") final String step,
+													  @RequestParam(value = "url") final String url,
+													  @RequestParam(value = "type") final String type,
+													  @RequestParam(value = "data") final String data,
+													  @RequestParam(value = "status") final String status){
+		TestCaseTO testCaseTO = new TestCaseTO();
+		testCaseTO.setId(id);
+		testCaseTO.setFunctionId(functionId);
+		testCaseTO.setName(name);
+		testCaseTO.setStep(step);
+		testCaseTO.setUrl(url);
+		testCaseTO.setType(type);
+		testCaseTO.setData(data);
+		testCaseTO.setStatus(status);
+		
+		int affectRows = testDataService.updateTestCase(testCaseTO);
+		if(affectRows == 1){
+			Map<String,Object> result = new HashMap<String,Object>();
+			result.put("testCase", testCaseTO);
+			return new JsonResponse(JsonResponse.CODE_SUCCESS,"更新测试用例成功",result);
+		} else {
+			return new JsonResponse(JsonResponse.CODE_FAILED,"更新测试用例失败");
+		}
+	}
+	
+	@RequestMapping("/delete/{id}")
+	public @ResponseBody JsonResponse deleteTestCase(@PathVariable("id")  final long id){
+		int affectRows = testDataService.deleteTestCase(id);
+		if(affectRows == 1){
+			Map<String,Object> result = new HashMap<String,Object>();
+			result.put("id", id);
+			return new JsonResponse(JsonResponse.CODE_SUCCESS,"删除测试用例成功",result);
+		} else {
+			return new JsonResponse(JsonResponse.CODE_FAILED,"删除测试用例失败");
+		}
 	}
 }
