@@ -10,9 +10,11 @@ import java.util.Map;
 import javax.annotation.Resource;
 
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Service;
 import org.test.tdc.dao.JdbcTemplateProcessor;
 import org.test.tdc.pojo.EnvironmentTO;
 
+@Service
 public class EnvironmentService {
 	@Resource
 	private JdbcTemplateProcessor jdbcTemplateProcessor;

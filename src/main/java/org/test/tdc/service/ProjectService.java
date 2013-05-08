@@ -12,7 +12,6 @@ import javax.annotation.Resource;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 import org.test.tdc.dao.JdbcTemplateProcessor;
-import org.test.tdc.dao.rowmapper.FunctionRowMapper;
 import org.test.tdc.dao.rowmapper.ProjectRowMapper;
 import org.test.tdc.pojo.ProjectTO;
 

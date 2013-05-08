@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>study page</title>
+
+</head>
+<body>
+	<input type="text" id="url" style="width: 300px"/>
+	<a href="#" id='parseUrl'>解析</a>
+	
+	<form id="parseForm" action="">
+
+	</form>
+	<script type="text/javascript" src="/js/jquery.min.js"></script>
+	<script type="text/javascript">
+		String.prototype.format = function(O){
+			var s = this.replace(/\@\{(\w+)\}/g, function(t, _o){
+				return O[_o];
+			});
+			return s;
+		};
+		
+		var formTemplate = ['<p>表单名: @{formName}  提交地址: @{formAction}  method:@{method}</p>'].join('');
+		var inputTemplate = [
+						'<input type="text" name="eleName" value="@{name}"/>',
+						'<input type="text" name="eleValue" value="@{value}"/>',
+						'<input type="text" name="eleType" value="@{type}"/><br/>'
+						].join('');
+		
+		
+		$(document).ready(function(){
+			$("#parseUrl").click(function(){
+				var url = "/parse/form?url="+$("#url").val();
+				$.getJSON(url,function(data){
+					if(data.code == 1){
+						var forms = data.data.parse.formList;
+						$.each(forms,function(i){
+							
+							$("#parseForm").append(formTemplate.format({formName:forms[i].formName,formAction:forms[i].formAction,method:forms[i].method}));
+							
+							var inputs = forms[i].inputs;
+							$.each(inputs,function(i){
+								$("#parseForm").append(inputTemplate.format({
+									name:inputs[i].name,
+									value:inputs[i].value,
+									type:inputs[i].type
+								}));
+							})
+						});
+					} else {
+						$("#parseForm").append(data.msg);
+					}
+				});
+			});	
+		});
+	</script>
+</body>
