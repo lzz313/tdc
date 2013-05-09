@@ -16,6 +16,7 @@
 		<jackson.version>1.9.6</jackson.version>
 		<servlet.version>2.5</servlet.version>
 		<jstl.version>1.2</jstl.version>
+		<fastjson.version>1.1.13</fastjson.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -91,9 +92,15 @@
 	      	<artifactId>httpclient</artifactId>
 	      	<version>4.1.1</version>
 	    </dependency>
+	    
+	    <dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>${fastjson.version}</version>
+		</dependency>
 
-	</dependencies>
-
+	</dependencies> 
+	
 	<build>
 		<plugins>
 			<!-- jetty-maven-plugin主要用来帮助日常的快速开发和测试 -->
@@ -176,6 +183,14 @@
 			<id>central2</id>
 			<name>Maven Repository Switchboard</name>
 			<url>http://repo2.maven.org/maven2</url>
+		</repository>
+		<repository>
+			<id>opensesame</id>
+			<name>Alibaba OpenSource Repsoitory</name>
+			<url>http://code.alibabatech.com/mvn/releases/</url>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
 		</repository>
 	</repositories>
 </project>

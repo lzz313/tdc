@@ -54,7 +54,7 @@ public class ProjectController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/test2")
+	@RequestMapping("/query")
 	public @ResponseBody JsonResponse index2(){
 		List<ProjectTO> queryProject = projectService.queryProject();
 		

@@ -12,8 +12,10 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.test.tdc.common.HttpClientUtils;
 import org.test.tdc.common.JsonResponse;
 import org.test.tdc.service.HtmlParserService;
+import org.test.tdc.utils.JsonUtils;
 
 @Controller
 @RequestMapping("/parse")
@@ -41,6 +43,32 @@ public class HtmlParserController {
 		}
 		
 		return new JsonResponse(JsonResponse.CODE_FAILED,"解析失败");
+	}
+	
+	@RequestMapping("/test")
+	public @ResponseBody JsonResponse httpPost(HttpServletRequest request){
+		String url = request.getParameter("url");
+		String method = request.getParameter("method");
+		String formData = request.getParameter("formData");
+		
+		String responseStr = "";
+		try {
+			if("post".equalsIgnoreCase(method)){
+				Map<String,String> nameValuePair = (Map<String, String>) JsonUtils.parseObject(formData);
+				responseStr = HttpClientUtils.httpPost(url, nameValuePair);
+			} else if("get".equalsIgnoreCase(method)){
+				responseStr = HttpClientUtils.httpGet(url);
+			}
+			
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("content", responseStr);
+		return new JsonResponse(JsonResponse.CODE_SUCCESS,"请求成功",result);
 	}
 
 }

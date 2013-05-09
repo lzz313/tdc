@@ -8,13 +8,6 @@ import java.util.Map;
 import java.util.Vector;
 
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.BasicResponseHandler;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
 import org.htmlparser.Node;
 import org.htmlparser.NodeFilter;
 import org.htmlparser.Parser;
@@ -27,6 +20,7 @@ import org.htmlparser.tags.SelectTag;
 import org.htmlparser.util.NodeList;
 import org.htmlparser.util.ParserException;
 import org.springframework.stereotype.Service;
+import org.test.tdc.common.HttpClientUtils;
 
 @Service
 public class HtmlParserService {
@@ -38,19 +32,7 @@ public class HtmlParserService {
 	 */
 	public Map<String, Object> parse(String url) throws ClientProtocolException, IOException{
 		
-		HttpClient client = new DefaultHttpClient();
-		HttpPost httppost = new HttpPost(url);
-
-		// 设置请求参数，这些参数不同于HTTP头中的参数，它们是放在FORM里提交给服务器的参数
-		List<BasicNameValuePair> formparams = new ArrayList<BasicNameValuePair>();
-
-		UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams,"UTF-8");
-		httppost.setEntity(entity);
-
-		// 开始执行，发送请求到服务器
-		String response = null;
-		ResponseHandler<String> responseHandler = new BasicResponseHandler();
-		response = client.execute(httppost, responseHandler);
+		String response = HttpClientUtils.httpGet(url);
 
 		Map<String, Object> result = htmlFormParser(response);
 		return result;
@@ -76,8 +58,7 @@ public class HtmlParserService {
 				String childrenContent = formTag.getChildrenHTML();
 				NodeFilter inputFilter = new NodeClassFilter(InputTag.class);
 				NodeFilter selectFilter = new NodeClassFilter(SelectTag.class);
-				Node[] childrenNodes = htmlToNode(childrenContent,
-						new NodeFilter[] { inputFilter, selectFilter });
+				Node[] childrenNodes = htmlToNode(childrenContent, new NodeFilter[] { inputFilter, selectFilter });
 
 				for (int j = 0; childrenNodes != null
 						&& j < childrenNodes.length; j++) {
@@ -85,25 +66,20 @@ public class HtmlParserService {
 					FormElements fe = new FormElements();
 					if (anode instanceof SelectTag) {
 						SelectTag selectnode = (SelectTag) anode;
-						NodeList nl = selectnode.getChildren();
-						if (nl == null
-								|| selectnode.getAttribute("name") == null
-								|| selectnode.getAttribute("name").isEmpty()) {
+						String snChildren = selectnode.getChildrenHTML();
+						if (snChildren == null || snChildren == "" || selectnode.getAttribute("name") == null) {
 							continue;
 						}
-
-						Node[] nl_nodes = nl.toNodeArray();
-						int optNum = 0;
+						
+						NodeFilter optionFilter = new NodeClassFilter(OptionTag.class);
+						Node[] nl_nodes = htmlToNode(childrenContent,new NodeFilter[] { optionFilter });
 						String select_value = "";
 						for (int k = 0; k < nl_nodes.length; k++) {
 							Node optnode = (Node) nl_nodes[k];
-							if (optnode instanceof OptionTag) {
-								optNum++;
-								OptionTag opttag = (OptionTag) optnode;
-								Vector vv = opttag.getAttributesEx();
-								if (vv.toString().indexOf("selected") != -1)
-									select_value = opttag.getOptionText();
-							}
+							OptionTag opttag = (OptionTag) optnode;
+							Vector vv = opttag.getAttributesEx();
+							if (vv.toString().indexOf("selected") != -1)
+								select_value = opttag.getOptionText();
 						}
 
 						fe.setName(selectnode.getAttribute("name"));
@@ -116,22 +92,14 @@ public class HtmlParserService {
 								|| inputnode.getAttribute("name").isEmpty()) {
 							continue;
 						}
+						
+						String type = inputnode.getAttribute("type");
+						String name = inputnode.getAttribute("name");
+						String value = inputnode.getAttribute("value");
 
-						Vector v = inputnode.getAttributesEx();
-						if ((v.toString().indexOf("type=checkbox") != -1)
-								&& (v.toString().indexOf("checked") == -1)) {
-							fe.setType("checkbox");
-							continue;
-						} else if ((v.toString().indexOf("type=radio") != -1)
-								&& (v.toString().indexOf("checked") == -1)) {
-							fe.setType("radio");
-							continue;
-						} else {
-							fe.setType("input");
-						}
-
-						fe.setName(inputnode.getAttribute("name"));
-						fe.setValue(inputnode.getAttribute("value"));
+						fe.setType(type);
+						fe.setName(name);
+						fe.setValue(value);
 						formInfo.addElements(fe);
 					}
 				}
@@ -140,7 +108,6 @@ public class HtmlParserService {
 		}
 
 		result.put("formList", formList);
-
 		return result;
 	}
 
