@@ -60,7 +60,7 @@ public class TestDataService {
 	@SuppressWarnings("unchecked")
 	public List<TestCaseTO> queryTestCase(int functionId){
 		
-		String queryTestCaseSql = "select * from testcase where n_function_id = :fid ";
+		String queryTestCaseSql = "select * from TESTCASE where N_FUNCTION_ID = :fid";
 		
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("fid", functionId);
@@ -71,12 +71,13 @@ public class TestDataService {
 				public TestCaseTO mapRow(ResultSet query, int rowNum) throws SQLException{
 					TestCaseTO testCaseTO = new TestCaseTO();
 					testCaseTO.setId(query.getLong("N_ID"));
+					testCaseTO.setFunctionId(query.getLong("N_FUNCTION_ID"));
 					testCaseTO.setName(query.getString("S_NAME"));
 					testCaseTO.setStep(query.getString("S_STEP"));
 					testCaseTO.setUrl(query.getString("S_URL"));
 					testCaseTO.setType(query.getString("S_TYPE"));
 					testCaseTO.setData(query.getString("S_DATA"));
-					testCaseTO.setCreate(query.getDate("D_DATE"));
+					testCaseTO.setCreate(query.getDate("D_CREATE"));
 					testCaseTO.setStatus(query.getString("S_STATUS"));
 					return testCaseTO;
 				}

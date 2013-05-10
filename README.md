@@ -50,6 +50,47 @@ test data collection
 	</div>
 </div>
 
+
+				<div class="tdc_item" tdcId="@{id}">
+					<div class="tdc_title">
+						<span>@{name}</span>  
+		                <span style="float:right;">时间:@{create}</span>     
+		                <input type="hidden" id="fid_@{id} value="@{functionId}"/>
+		                <input type="hidden" id="id_@{id} value="@{id}"/>
+					</div>
+					<div class="tdc_data">
+						<div class="tdc_info">
+						        名称: <input id="name_@{id}" value="@{name}" style="width:200px"/> 
+						        地址: <input id="action_@{id}" value="@{url}" style="width:180px"/>
+		                   method:
+		                   <select id="method_@{id}" >
+		                   		<option value="GET">GET</option>
+		                   		<option value="POST">POST</option>
+		                   </select>
+						</div>
+						<div class="tdc_name_value_type" dtlId="@{j}">
+							<span>参数</span>
+							<input id="@{fIdx}_eleName_@{j}" type="text" name="@{fIdx}_eleName_@{j}" value="@{name}"/>
+							<input id="@{fIdx}_eleValue_@{j}" type="text" name="@{fIdx}_eleValue_@{j}" value="@{value}"/>
+							<input id="@{fIdx}_eleType_@{j}" type="text" name="@{fIdx}_eleType_@{j}" value="@{type}"/>
+						</div>
+						<div class="tdc_name_value_type" dtlId="@{j}">
+							<span>参数</span>
+							<input id="@{fIdx}_eleName_@{j}" type="text" name="@{fIdx}_eleName_@{j}" value="@{name}"/>
+							<input id="@{fIdx}_eleValue_@{j}" type="text" name="@{fIdx}_eleValue_@{j}" value="@{value}"/>
+							<input id="@{fIdx}_eleType_@{j}" type="text" name="@{fIdx}_eleType_@{j}" value="@{type}"/>
+						</div>
+						
+					</div>
+					<div class="tdc_action">
+						<input type="button" value="保存"/>
+						<input type="button" value="测试"/>
+					</div>
+				</div>
+
+{"elem": [{"k": "1","v":"2","t":"text"},{"k": "21","v":"22","t":"text"}]}
+
+
 下个版本功能
 
 1.输入测试页面地址自动获取页面form表单action，input值。

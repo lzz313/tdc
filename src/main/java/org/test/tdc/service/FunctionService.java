@@ -122,6 +122,19 @@ public class FunctionService {
 	}
 	
 	/**
+	 * 根据项目id 删除功能或模块
+	 * @param pid
+	 * @return
+	 */
+	public int deleteFunctionByPid(int pid){
+		String updateFunc = "delete from function where N_PROJECT_ID = :pid";
+		
+		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("pid", pid);
+		return jdbcTemplateProcessor.update(updateFunc, params);
+	}
+	
+	/**
 	 * 更新功能或模块
 	 * 
 	 * @param id
