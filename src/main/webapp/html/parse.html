@@ -179,7 +179,7 @@
 		var projectTemplate = [
 								'<div class="project_name" pid=@{id} >',
 									'<a class="project_delete_link" pid=@{id} onclick="deleteProject($(this))">删除</a>',
-									'<a class="function_add_link" onclick="showAddFunction($(this))">新加</a>',
+									'<a class="function_add_link" onclick="showAddFunction($(this),@{id})">新加</a>',
 									'<p>@{name}</p>',
 								'</div>' 
 							   ].join('');
@@ -245,12 +245,16 @@
 			
 			$("div.project_name >p").click(function(){
 				var obj = $(this).parent().children(".function_name");
+				var addBt = $(this).parent().children(".function_add_link");
+				var funcAdd = $(this).parent().children(".function_add");
 				if(obj.length==0){
 					loadFunctions($(this).parent(),$(this).parent().attr("pid"));
 				} else if(obj.length>0 && obj.is(":hidden")){
 					obj.show();
 				} else {
 					obj.hide();
+					addBt.show();
+					funcAdd.hide();
 				}
 			});
 		}
@@ -347,10 +351,11 @@
 		var addFuncTemplate = [
 								'<div class="function_add">',
 									'<input type="text" class="function_name_add" id="newFunction"/>',
+									'<input type="button" class="function_add_bt" value="添加"/>',
 									'<input type="button" class="function_cancle_add_bt" value="取消"/>',
 								'<div>'
 		                       ].join('');
-		
+		//obj -> project_name
 		function loadFunctions(obj,pid){
 			var url = "/func/query/"+pid;
 			var func = $.ajax({
@@ -363,7 +368,8 @@
 			func.done(function(data){
 				if(data.code == 1){
 					var funcs = data.data.functions;
-					obj.append(addFuncTemplate);
+					var funcAdd = obj.children(".function_add");
+					if(!funcAdd[0]) obj.append(addFuncTemplate);
 					$.each(funcs,function(i){
 						obj.append(funcTemplate.format({fname:funcs[i].name,fid:funcs[i].id}));
 						obj.append(editFuncTemplate.format({
@@ -373,24 +379,6 @@
 					});
 					
 					addFuncEvent();
-				}
-			});
-		}
-		
-		function updateFunction(obj,fid,fNm){
-			var url = "/func/update/"+fid+"/"+fNm;
-			var updateFunc = $.ajax({
-				url : url,
-				type : "get",
-				async:false,
-				dataType : "json"
-			});
-			
-			updateFunc.done(function(data){
-				if(data.code == 1){
-					obj.parent().prev().children("p").html(fNm);
-					obj.parent().hide();
-					obj.parent().prev().show();
 				}
 			});
 		}
@@ -412,6 +400,76 @@
 					updateFunction($(this),fid,fNm);
 				});
 			});
+			
+			$(".function_cancle_add_bt").click(function(){
+				$(this).parent().hide();
+				$(this).parent().parent().children(".function_add_link").show();
+			});
+			
+			$(".function_add_bt").click(function(){
+				var pid = $(this).parent().parent().attr("pid");
+				var fNm = $("#newFunction").val();
+				addFunction($(this),pid,fNm);
+			});
+		}
+		
+		function updateFunction(obj,fid,fNm){
+			var url = "/func/update/"+fid+"/"+fNm;
+			var updateFunc = $.ajax({
+				url : url,
+				type : "get",
+				async:false,
+				dataType : "json"
+			});
+			
+			updateFunc.done(function(data){
+				if(data.code == 1){
+					obj.parent().prev().children("p").html(fNm);
+					obj.parent().hide();
+					obj.parent().prev().show();
+				}
+			});
+		}
+		
+		function showAddFunction(obj,pid){
+			obj.hide();
+			
+			var fNms = obj.parent().children(".function_name");
+			if(fNms.length == 0){
+				loadFunctions(obj.parent(),pid);
+			}
+			
+			var fAdd = obj.parent().children(".function_add");
+			if(fAdd.is(":hidden")){
+				fAdd.show();
+			}
+		}
+		
+		function addFunction(obj,pid,fNm){
+			if(!!!fNm){
+				alert('模块名称不可以为空！');
+				return;
+			}
+			
+			var url = "/func/create/"+pid+"/"+fNm;
+			var addFunc = $.ajax({
+				url : url,
+				type : "get",
+				async:false,
+				dataType : "json"
+			});
+			
+			addFunc.done(function(data){
+				if(data.code == 1){
+					var func = data.data.functions[0];
+					obj.parent().append(funcTemplate.format({fname:func.name,fid:func.id}));
+					obj.parent().append(editFuncTemplate.format({
+						value:func.name,
+						fid:func.id
+					}));
+					$("#newFunction").val('');
+				}
+			});
 		}
 		
 		$(document).ready(function(){
@@ -419,8 +477,6 @@
 			$("#parseUrl").click(function(){
 				parse();
 			});	
-			
-			
 		});
 	</script>
 </body>
