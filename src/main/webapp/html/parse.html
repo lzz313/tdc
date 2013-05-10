@@ -4,25 +4,41 @@
 	<meta charset="utf-8" />
 	<title>分析页面form表单</title>
 	<style type="text/css">
-		div {display: block;}
-		p{margin:0;padding:0;}
+		body{margin:0;padding:0;font-size:14px;font-family:Tahoma,SimSun; height:100%}
+		div {display: block;margin:0 auto}
+		p{margin:0 auto;padding:0;}
 		
-		.container{width:100%;}
-		.analysis{width:1000px;margin:0 auto;}
+		.container{width:1318px;}
+		.analysis{width:950px;margin:0 auto;border:1px solid #969696;}
 		
-		.page_left{width:228px;float:left;}
-		.page_right{width:900px;float:right;}
+		.page_head{width:1318px;height: 30px}
+		.page_left{width:363px;float:left;border:1px solid #969696;}
+		.page_right{width:950px;float:right;border:1px solid #969696;}
 		
-		.project_list{width:228px;float:left;}
-		.project_name .project_name_edit{width:132px;}
-		.project_update .project_update_cancle{width:38px;}
-		.project_delete{width:50px;float:right;}
+		.project_name,.project_list{width:350px;float:left;margin-left: 3px;}
+		.project_delete_link{width:30px;float:right;}
+		.project_add_link{width:80px;float:right;}
+		
+		.project_name_edit,.project_name_add{width:265px;}
+		.project_update_bt,.project_cancle_update_bt,.project_cancle_add_bt,.project_add_bt{width:38px;}
+		.project_edit,.function_edit,.project_add,.function_add{display:none;}
+
+		.function_name {width:327px;margin-left: 25px;}
+		.function_delete{width:32px;float:right;}
+		
+		.function_name_edit,.function_name_add {width:245px;}
+		.function_update_bt,.function_cancle_update_bt,.function_add_bt,.function_cancle_add_bt{width:38px;}
+		.function_edit,.function_add{margin-left: 20px;}
+		.function_add_link{width:50px;float:right;}
 	</style>
 </head>
 <body>
 	<div class="container">
+		<div class="page_head">
+		
+		</div>
 		<div class="page_left">
-			<p>项目列表</p>
+			<p>项目列表<a class="project_add_link" onclick="showAddProject()">新加项目</a></p>
 			<div class="project_list">
 			
 			</div>
@@ -160,18 +176,29 @@
 			});
 		}
 		
-		
 		var projectTemplate = [
-								'<div class="project_name" id=@{id} >',
-									'<a class="project_delete" pid=@{id} onclick="deleteProject($(this))">删除</a>',
+								'<div class="project_name" pid=@{id} >',
+									'<a class="project_delete_link" pid=@{id} onclick="deleteProject($(this))">删除</a>',
+									'<a class="function_add_link" onclick="showAddFunction($(this))">新加</a>',
 									'<p>@{name}</p>',
 								'</div>' 
 							   ].join('');
 		var editProjectTemplate = [
-									'<input type="text" class="project_name_edit" value="@{value}"/>',
-									'<input type="button" class="project_update" value="更新"/>',
-									'<input type="button" class="project_update_cancle" value="取消"/>'
+		                           '<div class="project_edit">',
+										'<input type="text" class="project_name_edit" value="@{value}"/>',
+										'<input type="button" pid=@{pid} class="project_update_bt" value="更新"/>',
+										'<input type="button" class="project_cancle_update_bt" value="取消"/>',
+									'</div>'
 		                           ].join('');
+		var addProjectTemplate = [
+									'<div class="project_add">',
+										'<input type="text" class="project_name_add" id="newProject"/>',
+										'<input type="button" class="project_add_bt" onclick="addProject()" value="添加"/>',
+										'<input type="button" class="project_cancle_add_bt" onclick="cancelAddProj()" value="取消"/>',
+									'<div>'
+		                          ].join('');
+		
+
 		function loadProject(){
 			var url = "/project/query";
 			var projects = $.ajax({
@@ -184,18 +211,109 @@
 			projects.done(function(data){
 				if(data.code == 1){
 					var projects = data.data.projects
+					$(".project_list").append(addProjectTemplate);
 					$.each(projects,function(i){
-						$(".project_list").append(projectTemplate.format({name:projects[i].name,id:projects[i].id}))
+						$(".project_list").append(projectTemplate.format({name:projects[i].name,id:projects[i].id}));
+						$(".project_list").append(editProjectTemplate.format({
+							value:projects[i].name,
+							pid:projects[i].id
+						}))
 					});
+					
+					addProjectEvent();
 				}
-			})
+			});
 		}
 		
-		function editProject(){
-			alert('test');
+		function addProjectEvent(){
+			$("div.project_name >p").dblclick(function(){
+				//编辑项目
+				$(this).parent().hide();
+				$(this).parent().next().show();
+				
+				$(".project_update_bt").click(function(){
+					var pid = $(this).attr("pid");
+					var pNm = $(this).prev().val();
+					updateProject($(this),pid,pNm);
+				});
+				
+				$(".project_cancle_update_bt").click(function(){
+					$(this).parent().hide();
+					$(this).parent().prev().show();
+				});
+			});
+			
+			$("div.project_name >p").click(function(){
+				var obj = $(this).parent().children(".function_name");
+				if(obj.length==0){
+					loadFunctions($(this).parent(),$(this).parent().attr("pid"));
+				} else if(obj.length>0 && obj.is(":hidden")){
+					obj.show();
+				} else {
+					obj.hide();
+				}
+			});
+		}
+
+		function showAddProject(){
+			$(".project_add").show();
+		}
+		
+		function addProject(){
+			var pNm = $("#newProject").val();
+			if(!!!pNm){
+				alert('项目名称不可以为空！');
+				return;
+			}
+			
+			var url = "/project/create/"+pNm;
+			var addProj = $.ajax({
+				url : url,
+				type : "get",
+				async:false,
+				dataType : "json"
+			});
+			
+			addProj.done(function(data){
+				if(data.code == 1){
+					var project = data.data.projects[0];
+					$(".project_list").append(projectTemplate.format({name:project.name,id:project.id}));
+					$(".project_list").append(editProjectTemplate.format({
+						value:project.name,
+						pid:project.id
+					}));
+					$("#newProject").val('');
+				}
+			});
+		}
+		
+		function cancelAddProj(){
+			$(".project_add").hide();
+		}
+		
+		function updateProject(obj,pid,pNm){
+			var url = "/project/update/"+pid+"/"+pNm;
+			var updatePrj = $.ajax({
+				url : url,
+				type : "get",
+				async:false,
+				dataType : "json"
+			});
+			
+			updatePrj.done(function(data){
+				if(data.code == 1){
+					obj.parent().prev().children("p").html(pNm);
+					obj.parent().hide();
+					obj.parent().prev().show();
+				}
+			});
 		}
 		
 		function deleteProject(obj){
+			if(!confirm("确定删除!")){
+				return;
+			}
+			
 			var delProject = $.ajax({
 				url : "/project/delete/"+obj.attr("pid"),
 				type : "POST",
@@ -205,11 +323,94 @@
 			
 			delProject.done(function(data){
 				if(data.code == 1){
-					obj.prev().hide();
-					obj.hide();
+					obj.parent().remove();
 				}else{
 					alert(data.msg);
 				}
+			});
+		}
+		
+		
+		
+		var funcTemplate = [
+		                    '<div class="function_name" fid=@{fid}>',
+		                    	'<a class="function_delete" fid=@{id} onclick="deleteFunc($(this))">删除</a>',
+		                    	'<p>@{fname}</p>',
+		                    '</div>'
+		                    ].join('');
+		var editFuncTemplate = ['<div class="function_edit">',
+									'<input type="text" class="function_name_edit" value="@{value}"/>',
+									'<input type="button" fid=@{fid} class="function_update_bt" value="更新"/>',
+									'<input type="button" class="function_cancle_update_bt" value="取消"/>',
+								'</div>'
+		                           ].join('');
+		var addFuncTemplate = [
+								'<div class="function_add">',
+									'<input type="text" class="function_name_add" id="newFunction"/>',
+									'<input type="button" class="function_cancle_add_bt" value="取消"/>',
+								'<div>'
+		                       ].join('');
+		
+		function loadFunctions(obj,pid){
+			var url = "/func/query/"+pid;
+			var func = $.ajax({
+				url : url,
+				type : "get",
+				async:false,
+				dataType : "json"
+			});
+			
+			func.done(function(data){
+				if(data.code == 1){
+					var funcs = data.data.functions;
+					obj.append(addFuncTemplate);
+					$.each(funcs,function(i){
+						obj.append(funcTemplate.format({fname:funcs[i].name,fid:funcs[i].id}));
+						obj.append(editFuncTemplate.format({
+							value:funcs[i].name,
+							fid:funcs[i].id
+						}));
+					});
+					
+					addFuncEvent();
+				}
+			});
+		}
+		
+		function updateFunction(obj,fid,fNm){
+			var url = "/func/update/"+fid+"/"+fNm;
+			var updateFunc = $.ajax({
+				url : url,
+				type : "get",
+				async:false,
+				dataType : "json"
+			});
+			
+			updateFunc.done(function(data){
+				if(data.code == 1){
+					obj.parent().prev().children("p").html(fNm);
+					obj.parent().hide();
+					obj.parent().prev().show();
+				}
+			});
+		}
+		
+		function addFuncEvent(){
+			$("div.function_name >p").dblclick(function(){
+				//编辑项目
+				$(this).parent().hide();
+				$(this).parent().next().show();
+				
+				$(".function_cancle_update_bt").click(function(){
+					$(this).parent().hide();
+					$(this).parent().prev().show();
+				});
+				
+				$(".function_update_bt").click(function(){
+					var fid = $(this).attr("fid");
+					var fNm = $(this).prev().val();
+					updateFunction($(this),fid,fNm);
+				});
 			});
 		}
 		
@@ -219,16 +420,7 @@
 				parse();
 			});	
 			
-			$("div.project_name >p").click(function(){
-				$(this).parent().children().each(function(){$(this).hide()});
-				$(this).parent().append(editProjectTemplate.format({
-					value:$(this).parent().children("p").html()
-				}));
-			});
 			
-			$(".project_update").click(function(){
-				$("div.project_name");
-			})
 		});
 	</script>
 </body>

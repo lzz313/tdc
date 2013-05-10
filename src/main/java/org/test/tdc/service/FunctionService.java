@@ -128,12 +128,11 @@ public class FunctionService {
 	 * @param projectName
 	 * @return
 	 */
-	public int updateFunction(int id,int projectId,String funcName){
-		String updateFunction = "update function set s_name=:name,n_project_id=:pid where n_id = :id";
+	public int updateFunction(int id,String funcName){
+		String updateFunction = "update function set s_name=:name where n_id = :id";
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("id", id);
-		params.put("pid", projectId);
 		params.put("name", funcName);
 		return jdbcTemplateProcessor.update(updateFunction, params);
 	}

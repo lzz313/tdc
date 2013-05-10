@@ -34,11 +34,11 @@ public class FunctionController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/test/")
-	public @ResponseBody JsonResponse index(){
-		List<FunctionTO> queryFunction = functionService.queryFunction();
+	@RequestMapping("/query/{pid}")
+	public @ResponseBody JsonResponse index(@PathVariable("pid") int projectId){
+		List<FunctionTO> queryFunction = functionService.queryFunction(projectId);
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put("function", queryFunction);
+		result.put("functions", queryFunction);
 		return new JsonResponse(JsonResponse.CODE_SUCCESS,"查询功能或模块成功",result);	
 	}
 	
@@ -108,9 +108,9 @@ public class FunctionController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/update/{functionId}/{projectId}/{functionName}")
-	public @ResponseBody JsonResponse updateFunction(@PathVariable("functionId") int id,@PathVariable("projectId") int projectId, @PathVariable("functionName") String functionName){
-		int updateFunction = functionService.updateFunction(id, projectId, functionName);
+	@RequestMapping("/update/{functionId}/{functionName}")
+	public @ResponseBody JsonResponse updateFunction(@PathVariable("functionId") int id,@PathVariable("functionName") String functionName){
+		int updateFunction = functionService.updateFunction(id,functionName);
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", updateFunction);
 		return new JsonResponse(JsonResponse.CODE_SUCCESS,"更新功能或模块成功",result);
