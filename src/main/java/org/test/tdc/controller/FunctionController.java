@@ -77,8 +77,8 @@ public class FunctionController {
 		if (createFunction != 1){
 			return new JsonResponse(JsonResponse.CODE_FAILED, "创建功能或模块失败");
 		}
-		List<FunctionTO> queryFunction = functionService.queryFunction(projectId);
-		queryFunction = functionService.queryFunction(projectId);
+		List<FunctionTO> queryFunction = functionService.queryFunction(projectId,functionName);
+		//queryFunction = functionService.queryFunction(projectId);
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("functions", queryFunction);
 		return new JsonResponse(JsonResponse.CODE_SUCCESS, "创建功能或模块成功",result);

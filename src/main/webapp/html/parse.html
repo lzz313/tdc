@@ -195,7 +195,7 @@
 										'<input type="text" class="project_name_add" id="newProject"/>',
 										'<input type="button" class="project_add_bt" onclick="addProject()" value="添加"/>',
 										'<input type="button" class="project_cancle_add_bt" onclick="cancelAddProj()" value="取消"/>',
-									'<div>'
+									'</div>'
 		                          ].join('');
 		
 
@@ -337,8 +337,8 @@
 		
 		
 		var funcTemplate = [
-		                    '<div class="function_name" fid=@{fid}>',
-		                    	'<a class="function_delete" fid=@{id} onclick="deleteFunc($(this))">删除</a>',
+		                    '<div class="function_name" fid="@{fid}">',
+		                    	'<a class="function_delete" fid="@{fid}" onclick="deleteFunc($(this))">删除</a>',
 		                    	'<p>@{fname}</p>',
 		                    '</div>'
 		                    ].join('');
@@ -351,9 +351,9 @@
 		var addFuncTemplate = [
 								'<div class="function_add">',
 									'<input type="text" class="function_name_add" id="newFunction"/>',
-									'<input type="button" class="function_add_bt" value="添加"/>',
+									'<input type="button" class="function_add_bt" onclick="addFunction($(this))" value="添加"/>',
 									'<input type="button" class="function_cancle_add_bt" value="取消"/>',
-								'<div>'
+								'</div>'
 		                       ].join('');
 		//obj -> project_name
 		function loadFunctions(obj,pid){
@@ -406,11 +406,13 @@
 				$(this).parent().parent().children(".function_add_link").show();
 			});
 			
+			/**
 			$(".function_add_bt").click(function(){
 				var pid = $(this).parent().parent().attr("pid");
-				var fNm = $("#newFunction").val();
+				var fNm = $(this).parent().children("#newFunction").val();
 				addFunction($(this),pid,fNm);
 			});
+			*/
 		}
 		
 		function updateFunction(obj,fid,fNm){
@@ -445,8 +447,11 @@
 			}
 		}
 		
-		function addFunction(obj,pid,fNm){
-			if(!!!fNm){
+		function addFunction(obj){
+			var pid = obj.parent().parent().attr("pid");
+			var fNm = obj.parent().children("#newFunction").val();
+			
+			if(!fNm){
 				alert('模块名称不可以为空！');
 				return;
 			}
@@ -462,15 +467,39 @@
 			addFunc.done(function(data){
 				if(data.code == 1){
 					var func = data.data.functions[0];
-					obj.parent().append(funcTemplate.format({fname:func.name,fid:func.id}));
-					obj.parent().append(editFuncTemplate.format({
+					obj.parent().parent().append(funcTemplate.format({fname:func.name,fid:func.id}));
+					obj.parent().parent().append(editFuncTemplate.format({
 						value:func.name,
 						fid:func.id
 					}));
-					$("#newFunction").val('');
+					obj.parent().children("#newFunction").val('');
+					addFuncEvent();
 				}
 			});
 		}
+		
+		function deleteFunc(obj){
+			if(!confirm("确定删除!")){
+				return;
+			}
+			
+			var delFunc = $.ajax({
+				url : "/func/delete/"+obj.parent().attr("fid"),
+				type : "POST",
+				async:false,
+				dataType : "json"
+			});
+			
+			delFunc.done(function(data){
+				if(data.code == 1){
+					obj.parent().remove();
+					obj.parent().next().remove();
+				}else{
+					alert(data.msg);
+				}
+			});
+		}
+		
 		
 		$(document).ready(function(){
 			loadProject();
