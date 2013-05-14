@@ -21,6 +21,9 @@ public class ProjectService {
 	@Resource
 	private JdbcTemplateProcessor jdbcTemplateProcessor;
 	
+	@Resource
+	private FunctionService functionService;
+	
 	/**
 	 * 查询所有项目
 	 * 
@@ -119,10 +122,13 @@ public class ProjectService {
 	 * @return
 	 */
 	public int deleteProject(int id){
+		functionService.deleteFunctionByPid(id);
+		
 		String updateProject = "delete from project where n_id = :id";
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("id", id);
+		
 		return jdbcTemplateProcessor.update(updateProject, params);
 	}
 	

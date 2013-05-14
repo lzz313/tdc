@@ -11,7 +11,6 @@ import javax.annotation.Resource;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
-import org.test.tdc.dao.AccessDataProcessor;
 import org.test.tdc.dao.JdbcTemplateProcessor;
 import org.test.tdc.pojo.TestCaseTO;
 
@@ -19,39 +18,7 @@ import org.test.tdc.pojo.TestCaseTO;
 public class TestDataService {
 	
 	@Resource
-	private AccessDataProcessor accessDataProcessor;
-	
-	@Resource
 	private JdbcTemplateProcessor jdbcTemplateProcessor;
-	
-	/**
-	 * @return
-	 */
-	public List<TestCaseTO> queryTestCase(){
-		List<TestCaseTO> testCases = new ArrayList<TestCaseTO>();
-		
-		String queryTestCase = "select * from testcase";
-		try{
-			ResultSet query = accessDataProcessor.query(queryTestCase);
-			TestCaseTO testCaseTO = null;
-			while(query.next()){
-				testCaseTO = new TestCaseTO();
-				testCaseTO.setId(query.getLong("N_ID"));
-				testCaseTO.setName(query.getString("S_NAME"));
-				testCaseTO.setStep(query.getString("S_STEP"));
-				testCaseTO.setUrl(query.getString("S_URL"));
-				testCaseTO.setType(query.getString("S_TYPE"));
-				testCaseTO.setData(query.getString("S_DATA"));
-				testCaseTO.setCreate(query.getDate("D_DATE"));
-				testCaseTO.setStatus(query.getString("S_STATUS"));
-				
-				testCases.add(testCaseTO);	
-			}
-		} catch(Exception e){
-			e.printStackTrace();
-		}
-		return testCases;
-	}
 	
 	/**
 	 * @param functionId
@@ -60,7 +27,7 @@ public class TestDataService {
 	@SuppressWarnings("unchecked")
 	public List<TestCaseTO> queryTestCase(int functionId){
 		
-		String queryTestCaseSql = "select * from testcase where n_function_id = :fid ";
+		String queryTestCaseSql = "select * from TESTCASE where N_FUNCTION_ID = :fid";
 		
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("fid", functionId);
@@ -70,13 +37,14 @@ public class TestDataService {
 			testcases = (List<TestCaseTO>) jdbcTemplateProcessor.findAll(queryTestCaseSql, params, new RowMapper<TestCaseTO>(){
 				public TestCaseTO mapRow(ResultSet query, int rowNum) throws SQLException{
 					TestCaseTO testCaseTO = new TestCaseTO();
-					testCaseTO.setId(query.getLong("N_ID"));
+					testCaseTO.setId(query.getInt("N_ID"));
+					testCaseTO.setFunctionId(query.getInt("N_FUNCTION_ID"));
 					testCaseTO.setName(query.getString("S_NAME"));
 					testCaseTO.setStep(query.getString("S_STEP"));
 					testCaseTO.setUrl(query.getString("S_URL"));
 					testCaseTO.setType(query.getString("S_TYPE"));
 					testCaseTO.setData(query.getString("S_DATA"));
-					testCaseTO.setCreate(query.getDate("D_DATE"));
+					testCaseTO.setCreate(query.getDate("D_CREATE"));
 					testCaseTO.setStatus(query.getString("S_STATUS"));
 					return testCaseTO;
 				}
@@ -101,7 +69,7 @@ public class TestDataService {
 			testcases = (List<TestCaseTO>) jdbcTemplateProcessor.findAll(queryTestCaseSql, params, new RowMapper<TestCaseTO>(){
 				public TestCaseTO mapRow(ResultSet query, int rowNum) throws SQLException{
 					TestCaseTO testCaseTO = new TestCaseTO();
-					testCaseTO.setId(query.getLong("N_ID"));
+					testCaseTO.setId(query.getInt("N_ID"));
 					testCaseTO.setName(query.getString("S_NAME"));
 					testCaseTO.setStep(query.getString("S_STEP"));
 					testCaseTO.setUrl(query.getString("S_URL"));
@@ -147,14 +115,14 @@ public class TestDataService {
 	 * @return
 	 */
 	public int updateTestCase(TestCaseTO testCaseTO){
-		String updateTestCaseSql = "update TESTCASE set N_FUNCTION_ID=:functionId," +
-													"S_NAME=:name," +
+		String updateTestCaseSql = "update testcase set " +
+													"S_NAME=:name, " +
 													"S_STEP=:step," +
 													"S_URL=:url," +
 													"S_TYPE=:type," +
 													"S_DATA=:data," +
 													"S_STATUS=:status " +
-								"where N_ID = :id";
+								" where N_ID = :id";
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("id", testCaseTO.getId());

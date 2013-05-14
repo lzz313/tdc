@@ -224,9 +224,11 @@
 				}
 			});
 		}
-		
+		//定义setTimeout执行方法
+		var TimeFn = null;
 		function addProjectEvent(){
 			$("div.project_name >p").dblclick(function(){
+				clearTimeout(TimeFn);
 				//编辑项目
 				$(this).parent().hide();
 				$(this).parent().next().show();
@@ -243,19 +245,34 @@
 				});
 			});
 			
-			$("div.project_name >p").click(function(){
-				var obj = $(this).parent().children(".function_name");
-				var addBt = $(this).parent().children(".function_add_link");
-				var funcAdd = $(this).parent().children(".function_add");
-				if(obj.length==0){
-					loadFunctions($(this).parent(),$(this).parent().attr("pid"));
-				} else if(obj.length>0 && obj.is(":hidden")){
-					obj.show();
-				} else {
-					obj.hide();
-					addBt.show();
-					funcAdd.hide();
-				}
+			//添加显示隐藏模块事件
+			$("div.project_name >p").die().live("click",function(){
+				var p = $(this);
+				// 取消上次延时未执行的方法
+			    clearTimeout(TimeFn);
+			    //执行延时
+			    TimeFn = setTimeout(function(){
+					var obj = p.parent().children(".function_name");
+					var addBt = p.parent().children(".function_add_link");
+					var funcAdd = p.parent().children(".function_add");
+					var funcEdit = p.parent().children(".function_edit");
+					if(obj.length==0){
+						loadFunctions(p.parent(),p.parent().attr("pid"));
+					} else if(obj.length>0 && obj.is(":hidden")){
+						obj.show();
+						cancleAllEditFunc(funcEdit);
+					} else {
+						cancleAllEditFunc(funcEdit);
+						obj.hide();
+						addBt.show();
+					}
+			    },300);
+			});
+		}
+		
+		function cancleAllEditFunc(funcEdits){
+			$.each(funcEdits,function(i){
+				$(funcEdits[i]).hide();
 			});
 		}
 
@@ -287,6 +304,8 @@
 						pid:project.id
 					}));
 					$("#newProject").val('');
+					
+					addProjectEvent();
 				}
 			});
 		}
@@ -400,6 +419,7 @@
 					updateFunction($(this),fid,fNm);
 				});
 			});
+			
 			
 			$(".function_cancle_add_bt").click(function(){
 				$(this).parent().hide();

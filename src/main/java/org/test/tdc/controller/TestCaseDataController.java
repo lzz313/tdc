@@ -51,7 +51,7 @@ public class TestCaseDataController {
 	}
 	
 	@RequestMapping("/add")
-	public @ResponseBody JsonResponse addTestCase(@RequestParam(value = "functionId") final long functionId,
+	public @ResponseBody JsonResponse addTestCase(@RequestParam(value = "functionId") final int functionId,
 												  @RequestParam(value = "name") final String name,
 												  @RequestParam(value = "step") final String step,
 												  @RequestParam(value = "url") final String url,
@@ -77,8 +77,8 @@ public class TestCaseDataController {
 	}
 	
 	@RequestMapping("/update")
-	public @ResponseBody JsonResponse updateTestCase(@RequestParam(value = "id") final long id,
-													  @RequestParam(value = "functionId") final long functionId,
+	public @ResponseBody JsonResponse updateTestCase(@RequestParam(value = "id") final int id,
+													  @RequestParam(value = "functionId") final int functionId,
 													  @RequestParam(value = "name") final String name,
 													  @RequestParam(value = "step") final String step,
 													  @RequestParam(value = "url") final String url,

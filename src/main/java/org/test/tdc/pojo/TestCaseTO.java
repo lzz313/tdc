@@ -8,8 +8,8 @@ public class TestCaseTO  implements BaseTO{
 	 */
 	private static final long serialVersionUID = -8428736091192597314L;
 	
-	private Long id;
-	private Long functionId;
+	private int id;
+	private int functionId;
 	private String name;
 	private String url;
 	private String type;
@@ -17,16 +17,16 @@ public class TestCaseTO  implements BaseTO{
 	private String data;
 	private Date create;
 	private String status;
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
-	public Long getFunctionId() {
+	public int getFunctionId() {
 		return functionId;
 	}
-	public void setFunctionId(Long functionId) {
+	public void setFunctionId(int functionId) {
 		this.functionId = functionId;
 	}
 	public String getName() {
