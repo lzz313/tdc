@@ -95,7 +95,7 @@ function addProjectEvent(){
 				obj.hide();
 				addBt.show();
 			}
-	    },300);
+	    },150);
 	});
 }
 
@@ -258,7 +258,7 @@ function addFuncEvent(){
 	    //执行延时
 	    fTimeFn = setTimeout(function(){
 	    	displayTestData(o);
-	    },300);
+	    },150);
 	});
 	
 	$(".function_cancle_add_bt").click(function(){

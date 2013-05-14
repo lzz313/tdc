@@ -10,8 +10,8 @@ public class TestCaseRowMapper implements RowMapper<Object>{
 	public Object mapRow(ResultSet rs, int rowNum) throws SQLException{
 		TestCaseTO testCase = new TestCaseTO();
 		
-		testCase.setId(rs.getLong("N_ID"));
-		testCase.setFunctionId(rs.getLong("N_FUNCTION_ID"));
+		testCase.setId(rs.getInt("N_ID"));
+		testCase.setFunctionId(rs.getInt("N_FUNCTION_ID"));
 		testCase.setName(rs.getString("S_NAME"));
 		testCase.setStep(rs.getString("S_STEP"));
 		testCase.setUrl(rs.getString("S_URL"));
