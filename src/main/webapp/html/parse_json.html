@@ -39,10 +39,17 @@
 				if(!isArray(provideres)){
 					provideres = new Array(provideres);
 				}
+				
 				for(var j=0;j<provideres.length;j++){
 					if(!!!provideres[j]){
 						continue;
 					}
+					
+					var pnm = provideres[j].name;
+					if(isArray(pnm)){
+						pnm = pnm[0];
+					}
+					
 					var gsm = provideres[j].gsm;
 					if(!!!gsm){
 						continue;
@@ -70,7 +77,7 @@
 									+"|"
 									+apns[k]["-value"]
 									+"|"
-									+ct+"/"+provideres[j].name);
+									+ct+"/"+pnm);
 							$(".container").append('<br>');
 							/**console.log(mcc
 									+"|"
@@ -125,7 +132,7 @@
 								cnm = '';
 							} else {
 								aval = apns[l]["-value"];
-								cnm = ct+"/"+provideres[j].name
+								cnm = ct+"/"+pnm
 							}
 							$(".container").append(mcc
 									+"|"
