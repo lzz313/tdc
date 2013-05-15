@@ -106,7 +106,7 @@ public class TestCaseDataController {
 	}
 	
 	@RequestMapping("/delete/{id}")
-	public @ResponseBody JsonResponse deleteTestCase(@PathVariable("id")  final long id){
+	public @ResponseBody JsonResponse deleteTestCase(@PathVariable("id")  final int id){
 		int affectRows = testDataService.deleteTestCase(id);
 		if(affectRows == 1){
 			Map<String,Object> result = new HashMap<String,Object>();

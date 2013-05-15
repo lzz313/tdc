@@ -11,8 +11,8 @@
 		.container{width:1318px;}
 		
 		.page_head{width:1318px;height: 30px}
-		.page_left{width:363px;float:left;border:1px solid #969696;}
-		.page_center{width:700px;float:left}
+		.page_left{width:363px;float:left;border:1px solid #969696;min-height: 600px;}
+		.page_center{width:700px;float:left;border:1px solid #000;min-height: 600px;}
 		.page_right{width:248px;float:right;border:1px solid #969696;}
 		
 		.project_name,.project_list{width:350px;float:left;margin:5px 0 5px 3px;}
@@ -31,10 +31,18 @@
 		.function_edit,.function_add{margin-left: 20px;}
 		.function_add_link{width:50px;float:right;}
 		
-		.tdc_add{float:rigth;border:1px solid #000;}
-		.tdc_title_add_bt{float:rigth;border:1px solid #000;}
-		.tdc_list{width:700px;border:1px solid #000;}
-		.tdc_item{padding:3px 5px 3px 5px;border-bottom:1px solid #000;}
+		.tdc_list{width:700px;display:inline-block;}
+		
+		.tdc_add{width:700px;height:23px; border-bottom: 1px solid #000;}
+		.tdc_add p{height:23px;float:left;padding-top: 3px;}
+		.tdc_add input{float:right;}
+		
+		.tdc_item{width:690px;padding:3px 5px 3px 5px;}
+		.tdc_title{width:690px;height: 20px;}
+		.tdc_title p{width:450px;float: left;}
+		.tdc_title_add_bt{border:1px solid #000;}
+		.tdc_title_anly_bt{border:1px solid #000;}
+		
 		.tdc_data,.tdc_action{display: none;}
 		.tdc_name_value_type_title span{margin: 0 85px 0 30px;}
 	</style>
@@ -52,8 +60,9 @@
 		</div>
 		
 		<div class="page_center">
-			<div style="width:655px;float:left">测试步骤</div>
-				
+			<div class="tdc_add">
+				<p>测试步骤</p>
+			</div>
 			
 			<div class="tdc_list">
 				
@@ -69,14 +78,13 @@
 	<script type="text/javascript" src="/js/project.module.js"></script>
 	<script type="text/javascript">
 		var addNewTdcBtTemplate = [
-									'<div class="tdc_add">',
-										'<input type="button" fid="@{functionId}" class="tdc_title_add_bt" value="添加"/>',
-									'</div>'
+									'<input type="button" fid="@{functionId}" class="tdc_title_anly_bt" value="分析"/>',
+									'<input type="button" fid="@{functionId}" class="tdc_title_add_bt" value="添加"/>'
 		                           ].join('');
 		var tdcListTemplate = [
 							'<div class="tdc_item" id="tdc_@{id}">',
 								'<div class="tdc_title">',
-									'<span>@{name}</span>',
+									'<p>@{name}</p>',
 									'<span style="float:right;">时间:@{create}</span>',
 									'<input type="hidden" id="fid_@{id}" value="@{functionId}"/>',
 									'<input type="hidden" id="status_@{id}" value="@{status}"/>',
@@ -96,6 +104,7 @@
 								'</div>',
 								'<div class="tdc_action">',
 									'<input type="button" tid="@{id}" class="tdc_save_bt" value="保存"/>',
+									'<input type="button" tid="@{id}" class="tdc_delete_bt" value="删除"/>',
 									'<input type="button" value="测试"/>',
 								'</div>',
 							'</div>' 
@@ -115,8 +124,8 @@
 			var fid = o.parent().attr("fid");
 			var url = "/testcase/query/all/"+fid;
 			
-			$(".tdc_add").remove();
-			$(".tdc_list").before(addNewTdcBtTemplate.format({
+			$(".tdc_add input[type=button]").remove();
+			$(".tdc_add").append(addNewTdcBtTemplate.format({
 				functionId:fid
 			}));
 			
@@ -206,6 +215,12 @@
 				saveTdcData(tid);
 			});
 			
+			$(".tdc_delete_bt").click(function(){
+				var btObj = $(this);
+				var tid = btObj.attr("tid");
+				deleteTdc(btObj,tid);
+			});
+			
 			$(".tdc_title_add_bt").click(function(){
 				var fId = $(this).attr("fid");
 				var testCase={id:'',functionId:fId,name:'创建测试用例',url:'',type:'',step:'',data:'{"elem":[{"k":"","v":"","t":""}]}',create:'',status:''};
@@ -279,9 +294,26 @@
 			return JSON.stringify(data);
 		}
 		
+		function deleteTdc(obj,tid){
+			var url ="/testcase/delete/"+tid;
+			
+			var testcases = $.ajax({
+				url : url,
+				type : "get",
+				async:false,
+				dataType : "json"
+			});
+			
+			testcases.done(function(data){
+				if(data.code == 1){
+					obj.parent().parent().remove();
+					alert("删除成功");
+				}
+			});
+		}
+		
 		$(document).ready(function(){
 			loadProject();
-			
 		});
 	</script>
 </body>

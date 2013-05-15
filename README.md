@@ -12,6 +12,8 @@ todo:
 添加删除，测试和分析按钮
 项目名称后面显示模块数量，模块名称后面显示用例数量
 
+根据值类型自动生成case
+
 页面结构
 <div class="page_left">
 	<p>项目列表<a class="project_add_link" onclick="showAddProject($(this))">新加项目</a></p>

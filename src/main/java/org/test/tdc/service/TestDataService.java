@@ -142,7 +142,7 @@ public class TestDataService {
 	 * @param id
 	 * @return
 	 */
-	public int deleteTestCase(long id){
+	public int deleteTestCase(int id){
 		String deleteTestCaseSql = "delete from TESTCASE where N_ID = :id";
 		
 		Map<String,Object> params = new HashMap<String,Object>();
