@@ -35,7 +35,7 @@ public class EnvironmentService {
 			domains = (List<EnvironmentTO>) jdbcTemplateProcessor.findAll(queryDomainSql, params, new RowMapper<EnvironmentTO>(){
 				public EnvironmentTO mapRow(ResultSet query, int rowNum) throws SQLException{
 					EnvironmentTO environmentTO = new EnvironmentTO();
-					environmentTO.setId(query.getLong("N_ID"));
+					environmentTO.setId(query.getInt("N_ID"));
 					environmentTO.setName(query.getString("S_NAME"));
 					environmentTO.setDomain(query.getString("S_DOMAIN"));
 					return environmentTO;
@@ -69,7 +69,7 @@ public class EnvironmentService {
 	 * @param id
 	 * @return
 	 */
-	public int deleteDomian(long id){
+	public int deleteDomian(int id){
 		String deleteDomianSql = "delete from ENVIRONMENT where n_id = :id";
 		
 		Map<String,Object> params = new HashMap<String,Object>();

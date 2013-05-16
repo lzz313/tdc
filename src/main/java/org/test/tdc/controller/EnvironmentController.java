@@ -51,7 +51,7 @@ public class EnvironmentController{
 	}
 	
 	@RequestMapping("/update")
-	public @ResponseBody JsonResponse updateDomain(@RequestParam(value = "id") final long id,
+	public @ResponseBody JsonResponse updateDomain(@RequestParam(value = "id") final int id,
 													  @RequestParam(value = "name") final String name,
 													  @RequestParam(value = "domain") final String domain){
 		EnvironmentTO environmentTO = new EnvironmentTO();
@@ -70,7 +70,7 @@ public class EnvironmentController{
 	}
 	
 	@RequestMapping("/delete/{id}")
-	public @ResponseBody JsonResponse deleteDomain(@PathVariable("id") final long id){
+	public @ResponseBody JsonResponse deleteDomain(@PathVariable("id") final int id){
 		int affectRows = environmentService.deleteDomian(id);
 		if(affectRows == 1){
 			Map<String,Object> result = new HashMap<String,Object>();

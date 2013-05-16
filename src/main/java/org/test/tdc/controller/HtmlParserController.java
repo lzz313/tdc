@@ -16,6 +16,7 @@ import org.test.tdc.common.HttpClientUtils;
 import org.test.tdc.common.JsonResponse;
 import org.test.tdc.service.HtmlParserService;
 import org.test.tdc.utils.JsonUtils;
+import org.test.tdc.utils.StringUtils;
 
 @Controller
 @RequestMapping("/parse")
@@ -28,8 +29,12 @@ public class HtmlParserController {
 	public @ResponseBody JsonResponse parseUrl(HttpServletRequest request, ModelMap model){
 		Map<String, Object> parse = null;
 		try {
-			parse = htmlParserService.parse((String) request.getParameter("url"));
+			String url = (String) request.getParameter("url");
+			if(StringUtils.isEmpty(url)){
+				return new JsonResponse(JsonResponse.CODE_FAILED,"URL不可以为空");
+			}
 			
+			parse = htmlParserService.parse(url);
 			Map<String,Object> result = new HashMap<String,Object>();
 			result.put("parse", parse);
 			

@@ -12,6 +12,8 @@
 		
 		.page_head{width:1318px;height: 30px}
 		.page_left{width:363px;float:left;border:1px solid #969696;min-height: 600px;}
+		.page_envi{width:700px;float:left;border:1px solid #000;height: 25px;}
+		.envi_edit{display: none;width:630px;}
 		.page_center{width:700px;float:left;border:1px solid #000;min-height: 600px;}
 		.page_right{width:248px;float:right;border:1px solid #969696;}
 		
@@ -45,275 +47,199 @@
 		
 		.tdc_data,.tdc_action{display: none;}
 		.tdc_name_value_type_title span{margin: 0 85px 0 30px;}
+		
+		.select{position:absolute;margin-top:3px; display: inline-block;width: 300px;border:1px solid #969696;}
+		.envi_tips {margin: 4px 0 0 3px ;width: 65px;float:left;}
+		.option,.option_edit{position: relative;width: 298px;border-top:1px solid #000;z-index: 100;display: none;background-color: #fff;}
+		.option_edit input{width:115px;}
+		.option_edit label{font-size: 5pt;}
+		/**
+		filter:alpha(opacity=50);opacity:0.5;-moz-opacity: .50
+		*/
 	</style>
 </head>
 <body>
 	<div class="container">
-		<div class="page_head">
-		
-		</div>
+		<div class="page_head"></div>
 		<div class="page_left">
 			<p>项目列表<a class="project_add_link" onclick="showAddProject()">新加项目</a></p>
-			<div class="project_list">
-				
+			<div class="project_list"></div>
+		</div>
+		<div class="page_envi">
+			<p class="envi_tips">测试环境</p>
+			<div class="select">
+				<span>请选择...</span><span style="float: right;">▼</span>
 			</div>
 		</div>
-		
 		<div class="page_center">
 			<div class="tdc_add">
 				<p>测试步骤</p>
 			</div>
-			
-			<div class="tdc_list">
-				
-			</div>	
+			<div class="tdc_list"></div>
+			<div id="tdc_anlysis" style="display:none;">
+				地址：<input type="text" id="url" style="width: 300px"/><input type="button" id='parseUrl' value="分析页面表单"/>
+				<div id="parseForm" action="">
+				</div>	
+			</div>
 		</div>
-		
 		<div class="page_right">
 			<p>接口参数</p>
-			
 		</div>
 	</div>
 	<script type="text/javascript" src="/js/jquery.min.js"></script>
 	<script type="text/javascript" src="/js/project.module.js"></script>
+	<script type="text/javascript" src="/js/testcase.js"></script>
 	<script type="text/javascript">
-		var addNewTdcBtTemplate = [
-									'<input type="button" fid="@{functionId}" class="tdc_title_anly_bt" value="分析"/>',
-									'<input type="button" fid="@{functionId}" class="tdc_title_add_bt" value="添加"/>'
-		                           ].join('');
-		var tdcListTemplate = [
-							'<div class="tdc_item" id="tdc_@{id}">',
-								'<div class="tdc_title">',
-									'<p>@{name}</p>',
-									'<span style="float:right;">时间:@{create}</span>',
-									'<input type="hidden" id="fid_@{id}" value="@{functionId}"/>',
-									'<input type="hidden" id="status_@{id}" value="@{status}"/>',
-								'</div>',
-								'<div class="tdc_data" tid="@{id}">',
-									'<div class="tdc_info">',
-										'步骤: <input id="step_@{id}" value="@{step}" style="width:50px"/> ',
-								       	'名称: <input id="name_@{id}" value="@{name}" style="width:200px"/> ',
-								       	'地址: <input id="action_@{id}" value="@{url}" style="width:180px"/>',
-				                   	   	'method:',
-				                   		'<select id="method_@{id}" >',
-				                   			'<option value="GET">GET</option>',
-				                   			'<option value="POST">POST</option>',
-				                   		'</select>',
-				                   	'</div>',
-				                   	'<div class="tdc_name_value_type_title"><span>字段名</span><span>字段值</span><span>字段类型</span></div>',
-								'</div>',
-								'<div class="tdc_action">',
-									'<input type="button" tid="@{id}" class="tdc_save_bt" value="保存"/>',
-									'<input type="button" tid="@{id}" class="tdc_delete_bt" value="删除"/>',
-									'<input type="button" value="测试"/>',
-								'</div>',
-							'</div>' 
-						   ].join('');
-		
-		var tdcItemDataTemplate = [
-									'<div class="tdc_name_value_type" dtlId="@{j}">',
-										'<span>参数</span>',
-										'<input id="@{id}_eleName_@{j}" type="text" name="eleName" value="@{name}"/>',
-										'<input id="@{id}_eleValue_@{j}" type="text" name="eleValue" value="@{value}"/>',
-										'<input id="@{id}_eleType_@{j}" type="text" name="eleType" value="@{type}"/>',
-										'<input class="tdc_name_value_delete_bt" type="button" value="删除"/>',
-									'</div>'
-		                           ].join('');
-		
-		function displayTestData(o){
-			var fid = o.parent().attr("fid");
-			var url = "/testcase/query/all/"+fid;
+		var editabelOptionTemplate = [
+										'<div class="option" id="@{id}" value="@{value}">@{name}</div>',
+										'<div class="option_edit">',
+											'<input type="hidden" class="envi_ipt_id" value="@{id}"/>',
+											'<label>地址:</label><input type="text" class="envi_ipt_val" init="输入地址..." value="@{value}"/>',
+											'<label>名称:</label><input type="text" class="envi_ipt_name" init="输入名称..." value="@{name}"/>',
+										'</div>'
+		                              ].join('');
+		function loadEnvi(){
+			var url ="/domain/query";
 			
-			$(".tdc_add input[type=button]").remove();
-			$(".tdc_add").append(addNewTdcBtTemplate.format({
-				functionId:fid
-			}));
-			
-			var testcases = $.ajax({
+			var envi = $.ajax({
 				url : url,
 				type : "get",
 				async:false,
 				dataType : "json"
 			});
 			
-			testcases.done(function(data){
+			envi.done(function(data){
 				if(data.code == 1){
-					var testCases = data.data.testCases;
-					$(".tdc_list").html('');
-					$.each(testCases,function(i){
-						var testCase = testCases[i];
-						addTdc(testCase);
-					});
+					var domains = data.data.queryDomain;
 					
-					addTdcEvent();
-				}
-			});
-		}
-		
-		function addTdc(testCase){
-			$(".tdc_list").append(tdcListTemplate.format({
-				id:testCase.id,
-				name:testCase.name,
-				step:testCase.step,
-				functionId:testCase.functionId,
-				url:testCase.url,
-				create:testCase.create,
-				status:testCase.status
-			}));
-			
-			var elems = JSON.parse(testCase.data).elem;
-			$.each(elems,function(j){
-				$("#tdc_"+testCase.id+" .tdc_data").append(tdcItemDataTemplate.format({
-					id:testCase.id,
-					j:j,
-					name:elems[j].k,
-					value:elems[j].v,
-					type:elems[j].t
-				}));
-			});
-		}
-		
-		function addTdcEvent(){
-			$(".tdc_title").die().live("click",function(){
-				var o = $(this).next();
-				if(o.is(":hidden")){
-					o.show();
-					o.next().show();
-				} else {
-					o.hide();
-					o.next().hide();
+					$.each(domains,function(i){
+						$(".select").append(editabelOptionTemplate.format({
+							id:domains[i].id,
+							value:domains[i].domain,
+							name:domains[i].name
+						}));
+					});
+					if(domains.length == 0){
+						$(".select").append(editabelOptionTemplate.format({
+							id:'',
+							value:'输入地址...',
+							name:'输入名称...'
+						}));
+					}
+					addOptionEvent();
 				}
 			});
 			
-			var j = $(".tdc_name_value_type").length;
-			$(".tdc_name_value_type:last input[type=text]").die().live("blur",function(){
+			addEnviEvent();
+		}
+		
+		function saveOrDispEnvi(){
+			if($(this).is('hidden')){
+				$(".select .option").each(function(){
+					var val = $(this).attr("value");
+					var name = $(this).html();
+					
+					$(this).next().children(".envi_ipt_val").val(val);
+					$(this).next().children(".envi_ipt_name").val(name);
+				});
+			} else {
+				var id = $(this).children(".envi_ipt_id").val();
+				var domain = $(this).children(".envi_ipt_val").val();
+				var name = $(this).children(".envi_ipt_name").val();
+				//添加delete
+				var url =id?"/domain/update":"/domain/add";
+				
+				var init = $(this).children(".envi_ipt_val").attr("init");
+				if(init == domain && !id){
+					return;
+				}
+				
+				if(init == domain && !!id){
+					url = "/domain/delete/"+id;
+				} 
+				
+				var saveEnvi = $.ajax({
+					url : url,
+					data:{id:id,name:name,domain:domain},
+					type : "get",
+					async:false,
+					dataType : "json"
+				});
+				
+				var obj = $(this);
+				saveEnvi.done(function(data){
+					obj.prev().html(name);
+					obj.prev().attr("value",domain);
+				});
+			}
+		}
+		
+		function addOptionEvent(){
+			$(".select input[type='text']").focus(function(){
+				var init = $(this).attr('init');
+				if(init != $(this).val()){
+					return;
+				}
+				
+				$(this).val('');
+			});
+			$(".select input[type='text']").blur(function(){
+				var init = $(this).attr('init');
+				if($(this).val() == ''){
+					$(this).val(init);
+				}
+			});
+			$(".select .option").click(function(){
+				$(".select span:first").attr("value",$(this).attr("value"));
+				$(".select span:first").html($(this).html());
+				$(".select .option").hide();
+			});
+		}
+		
+		function addEnviEvent(){
+			var pTimeFn = null;
+			$(".select span").click(function(){
+				clearTimeout(pTimeFn);
+				pTimeFn = setTimeout(function(){
+					$(".select .option").toggle();
+				},300);
+			});
+			$(".select span").live("dblclick",function(){
+				clearTimeout(pTimeFn);
+				$(".select .option_edit").toggle("normal",saveOrDispEnvi);
+			});
+			
+			$(".option_edit:last input[type='text']").die().live("blur",function(){
 				var obj = $(this).parent();
 				var inputs = obj.children("input[type=text]");
 				var needAppend = true;
 				$.each(inputs,function(i){
-					if(!$(inputs[i]).val()){
+					var init = $(inputs[i]).attr('init');
+					if(init == $(inputs[i]).val()){
 						needAppend = false;
 					}
 				});
 				
-				var tid = obj.parent().attr("tid");
 				if(needAppend) {
-					obj.parent().append(tdcItemDataTemplate.format({
-						id:tid,
-						j:j,
-						name:'',
-						value:'',
-						type:''
+					obj.parent().append(editabelOptionTemplate.format({
+						id:'',
+						value:'输入地址...',
+						name:'输入名称...'
 					}));
-					addTdcDelEvent();
-				}
-			});
-			
-			$(".tdc_save_bt").click(function(){
-				var btObj = $(this);
-				var tid = btObj.attr("tid");
-				saveTdcData(tid);
-			});
-			
-			$(".tdc_delete_bt").click(function(){
-				var btObj = $(this);
-				var tid = btObj.attr("tid");
-				deleteTdc(btObj,tid);
-			});
-			
-			$(".tdc_title_add_bt").click(function(){
-				var fId = $(this).attr("fid");
-				var testCase={id:'',functionId:fId,name:'创建测试用例',url:'',type:'',step:'',data:'{"elem":[{"k":"","v":"","t":""}]}',create:'',status:''};
-				addTdc(testCase);
-				$("#tdc_"+testCase.id+" .tdc_data").show();
-				$("#tdc_"+testCase.id+" .tdc_action").show();
-				addTdcEvent();
-			});
-			
-			addTdcDelEvent();
-		}
-		
-		function saveTdcData(tid){
-			var fId = $("#fid_"+tid).val();
-			var name = $("#name_"+tid).val();
-			var step = $("#step_"+tid).val();
-			var action = $("#action_"+tid).val();
-			var type = $("#method_"+tid).val();
-			var status = $("#status_"+tid).val();
-			var data = encapElemData(tid);
-			
-			var url =!tid?"/testcase/add":"/testcase/update";
-			
-			var testcases = $.ajax({
-				url : url,
-				data :{id:tid,functionId:fId,name:name,step:step,url:action,type:type,data:data,status:status},
-				type : "post",
-				async:false,
-				dataType : "json"
-			});
-			
-			testcases.done(function(data){
-				if(data.code == 1){
-					$("#tdc_"+tid+" .tdc_title span:first").html(name);
-					alert("保存成功");
-				}
-			});
-		}
-		
-		function addTdcDelEvent(){
-			$(".tdc_name_value_delete_bt").die().live("click",(function(){
-				if(!confirm("确定删除!")){
-					return;
-				}
-				$(this).parent().remove();
-			}));
-		}
-		
-		function encapElemData(tid){
-			var elemObjs = $("#tdc_"+tid+" .tdc_data .tdc_name_value_type");
-			var data ={elem:''};
-			var elem = [];
-			var ElemObj = {'k':'','v':'','t':''};
-			
-			$.each(elemObjs,function(i){
-				var elemObj = $(elemObjs[i]);
-				var name = elemObj.children("input[name='eleName']");
-				var value = elemObj.children("input[name='eleValue']");
-				var type = elemObj.children("input[name='eleType']");
-				if(!!name.val()&&!!value.val()&&!!type.val()){
-					var elemObj = {};
-					elemObj.k = name.val();
-					elemObj.v = value.val();
-					elemObj.t = type.val();
-					elem[i] = elemObj;
-				}
-			});
-			
-			data.elem = elem;
-			
-			return JSON.stringify(data);
-		}
-		
-		function deleteTdc(obj,tid){
-			var url ="/testcase/delete/"+tid;
-			
-			var testcases = $.ajax({
-				url : url,
-				type : "get",
-				async:false,
-				dataType : "json"
-			});
-			
-			testcases.done(function(data){
-				if(data.code == 1){
-					obj.parent().parent().remove();
-					alert("删除成功");
+					$(".option:last").html('');
+					$(".option_edit:last").show();
+					addOptionEvent();
 				}
 			});
 		}
 		
 		$(document).ready(function(){
 			loadProject();
+			loadEnvi();
+			
+			$("#parseUrl").click(function(){
+				anlysis();
+			});
 		});
 	</script>
 </body>
