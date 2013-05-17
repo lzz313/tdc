@@ -52,7 +52,7 @@ function displayTestData(o){
 	var fNm = o.html();
 	var pNm = o.parent().parent().children("p").html();
 	
-	$(".tdc_add >p").html(pNm+'->'+fNm+'->测试步骤');
+	$(".tdc_add >p").html(pNm+' > '+fNm+' > 测试步骤');
 	$(".tdc_add input[type=button]").remove();
 	$(".tdc_add").append(addNewTdcBtTemplate.format({
 		functionId:fid
