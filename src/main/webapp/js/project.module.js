@@ -88,12 +88,12 @@ function addProjectEvent(){
 			if(obj.length==0){
 				loadFunctions(p.parent(),p.parent().attr("pid"));
 			} else if(obj.length>0 && obj.is(":hidden")){
-				obj.show();
+				obj.show("normal");
 				cancleAllEditFunc(funcEdit);
 			} else {
 				cancleAllEditFunc(funcEdit);
-				obj.hide();
-				addBt.show();
+				obj.hide("normal");
+				addBt.show("normal");
 			}
 	    },150);
 	});
@@ -258,6 +258,7 @@ function addFuncEvent(){
 	    //执行延时
 	    fTimeFn = setTimeout(function(){
 	    	displayTestData(o);
+	    	loadEnvi(o.parent().parent().attr("pid"));
 	    },150);
 	});
 	

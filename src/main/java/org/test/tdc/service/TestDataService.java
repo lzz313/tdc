@@ -42,6 +42,7 @@ public class TestDataService {
 					testCaseTO.setName(query.getString("S_NAME"));
 					testCaseTO.setStep(query.getString("S_STEP"));
 					testCaseTO.setUrl(query.getString("S_URL"));
+					testCaseTO.setDesc(query.getString("S_DESC"));
 					testCaseTO.setType(query.getString("S_TYPE"));
 					testCaseTO.setData(query.getString("S_DATA"));
 					testCaseTO.setCreate(query.getDate("D_CREATE"));
@@ -73,6 +74,7 @@ public class TestDataService {
 					testCaseTO.setName(query.getString("S_NAME"));
 					testCaseTO.setStep(query.getString("S_STEP"));
 					testCaseTO.setUrl(query.getString("S_URL"));
+					testCaseTO.setDesc(query.getString("S_DESC"));
 					testCaseTO.setType(query.getString("S_TYPE"));
 					testCaseTO.setData(query.getString("S_DATA"));
 					testCaseTO.setCreate(query.getDate("D_DATE"));
@@ -95,8 +97,8 @@ public class TestDataService {
 	 * @return
 	 */
 	public int createTestCase(TestCaseTO testCaseTO){
-		String createTestCaseSql = "insert into TESTCASE (N_FUNCTION_ID,S_NAME,S_STEP,S_URL,S_TYPE,S_DATA,D_CREATE,S_STATUS) " +
-								"values (:functionId,:name,:step,:url,:type,:data,now(),'1')";
+		String createTestCaseSql = "insert into TESTCASE (N_FUNCTION_ID,S_NAME,S_STEP,S_URL,S_DESC,S_TYPE,S_DATA,D_CREATE,S_STATUS) " +
+								"values (:functionId,:name,:step,:url,:desc,:type,:data,now(),'1')";
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("functionId", testCaseTO.getFunctionId());
@@ -104,6 +106,7 @@ public class TestDataService {
 		params.put("step", testCaseTO.getStep());
 		params.put("url", testCaseTO.getUrl());
 		params.put("type", testCaseTO.getType());
+		params.put("desc", testCaseTO.getDesc());
 		params.put("data", testCaseTO.getData());
 
 		int affectRows = jdbcTemplateProcessor.update(createTestCaseSql, params);
@@ -119,6 +122,7 @@ public class TestDataService {
 													"S_NAME=:name, " +
 													"S_STEP=:step," +
 													"S_URL=:url," +
+													"S_DESC=:desc," +
 													"S_TYPE=:type," +
 													"S_DATA=:data," +
 													"S_STATUS=:status " +
@@ -131,6 +135,7 @@ public class TestDataService {
 		params.put("step", testCaseTO.getStep());
 		params.put("url", testCaseTO.getUrl());
 		params.put("type", testCaseTO.getType());
+		params.put("desc", testCaseTO.getDesc());
 		params.put("data", testCaseTO.getData());
 		params.put("status", testCaseTO.getStatus());
 		

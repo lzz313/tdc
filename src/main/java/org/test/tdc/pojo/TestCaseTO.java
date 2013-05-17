@@ -14,6 +14,7 @@ public class TestCaseTO  implements BaseTO{
 	private String url;
 	private String type;
 	private String step;
+	private String desc;
 	private String data;
 	private Date create;
 	private String status;
@@ -40,6 +41,12 @@ public class TestCaseTO  implements BaseTO{
 	}
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	public String getDesc() {
+		return desc;
+	}
+	public void setDesc(String desc) {
+		this.desc = desc;
 	}
 	public String getType() {
 		return type;

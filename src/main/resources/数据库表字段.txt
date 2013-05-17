@@ -1,6 +1,7 @@
 表结构
 表名		ENVIRONMENT   项目环境
 		N_ID
+		N_PROJECT_ID 项目id
 		S_NAME     环境名称
 		S_DOMAIN   环境域名
 
@@ -19,6 +20,7 @@
 		N_ID 
 		N_FUNCTION_ID 功能或模块id
 		S_NAME  测试名称，说明
+		S_DESC 详细说明
 		S_STEP 步骤
 		S_URL 测试接口
 		S_TYPE  接口访问类型(get/post)

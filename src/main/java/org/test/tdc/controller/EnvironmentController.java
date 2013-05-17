@@ -22,9 +22,9 @@ public class EnvironmentController{
 	@Resource
 	private EnvironmentService environmentService;
 	
-	@RequestMapping("/query")
-	public @ResponseBody JsonResponse queryDomain(){
-		List<EnvironmentTO> queryDomain = environmentService.queryDomain();
+	@RequestMapping("/query/{pid}")
+	public @ResponseBody JsonResponse queryDomain(@PathVariable("pid") final int pid){
+		List<EnvironmentTO> queryDomain = environmentService.queryDomain(pid);
 		
 		Map<String,Object> result = new HashMap<String,Object>();
 		result.put("queryDomain", queryDomain);
@@ -33,16 +33,17 @@ public class EnvironmentController{
 	}
 	
 	@RequestMapping("/add")
-	public @ResponseBody JsonResponse addDomain(  @RequestParam(value = "name") final String name,
+	public @ResponseBody JsonResponse addDomain(  @RequestParam(value = "pid") final int pid,
+												  @RequestParam(value = "name") final String name,
 												  @RequestParam(value = "domain") final String domain){
 		
-		EnvironmentTO environmentTO = new EnvironmentTO();
-		environmentTO.setName(name);
-		environmentTO.setDomain(domain);
-		
-		int affectRows = environmentService.createDomian(name, domain);
+		int affectRows = environmentService.createDomian(pid, name, domain);
 		if(affectRows == 1){
 			Map<String,Object> result = new HashMap<String,Object>();
+			EnvironmentTO environmentTO = new EnvironmentTO();
+			environmentTO.setProjectId(pid);
+			environmentTO.setName(name);
+			environmentTO.setDomain(domain);
 			result.put("environment", environmentTO);
 			return new JsonResponse(JsonResponse.CODE_SUCCESS,"添加成功",result);
 		} else {

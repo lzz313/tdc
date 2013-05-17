@@ -24,11 +24,12 @@ public class EnvironmentService {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public List<EnvironmentTO> queryDomain(){
+	public List<EnvironmentTO> queryDomain(int pid){
 		
-		String queryDomainSql = "select * from ENVIRONMENT";
+		String queryDomainSql = "select * from ENVIRONMENT where n_project_id=:pid";
 		
 		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("pid", pid);
 		
 		List<EnvironmentTO> domains = new ArrayList<EnvironmentTO>();
 		try{
@@ -36,6 +37,7 @@ public class EnvironmentService {
 				public EnvironmentTO mapRow(ResultSet query, int rowNum) throws SQLException{
 					EnvironmentTO environmentTO = new EnvironmentTO();
 					environmentTO.setId(query.getInt("N_ID"));
+					environmentTO.setProjectId(query.getInt("N_PROJECT_ID"));
 					environmentTO.setName(query.getString("S_NAME"));
 					environmentTO.setDomain(query.getString("S_DOMAIN"));
 					return environmentTO;
@@ -54,10 +56,11 @@ public class EnvironmentService {
 	 * @param domain
 	 * @return
 	 */
-	public int createDomian(String name,String domain){
-		String updateProject = "insert into ENVIRONMENT (S_NAME,S_DOMAIN) values (:name,:domain)";
+	public int createDomian(int pid,String name,String domain){
+		String updateProject = "insert into ENVIRONMENT (N_PROJECT_ID,S_NAME,S_DOMAIN) values (:pid,:name,:domain)";
 		
 		Map<String,Object> params = new HashMap<String,Object>();
+		params.put("pid", pid);
 		params.put("name", name);
 		params.put("domain", domain);
 		return jdbcTemplateProcessor.update(updateProject, params);

@@ -55,6 +55,7 @@ public class TestCaseDataController {
 												  @RequestParam(value = "name") final String name,
 												  @RequestParam(value = "step") final String step,
 												  @RequestParam(value = "url") final String url,
+												  @RequestParam(value = "desc") final String desc,
 												  @RequestParam(value = "type") final String type,
 												  @RequestParam(value = "data") final String data){
 		
@@ -64,6 +65,7 @@ public class TestCaseDataController {
 		testCaseTO.setStep(step);
 		testCaseTO.setUrl(url);
 		testCaseTO.setType(type);
+		testCaseTO.setDesc(desc);
 		testCaseTO.setData(data);
 		
 		int affectRows = testDataService.createTestCase(testCaseTO);
@@ -82,6 +84,7 @@ public class TestCaseDataController {
 													  @RequestParam(value = "name") final String name,
 													  @RequestParam(value = "step") final String step,
 													  @RequestParam(value = "url") final String url,
+													  @RequestParam(value = "desc") final String desc,
 													  @RequestParam(value = "type") final String type,
 													  @RequestParam(value = "data") final String data,
 													  @RequestParam(value = "status") final String status){
@@ -92,6 +95,7 @@ public class TestCaseDataController {
 		testCaseTO.setStep(step);
 		testCaseTO.setUrl(url);
 		testCaseTO.setType(type);
+		testCaseTO.setDesc(desc);
 		testCaseTO.setData(data);
 		testCaseTO.setStatus(status);
 		

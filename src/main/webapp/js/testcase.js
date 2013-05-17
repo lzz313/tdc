@@ -20,6 +20,8 @@ var tdcListTemplate = [
 		                   			'<option value="GET">GET</option>',
 		                   			'<option value="POST">POST</option>',
 		                   		'</select>',
+		                   		'<p>测试说明:</p>',
+		                   		'<textarea cols="92" rows="5" id="desc_@{id}">@{desc}</textarea>',
 		                   	'</div>',
 		                   	'<div class="tdc_name_value_type_title"><span>字段名</span><span>字段值</span><span>字段类型</span></div>',
 						'</div>',
@@ -84,6 +86,7 @@ function addTdc(testCase){
 		step:testCase.step,
 		functionId:testCase.functionId,
 		url:testCase.url,
+		desc:testCase.desc,
 		create:testCase.create,
 		status:testCase.status
 	}));
@@ -175,6 +178,7 @@ function saveTdcData(tid){
 	var name = $("#name_"+tid).val();
 	var step = $("#step_"+tid).val();
 	var action = $("#action_"+tid).val();
+	var desc = $("#desc_"+tid).val();
 	var type = $("#method_"+tid).val();
 	var status = $("#status_"+tid).val();
 	var data = encapElemData(tid);
@@ -183,7 +187,7 @@ function saveTdcData(tid){
 	
 	var testcases = $.ajax({
 		url : url,
-		data :{id:tid,functionId:fId,name:name,step:step,url:action,type:type,data:data,status:status},
+		data :{id:tid,functionId:fId,name:name,step:step,url:action,desc:desc,type:type,data:data,status:status},
 		type : "post",
 		async:false,
 		dataType : "json"
@@ -250,13 +254,24 @@ function deleteTdc(obj,tid){
 }
 
 function test(tid){
+	var domain = $(".select span:first").attr("value");
+	var action = $("#action_"+tid).val();
+	
+	if(action.indexOf("http://") == -1){
+		if(domain == ''||domain == undefined){
+			alert('请选择测试环境');
+			return;
+		}
+		action = domain + action;
+	}
+	
 	var testAction = $.ajax({
 		url : "/parse/test",
 		type : "post",
 		async : false,
 		data : {
 			formData:formData(tid),
-			url:$("#action_"+tid).val(),
+			url:action,
 			method:$("#method_"+tid).val()
 		},
 		dataType : "json"
@@ -291,7 +306,7 @@ function getActionWithHost(action,url){
 		actionUrl = 'http://'+host+action;
 	}
 	
-	return actionUrl
+	return actionUrl;
 }
 
 function pushForm(forms){
@@ -333,7 +348,7 @@ function formData(fIdx){
 	$('input[id^='+eleNm+']').each(function(){
 		idx = $(this).attr("id").split('_')[2];
 		var key = $("#"+eleNm+idx).val();
-		var value = $("#"+eleVal+idx).val()
+		var value = $("#"+eleVal+idx).val();
 		
 		args[key]=value;
 	});
