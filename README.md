@@ -99,5 +99,5 @@ todo:
 
 下个版本功能
 
-1.输入测试页面地址自动获取页面form表单action，input值。
+<input type="checkbox"/>1.输入测试页面地址自动获取页面form表单action，input值。
 2.每个功能的测试用例能够回归测试，并保存测试结果
