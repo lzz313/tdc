@@ -91,6 +91,9 @@ function addTdc(testCase){
 		status:testCase.status
 	}));
 	
+	var method_type = testCase.type;
+	$("#method_"+testCase.id).val(method_type.toUpperCase());
+	
 	var elems = JSON.parse(testCase.data).elem;
 	$.each(elems,function(j){
 		$("#tdc_"+testCase.id+" .tdc_data").append(tdcItemDataTemplate.format({
@@ -321,9 +324,10 @@ function pushForm(forms){
 										status:'',
 										create:'',
 										functionId:fId,
-										url:getActionWithHost(forms[i].formAction,$("#url").val()),
-										method:forms[i].method})
+										url:getActionWithHost(forms[i].formAction,$("#url").val())})
 							   );
+		
+		$("#method_"+tid).val(forms[i].method.toUpperCase());
 		
 		var inputs = forms[i].inputs;
 		$.each(inputs,function(j){
