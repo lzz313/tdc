@@ -8,21 +8,22 @@ public class FunctionTO implements BaseTO{
 	 */
 	private static final long serialVersionUID = 1344669304647808996L;
 	
-	private Long id;
-	private Long projectId;
+	private int id;
+	private int projectId;
 	private String name;
 	private Date create;
+	private int tcount;
 	
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
-	public Long getProjectId() {
+	public int getProjectId() {
 		return projectId;
 	}
-	public void setProjectId(Long projectId) {
+	public void setProjectId(int projectId) {
 		this.projectId = projectId;
 	}
 	public String getName() {
@@ -36,6 +37,12 @@ public class FunctionTO implements BaseTO{
 	}
 	public void setCreate(Date create) {
 		this.create = create;
+	}
+	public int getTcount() {
+		return tcount;
+	}
+	public void setTcount(int tcount) {
+		this.tcount = tcount;
 	}
 	
 }

@@ -45,7 +45,10 @@ public class FunctionService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<FunctionTO> queryFunction(int projectId){
-		String queryProject = "select * from function where n_project_id = :pid";
+		String queryProject = "select f.N_ID,f.N_PROJECT_ID,f.S_NAME,f.D_CREATE,count(t.n_id) as TCOUNT " +
+								" from function f left join testcase t on f.n_id = t.n_function_id " +
+								" where f.n_project_id = :pid " +
+								" group by f.n_id,f.n_project_id,f.S_NAME,f.d_create";
 		List<FunctionTO> functions = new ArrayList<FunctionTO>();
 		try {
 			Map<String,Object> params = new HashMap<String,Object>();
@@ -54,10 +57,11 @@ public class FunctionService {
 				public FunctionTO mapRow(ResultSet query, int rowNum)
 						throws SQLException {
 					FunctionTO functionTO = new FunctionTO();
-					functionTO.setId(query.getLong("N_ID"));
-					functionTO.setProjectId(query.getLong("N_PROJECT_ID"));
+					functionTO.setId(query.getInt("N_ID"));
+					functionTO.setProjectId(query.getInt("N_PROJECT_ID"));
 					functionTO.setName(query.getString("S_NAME"));
 					functionTO.setCreate(query.getDate("D_CREATE"));
+					functionTO.setTcount(query.getInt("TCOUNT"));
 					return functionTO;
 				}
 			});
@@ -79,8 +83,8 @@ public class FunctionService {
 			functions = (List<FunctionTO>) jdbcTemplateProcessor.findAll(queryFunction, params, new RowMapper<FunctionTO>(){
 				public FunctionTO mapRow(ResultSet query, int rowNum) throws SQLException{
 					FunctionTO functionTO = new FunctionTO();
-					functionTO.setId(query.getLong("N_ID"));
-					functionTO.setProjectId(query.getLong("N_PROJECT_ID"));
+					functionTO.setId(query.getInt("N_ID"));
+					functionTO.setProjectId(query.getInt("N_PROJECT_ID"));
 					functionTO.setName(query.getString("S_NAME"));
 					functionTO.setCreate(query.getDate("D_CREATE"));
 					return functionTO;

@@ -11,10 +11,10 @@ public class ProjectRowMapper implements RowMapper<Object>{
 	public Object mapRow(ResultSet rs, int rowNum) throws SQLException {
 		ProjectTO project = new ProjectTO();
 		
-		project.setId(rs.getLong("N_ID"));
+		project.setId(rs.getInt("N_ID"));
 		project.setName(rs.getString("S_NAME"));
 		project.setCreate(rs.getDate("D_CREATE"));
-		
+		project.setFcount(rs.getInt("FCOUNT"));
 		return project;
 	}
 

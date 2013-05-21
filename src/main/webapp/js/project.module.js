@@ -42,7 +42,7 @@ function loadProject(){
 			var projects = data.data.projects;
 			$(".project_list").append(addProjectTemplate);
 			$.each(projects,function(i){
-				$(".project_list").append(projectTemplate.format({name:projects[i].name,id:projects[i].id}));
+				$(".project_list").append(projectTemplate.format({name:projects[i].name+'('+projects[i].fcount+')',id:projects[i].id}));
 				$(".project_list").append(editProjectTemplate.format({
 					value:projects[i].name,
 					pid:projects[i].id
@@ -219,7 +219,7 @@ function loadFunctions(obj,pid){
 			var funcAdd = obj.children(".function_add");
 			if(!funcAdd[0]) obj.append(addFuncTemplate);
 			$.each(funcs,function(i){
-				obj.append(funcTemplate.format({fname:funcs[i].name,fid:funcs[i].id}));
+				obj.append(funcTemplate.format({fname:funcs[i].name+'('+funcs[i].tcount+')',fid:funcs[i].id}));
 				obj.append(editFuncTemplate.format({
 					value:funcs[i].name,
 					fid:funcs[i].id

@@ -31,7 +31,7 @@ public class ProjectService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ProjectTO> queryProject(){
-		String queryProeject = "select * from project";
+		String queryProeject = "select p.N_ID,p.S_NAME,p.D_CREATE,count(f.N_ID) as fcount from project p left join function f on p.N_ID=f.N_PROJECT_ID group by p.N_ID,p.S_NAME,p.D_CREATE";
 		List<ProjectTO> projects = new ArrayList<ProjectTO>();
 		try {
 			projects = (List<ProjectTO>) jdbcTemplateProcessor.findAll(queryProeject, new HashMap<String,Object>(), new ProjectRowMapper());
@@ -59,7 +59,7 @@ public class ProjectService {
 				public ProjectTO mapRow(ResultSet query, int rowNum)
 						throws SQLException {
 					ProjectTO projectTO = new ProjectTO();
-					projectTO.setId(query.getLong("N_ID"));
+					projectTO.setId(query.getInt("N_ID"));
 					projectTO.setName(query.getString("S_NAME"));
 					projectTO.setCreate(query.getDate("D_CREATE"));
 					return projectTO;
@@ -89,7 +89,7 @@ public class ProjectService {
 				public ProjectTO mapRow(ResultSet query, int rowNum)
 						throws SQLException{
 					ProjectTO projectTO = new ProjectTO();
-					projectTO.setId(query.getLong("N_ID"));
+					projectTO.setId(query.getInt("N_ID"));
 					projectTO.setName(query.getString("S_NAME"));
 					projectTO.setCreate(query.getDate("D_CREATE"));
 					return projectTO;

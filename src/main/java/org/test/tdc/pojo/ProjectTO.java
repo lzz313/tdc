@@ -8,15 +8,22 @@ public class ProjectTO  implements BaseTO{
 	 */
 	private static final long serialVersionUID = 7683078100000594742L;
 	
-	private Long id;
+	private int id;
+	private int fcount;
 	private String name;
 	private Date create;
 	
-	public Long getId() {
+	public int getId() {
 		return id;
 	}
-	public void setId(Long id) {
+	public void setId(int id) {
 		this.id = id;
+	}
+	public int getFcount() {
+		return fcount;
+	}
+	public void setFcount(int fcount) {
+		this.fcount = fcount;
 	}
 	public String getName() {
 		return name;
