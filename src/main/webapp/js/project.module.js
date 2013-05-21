@@ -8,7 +8,7 @@ String.prototype.format = function(O){
 var projectTemplate = [
 						'<div class="project_name" pid=@{id} >',
 							'<a class="project_delete_link" pid=@{id} onclick="deleteProject($(this))">删除</a>',
-							'<a class="function_add_link" onclick="showAddFunction($(this),@{id})">新加</a>',
+							'<a class="add function_add_link" onclick="showAddFunction($(this),@{id})"></a>',
 							'<p>@{name}</p>',
 						'</div>' 
 					   ].join('');

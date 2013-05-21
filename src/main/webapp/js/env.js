@@ -21,7 +21,7 @@ function loadEnvi(pid){
 	envi.done(function(data){
 		if(data.code == 1){
 			var domains = data.data.queryDomain;
-			
+			$(".select").html('<span class="select_choice">请选择...</span><span class="select_edit" style="float: right;">＋</span>');
 			$.each(domains,function(i){
 				$(".select").append(editabelOptionTemplate.format({
 					id:domains[i].id,
@@ -111,14 +111,10 @@ function addOptionEvent(){
 
 function addEnviEvent(){
 	var pTimeFn = null;
-	$(".select span").click(function(){
-		clearTimeout(pTimeFn);
-		pTimeFn = setTimeout(function(){
-			$(".select .option").toggle();
-		},300);
+	$(".select span:first").click(function(){
+		$(".select .option").toggle();
 	});
-	$(".select span").live("dblclick",function(){
-		clearTimeout(pTimeFn);
+	$(".select span:last").die().live("dblclick",function(){
 		$(".select .option_edit").toggle("normal",saveOrDispEnvi);
 	});
 	

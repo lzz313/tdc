@@ -1,4 +1,5 @@
-body{margin:0;padding:0;font-size:14px;font-family:Tahoma,SimSun; height:100%}
+/**body{margin:0;padding:0;font-size:14px;font-family:Tahoma,SimSun; height:100%}*/
+body{margin:0px;padding:0px;background-color:#E7EAEB;font-family:"Î¢ÈíÑÅºÚ","ºÚÌå","ËÎÌå";font-size:14px;height:36px;}
 div {display: block;margin:0 auto}
 p{margin:0 auto;padding:0;}
 a{cursor:pointer;}
@@ -11,7 +12,7 @@ input[type="button"]{height:25px;border:1px solid #969696;margin-left:1px;}
 .page_left{width:363px;float:left;border:1px solid #969696;min-height: 627px;}
 .left_title{font-size:15pt;font-weight: bold;}
 
-.page_envi{width:700px;float:left;border:1px solid #000;height: 25px;}
+.page_envi{width:700px;float:left;border:1px solid #000;height: 28px;}
 .envi_edit{display: none;width:630px;}
 .page_center{width:700px;float:left;border:1px solid #000;min-height: 600px;}
 
@@ -60,6 +61,8 @@ input[type="button"]{height:25px;border:1px solid #969696;margin-left:1px;}
 .tdc_name_value_type input{margin:1px 1px 1px 0;}
 
 .select{position:absolute;margin-top:3px; display: inline-block;width: 300px;border:1px solid #969696;}
+.select_choice{width:280px;padding-right:220px;}
+.select_edit{float: right;width:20px;}
 .envi_tips {margin: 4px 0 0 3px ;width: 65px;float:left;}
 .option,.option_edit{position: relative;width: 298px;border-top:1px solid #000;z-index: 100;display: none;background-color: #fff;}
 .option_edit input{width:115px;}

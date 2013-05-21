@@ -7,12 +7,17 @@ test data collection
 1.显示项目列表，修改项目名称(双击修改)，删除项目
 2.显示下面模块列表(单击项目显示模块)，修改模块名称(双击修改)
 3.测试用例可添加，保存，修改
+4.测试用例添加，删除，测试和分析按钮
+5.测试用例添加用例说明
 
 todo:
-添加删除，测试和分析按钮
-项目名称后面显示模块数量，模块名称后面显示用例数量
+1.项目名称后面显示模块数量，模块名称后面显示用例数量
+2.根据值类型自动生成case
+3.测试用例GET/POST 自动选择
+4.测试用例添加预期结果
 
-根据值类型自动生成case
+
+考虑其他协议socket
 
 页面结构
 <div class="page_left">
@@ -57,42 +62,42 @@ todo:
 </div>
 
 
-				<div class="tdc_item" tdcId="@{id}">
-					<div class="tdc_title">
-						<span>@{name}</span>  
-		                <span style="float:right;">时间:@{create}</span>     
-		                <input type="hidden" id="fid_@{id} value="@{functionId}"/>
-		                <input type="hidden" id="id_@{id} value="@{id}"/>
-					</div>
-					<div class="tdc_data">
-						<div class="tdc_info">
-						        名称: <input id="name_@{id}" value="@{name}" style="width:200px"/> 
-						        地址: <input id="action_@{id}" value="@{url}" style="width:180px"/>
-		                   method:
-		                   <select id="method_@{id}" >
-		                   		<option value="GET">GET</option>
-		                   		<option value="POST">POST</option>
-		                   </select>
-						</div>
-						<div class="tdc_name_value_type" dtlId="@{j}">
-							<span>参数</span>
-							<input id="@{fIdx}_eleName_@{j}" type="text" name="@{fIdx}_eleName_@{j}" value="@{name}"/>
-							<input id="@{fIdx}_eleValue_@{j}" type="text" name="@{fIdx}_eleValue_@{j}" value="@{value}"/>
-							<input id="@{fIdx}_eleType_@{j}" type="text" name="@{fIdx}_eleType_@{j}" value="@{type}"/>
-						</div>
-						<div class="tdc_name_value_type" dtlId="@{j}">
-							<span>参数</span>
-							<input id="@{fIdx}_eleName_@{j}" type="text" name="@{fIdx}_eleName_@{j}" value="@{name}"/>
-							<input id="@{fIdx}_eleValue_@{j}" type="text" name="@{fIdx}_eleValue_@{j}" value="@{value}"/>
-							<input id="@{fIdx}_eleType_@{j}" type="text" name="@{fIdx}_eleType_@{j}" value="@{type}"/>
-						</div>
-						
-					</div>
-					<div class="tdc_action">
-						<input type="button" value="保存"/>
-						<input type="button" value="测试"/>
-					</div>
-				</div>
+<div class="tdc_item" tdcId="@{id}">
+	<div class="tdc_title">
+		<span>@{name}</span>  
+        <span style="float:right;">时间:@{create}</span>     
+        <input type="hidden" id="fid_@{id} value="@{functionId}"/>
+        <input type="hidden" id="id_@{id} value="@{id}"/>
+	</div>
+	<div class="tdc_data">
+		<div class="tdc_info">
+		        名称: <input id="name_@{id}" value="@{name}" style="width:200px"/> 
+		        地址: <input id="action_@{id}" value="@{url}" style="width:180px"/>
+           method:
+           <select id="method_@{id}" >
+           		<option value="GET">GET</option>
+           		<option value="POST">POST</option>
+           </select>
+		</div>
+		<div class="tdc_name_value_type" dtlId="@{j}">
+			<span>参数</span>
+			<input id="@{fIdx}_eleName_@{j}" type="text" name="@{fIdx}_eleName_@{j}" value="@{name}"/>
+			<input id="@{fIdx}_eleValue_@{j}" type="text" name="@{fIdx}_eleValue_@{j}" value="@{value}"/>
+			<input id="@{fIdx}_eleType_@{j}" type="text" name="@{fIdx}_eleType_@{j}" value="@{type}"/>
+		</div>
+		<div class="tdc_name_value_type" dtlId="@{j}">
+			<span>参数</span>
+			<input id="@{fIdx}_eleName_@{j}" type="text" name="@{fIdx}_eleName_@{j}" value="@{name}"/>
+			<input id="@{fIdx}_eleValue_@{j}" type="text" name="@{fIdx}_eleValue_@{j}" value="@{value}"/>
+			<input id="@{fIdx}_eleType_@{j}" type="text" name="@{fIdx}_eleType_@{j}" value="@{type}"/>
+		</div>
+		
+	</div>
+	<div class="tdc_action">
+		<input type="button" value="保存"/>
+		<input type="button" value="测试"/>
+	</div>
+</div>
 
 {"elem": [{"k": "1","v":"2","t":"text"},{"k": "21","v":"22","t":"text"}]}
 

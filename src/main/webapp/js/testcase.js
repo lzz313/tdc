@@ -12,7 +12,7 @@ var tdcListTemplate = [
 						'</div>',
 						'<div class="tdc_data" tid="@{id}">',
 							'<div class="tdc_info">',
-								'步骤: <input id="step_@{id}" value="@{step}" style="width:50px"/> ',
+								'步骤: <input id="step_@{id}" value="@{step}" style="width:25px"/> ',
 						       	'名称: <input id="name_@{id}" value="@{name}" style="width:200px"/> ',
 						       	'地址: <input id="action_@{id}" value="@{url}" style="width:180px"/>',
 		                   	   	'method:',
