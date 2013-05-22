@@ -21,7 +21,9 @@ var tdcListTemplate = [
 		                   			'<option value="POST">POST</option>',
 		                   		'</select>',
 		                   		'<p>测试说明:</p>',
-		                   		'<textarea cols="92" rows="5" id="desc_@{id}">@{desc}</textarea>',
+		                   		'<textarea cols="92" rows="3" class="tdc_info_area" id="desc_@{id}">@{desc}</textarea>',
+		                   		'<p>期望:</p>',
+		                   		'<textarea cols="92" rows="3" class="tdc_info_area" id="expect_@{id}">@{expect}</textarea>',
 		                   	'</div>',
 		                   	'<div class="tdc_name_value_type_title"><span>字段名</span><span>字段值</span><span>字段类型</span></div>',
 						'</div>',
@@ -87,6 +89,7 @@ function addTdc(testCase){
 		functionId:testCase.functionId,
 		url:testCase.url,
 		desc:testCase.desc,
+		expect:testCase.expect,
 		create:testCase.create,
 		status:testCase.status
 	}));
@@ -173,7 +176,32 @@ function addTdcEvent(){
 		$("#tdc_anlysis").show();
 	});
 	
+	$(".tdc_info_area").focus(function(){
+		var o = $(this);
+		calMinAreaRows(o,3);
+	});
+	
+	$(".tdc_info_area").blur(function(){
+		var o = $(this);
+		calMinAreaRows(o,3);
+	});
+	
+	$(".tdc_info_area").each(function(){
+		var o = $(this);
+		calMinAreaRows(o,3);
+	});
+	
 	addTdcDelEvent();
+}
+
+function calMinAreaRows(o,minRows){
+	var f_min_w = o.attr('cols');
+	var v = o.val();
+	var f_v_h = v.length/parseInt(f_min_w)+1;
+	var f_lf_h = v.split(/\r?\n/).length;
+	var f_m_h = f_lf_h > f_v_h?f_lf_h:f_v_h;
+	var f_h = f_m_h > minRows?f_m_h:minRows;
+	o.attr('rows',f_h);
 }
 
 function saveTdcData(tid){
@@ -182,6 +210,7 @@ function saveTdcData(tid){
 	var step = $("#step_"+tid).val();
 	var action = $("#action_"+tid).val();
 	var desc = $("#desc_"+tid).val();
+	var expect = $("#expect_"+tid).val();
 	var type = $("#method_"+tid).val();
 	var status = $("#status_"+tid).val();
 	var data = encapElemData(tid);
@@ -190,7 +219,7 @@ function saveTdcData(tid){
 	
 	var testcases = $.ajax({
 		url : url,
-		data :{id:tid,functionId:fId,name:name,step:step,url:action,desc:desc,type:type,data:data,status:status},
+		data :{id:tid,functionId:fId,name:name,step:step,url:action,desc:desc,type:type,expect:expect,data:data,status:status},
 		type : "post",
 		async:false,
 		dataType : "json"

@@ -87,6 +87,7 @@ public class TestCaseDataController {
 													  @RequestParam(value = "desc") final String desc,
 													  @RequestParam(value = "type") final String type,
 													  @RequestParam(value = "data") final String data,
+													  @RequestParam(value = "expect") final String expect,
 													  @RequestParam(value = "status") final String status){
 		TestCaseTO testCaseTO = new TestCaseTO();
 		testCaseTO.setId(id);
@@ -97,6 +98,7 @@ public class TestCaseDataController {
 		testCaseTO.setType(type);
 		testCaseTO.setDesc(desc);
 		testCaseTO.setData(data);
+		testCaseTO.setExpect(expect);
 		testCaseTO.setStatus(status);
 		
 		int affectRows = testDataService.updateTestCase(testCaseTO);

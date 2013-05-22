@@ -11,7 +11,6 @@ test data collection
 
 ###todo:
 1.根据值类型自动生成case<br/>
-2.测试用例添加预期结果<br/>
 
 ###页面结构
 ```html

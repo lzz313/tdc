@@ -16,6 +16,7 @@ public class TestCaseTO  implements BaseTO{
 	private String step;
 	private String desc;
 	private String data;
+	private String expect;
 	private Date create;
 	private String status;
 	public int getId() {
@@ -59,6 +60,12 @@ public class TestCaseTO  implements BaseTO{
 	}
 	public void setStep(String step) {
 		this.step = step;
+	}
+	public String getExpect() {
+		return expect;
+	}
+	public void setExpect(String expect) {
+		this.expect = expect;
 	}
 	public String getData() {
 		return data;
