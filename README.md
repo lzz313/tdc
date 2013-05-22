@@ -10,7 +10,9 @@ test data collection
 5.测试用例添加用例说明<br/>
 
 ###todo:
-1.根据值类型自动生成case<br/>
+1.用例数据自动复制功能<br/>
+2.用例根据步骤排序<br/>
+2.根据值类型自动生成case<br/>
 
 ###页面结构
 ```html
@@ -54,7 +56,6 @@ test data collection
 		
 	</div>
 </div>
-
 
 <div class="tdc_item" tdcId="@{id}">
 	<div class="tdc_title">

@@ -29,6 +29,7 @@ var tdcListTemplate = [
 						'</div>',
 						'<div class="tdc_action">',
 							'<input type="button" tid="@{id}" class="tdc_save_bt" value="保存"/>',
+							'<input type="button" tid="@{id}" class="tdc_copy_bt" value="复制"/>',
 							'<input type="button" tid="@{id}" class="tdc_delete_bt" value="删除"/>',
 							'<input type="button" tid="@{id}" class="tdc_test_bt" value="测试"/>',
 						'</div>',
@@ -151,6 +152,12 @@ function addTdcEvent(){
 		saveTdcData(tid);
 	});
 	
+	$(".tdc_copy_bt").click(function(){
+		var btObj = $(this);
+		var tid = btObj.attr("tid");
+		copyTdcData(tid);
+	});
+	
 	$(".tdc_delete_bt").click(function(){
 		var btObj = $(this);
 		var tid = btObj.attr("tid");
@@ -204,7 +211,23 @@ function calMinAreaRows(o,minRows){
 	o.attr('rows',f_h);
 }
 
+function cbSaveTdcDisp(testCase){
+	$("#tdc_"+testCase.tid+" .tdc_title span:first").html(testCase.name);
+	alert("保存成功");
+}
+
+function cbCopyTdcDisp(testCase){
+	$("#tdc_"+testCase.tid+" .tdc_title span:first").html(testCase.name);
+	addTdc(testCase);
+	alert("复制成功");
+}
+
 function saveTdcData(tid){
+	var url =(!tid||parseInt(tid)<=0)?"/testcase/add":"/testcase/update";
+	saveTdc(tid,url,cbSaveTdcDisp);
+}
+
+function copyTdcData(tid){
 	var fId = $("#fid_"+tid).val();
 	var name = $("#name_"+tid).val();
 	var step = $("#step_"+tid).val();
@@ -214,8 +237,22 @@ function saveTdcData(tid){
 	var type = $("#method_"+tid).val();
 	var status = $("#status_"+tid).val();
 	var data = encapElemData(tid);
+	var testCase = {'id':'','name':name,'step':step,'functionId':fId,'url':action,'type':type,'desc':desc,'expect':expect,'data':data,'create':'-','status':status};
 	
-	var url =(!tid||parseInt(tid)<=0)?"/testcase/add":"/testcase/update";
+	addTdc(testCase);
+	alert("复制成功");
+}
+
+function saveTdc(tid,url,callback){
+	var fId = $("#fid_"+tid).val();
+	var name = $("#name_"+tid).val();
+	var step = $("#step_"+tid).val();
+	var action = $("#action_"+tid).val();
+	var desc = $("#desc_"+tid).val();
+	var expect = $("#expect_"+tid).val();
+	var type = $("#method_"+tid).val();
+	var status = $("#status_"+tid).val();
+	var data = encapElemData(tid);
 	
 	var testcases = $.ajax({
 		url : url,
@@ -227,8 +264,7 @@ function saveTdcData(tid){
 	
 	testcases.done(function(data){
 		if(data.code == 1){
-			$("#tdc_"+tid+" .tdc_title span:first").html(name);
-			alert("保存成功");
+			callback(data.data.testCase);
 		}
 	});
 }

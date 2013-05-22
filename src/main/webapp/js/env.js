@@ -112,10 +112,10 @@ function addOptionEvent(){
 function addEnviEvent(){
 	var pTimeFn = null;
 	$(".select span:first").click(function(){
-		$(".select .option").toggle();
+		$(".select .option").toggle('fast');
 	});
 	$(".select span:last").die().live("dblclick",function(){
-		$(".select .option_edit").toggle("normal",saveOrDispEnvi);
+		$(".select .option_edit").toggle("fast",saveOrDispEnvi);
 	});
 	
 	$(".option_edit:last input[type='text']").die().live("blur",function(){

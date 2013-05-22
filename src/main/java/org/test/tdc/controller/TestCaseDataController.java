@@ -53,9 +53,10 @@ public class TestCaseDataController {
 	@RequestMapping("/add")
 	public @ResponseBody JsonResponse addTestCase(@RequestParam(value = "functionId") final int functionId,
 												  @RequestParam(value = "name") final String name,
-												  @RequestParam(value = "step") final String step,
+												  @RequestParam(value = "step",defaultValue="1") final String step,
 												  @RequestParam(value = "url") final String url,
 												  @RequestParam(value = "desc") final String desc,
+												  @RequestParam(value = "expect") final String expect,
 												  @RequestParam(value = "type") final String type,
 												  @RequestParam(value = "data") final String data){
 		
@@ -66,11 +67,13 @@ public class TestCaseDataController {
 		testCaseTO.setUrl(url);
 		testCaseTO.setType(type);
 		testCaseTO.setDesc(desc);
+		testCaseTO.setExpect(expect);
 		testCaseTO.setData(data);
 		
 		int affectRows = testDataService.createTestCase(testCaseTO);
 		if(affectRows == 1){
 			Map<String,Object> result = new HashMap<String,Object>();
+			
 			result.put("testCase", testCaseTO);
 			return new JsonResponse(JsonResponse.CODE_SUCCESS,"添加测试用例成功",result);
 		} else {

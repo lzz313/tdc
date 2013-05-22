@@ -3,6 +3,7 @@ package org.test.tdc.service;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,8 +101,7 @@ public class TestDataService {
 	 */
 	public int createTestCase(TestCaseTO testCaseTO){
 		String createTestCaseSql = "insert into TESTCASE (N_FUNCTION_ID,S_NAME,S_STEP,S_URL,S_DESC,S_TYPE,S_EXPECT,S_DATA,D_CREATE,S_STATUS) " +
-								"values (:functionId,:name,:step,:url,:desc,:type,:data,:expect,now(),'1')";
-		
+								"values (:functionId,:name,:step,:url,:desc,:type,:expect,:data,now(),'1')";
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("functionId", testCaseTO.getFunctionId());
 		params.put("name", testCaseTO.getName());

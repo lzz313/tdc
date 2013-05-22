@@ -12,7 +12,12 @@ public class TdcDriverManagerDataSource extends DriverManagerDataSource{
 
 	public void setDbq(String dbq) {
 		String path = Thread.currentThread().getContextClassLoader().getResource("").getFile();
-		dbq = "DBQ="+path.substring(1) + dbq;
+		if(dbq != null && dbq.indexOf(':') == -1){
+			dbq = "DBQ="+path.substring(1) + dbq;
+		} else {
+			dbq = "DBQ=" + dbq;
+		}
+		
 		this.dbq = dbq;
 	}
 	
