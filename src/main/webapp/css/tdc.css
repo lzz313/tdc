@@ -5,7 +5,7 @@ div {display: block;margin:0 auto}
 p{margin:0 auto;padding:0;}
 a{cursor:pointer;}
 input[type="text"]{height:28px;}
-input[type="button"]{height:25px;border:1px solid #969696;margin-left:1px;}
+input[type="button"]{height:25px;border:1px solid #969696;margin-left:1px;cursor:pointer;}
 
 .container{width:1118px;}
 .page_head{width:1118px;height: 30px}
