@@ -112,10 +112,15 @@ function addOptionEvent(){
 function addEnviEvent(){
 	var pTimeFn = null;
 	$(".select span:first").click(function(){
-		$(".select .option").toggle('fast');
+		$(".select .option").slideToggle('fast');
+		//$(".select .option").show().slideDown('normal');
+		
+		//$(".select .option").slideUp('fast');
 	});
+	
+	
 	$(".select span:last").die().live("dblclick",function(){
-		$(".select .option_edit").toggle("fast",saveOrDispEnvi);
+		$(".select .option_edit").slideToggle("fast",saveOrDispEnvi);
 	});
 	
 	$(".option_edit:last input[type='text']").die().live("blur",function(){

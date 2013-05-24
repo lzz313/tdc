@@ -40,11 +40,11 @@ public class HtmlParserController {
 			
 			return new JsonResponse(JsonResponse.CODE_SUCCESS,"解析成功",result);
 		} catch (ClientProtocolException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		} catch (Exception e){
-			e.printStackTrace();
+			System.out.println(e.getMessage());
 		}
 		
 		return new JsonResponse(JsonResponse.CODE_FAILED,"解析失败");

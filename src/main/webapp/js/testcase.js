@@ -325,7 +325,7 @@ function test(tid){
 	var domain = $(".select span:first").attr("value");
 	var action = $("#action_"+tid).val();
 	
-	if(action.indexOf("http://") == -1){
+	if(action.indexOf("http://") == -1 && action.indexOf("https://") == -1){
 		if(domain == ''||domain == undefined){
 			alert('请选择测试环境');
 			return;
@@ -371,7 +371,7 @@ function getActionWithHost(action,url){
 	var actionUrl = action;
 	if(action.toLowerCase().indexOf('http') !=0){
 		host = url.split('/')[2];
-		actionUrl = 'http://'+host+action;
+		actionUrl = url.split('/')[0]+'//'+host+action;
 	}
 	
 	return actionUrl;

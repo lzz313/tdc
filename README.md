@@ -1,4 +1,4 @@
-tdc测试数据收集
+tdc测试数据存储
 ===
 test data collection
 
@@ -12,7 +12,9 @@ test data collection
 ###todo:
 1.用例数据自动复制功能<br/>
 2.用例根据步骤排序<br/>
-2.根据值类型自动生成case<br/>
+3.根据值类型自动生成case<br/>
+4.支持https协议
+5.添加下拉框和列表动画效果
 
 ###页面结构
 ```html
