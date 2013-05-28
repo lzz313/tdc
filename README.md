@@ -19,3 +19,6 @@ test data collection
 ###下个版本功能
 1.每个功能的测试用例能够回归测试，并保存测试结果<br/>
 2.考虑其他协议socket<br/><br/>
+
+###启动h2数据库
+java -jar D:/repository/com/h2database/h2/1.3.171/h2-1.3.171.jar -web -webPort 8090 -browser
