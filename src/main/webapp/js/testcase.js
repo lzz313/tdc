@@ -237,9 +237,10 @@ function copyTdcData(tid){
 	var type = $("#method_"+tid).val();
 	var status = $("#status_"+tid).val();
 	var data = encapElemData(tid);
-	var testCase = {'id':'','name':name,'step':step,'functionId':fId,'url':action,'type':type,'desc':desc,'expect':expect,'data':data,'create':'-','status':status};
+	var testCase = {'id':-(new Date().getTime()),'name':name,'step':step,'functionId':fId,'url':action,'type':type,'desc':desc,'expect':expect,'data':data,'create':'-','status':status};
 	
 	addTdc(testCase);
+	addTdcEvent();
 	alert("复制成功");
 }
 
@@ -381,7 +382,7 @@ function pushForm(forms){
 	var fId = 1;
 	var tid;
 	$.each(forms,function(i){
-		tid = -i;
+		tid = -(new Date().getTime());
 		$(".tdc_list").append(tdcListTemplate.format({
 										id:tid,
 										name:!!forms[i].formName?forms[i].formName:('表单'+i),

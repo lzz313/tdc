@@ -28,7 +28,7 @@ public class TestDataService {
 	@SuppressWarnings("unchecked")
 	public List<TestCaseTO> queryTestCase(int functionId){
 		
-		String queryTestCaseSql = "select * from TESTCASE where N_FUNCTION_ID = :fid";
+		String queryTestCaseSql = "select * from TESTCASE where N_FUNCTION_ID = :fid order by s_step";
 		
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("fid", functionId);
