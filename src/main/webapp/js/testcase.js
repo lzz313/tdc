@@ -347,8 +347,9 @@ function test(tid){
 		dataType : "json"
 	});
 	testAction.done(function(data) {
-		NewWindow = window.open("","_blank");
-		NewWindow.document.write(data.data.content);
+		newWin = window.open("","_blank");
+		newWin.document.write(data.data.content);
+		newWin.document.close();
 	});
 }
 
