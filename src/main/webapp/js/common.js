@@ -1,3 +1,10 @@
+/**
+ * 字符串替换
+ * 
+ * <input type="text" value=@{value}/>
+ * @param O
+ * @returns
+ */
 String.prototype.format = function(O){
 	var s = this.replace(/\@\{(\w+)\}/g, function(t, _o){
 		return O[_o]==null?'':O[_o];
