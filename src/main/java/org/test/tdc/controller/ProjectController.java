@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.test.tdc.common.JsonResponse;
 import org.test.tdc.pojo.ProjectTO;
@@ -88,8 +89,8 @@ public class ProjectController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/create/{projectName}")
-	public @ResponseBody JsonResponse createProject(@PathVariable("projectName") String projectName){
+	@RequestMapping("/create")
+	public @ResponseBody JsonResponse createProject(@RequestParam(value = "projectName") final String projectName){
 		//查询该项目是否存在，不存在则创建，存在直接返回创建失败
 		List<ProjectTO> queryProject = projectService.queryProject(projectName);
 		if(!queryProject.isEmpty()){
@@ -134,8 +135,8 @@ public class ProjectController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/update/{projectId}/{projectName}")
-	public @ResponseBody JsonResponse deleteProject(@PathVariable("projectId") int id,@PathVariable("projectName") String projectName){
+	@RequestMapping("/update")
+	public @ResponseBody JsonResponse deleteProject(@RequestParam(value = "projectId")final int id,@RequestParam(value = "projectName")final String projectName){
 		int updateProject = projectService.updateProject(id,projectName);
 		
 		Map<String,Object> result = new HashMap<String,Object>();

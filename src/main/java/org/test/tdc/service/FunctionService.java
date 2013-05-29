@@ -48,7 +48,8 @@ public class FunctionService {
 		String queryProject = "select f.N_ID,f.N_PROJECT_ID,f.S_NAME,f.D_CREATE,count(t.n_id) as TCOUNT " +
 								" from function f left join testcase t on f.n_id = t.n_function_id " +
 								" where f.n_project_id = :pid " +
-								" group by f.n_id,f.n_project_id,f.S_NAME,f.d_create";
+								" group by f.n_id,f.n_project_id,f.S_NAME,f.d_create" +
+								" order by f.n_id";
 		List<FunctionTO> functions = new ArrayList<FunctionTO>();
 		try {
 			Map<String,Object> params = new HashMap<String,Object>();

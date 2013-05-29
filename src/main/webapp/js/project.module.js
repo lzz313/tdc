@@ -116,10 +116,11 @@ function addProject(){
 		return;
 	}
 	
-	var url = "/project/create/"+pNm;
+	var url = "/project/create/";
 	var addProj = $.ajax({
 		url : url,
-		type : "get",
+		data: {projectName:pNm},
+		type : "POST",
 		async:false,
 		dataType : "json"
 	});
@@ -144,11 +145,12 @@ function cancelAddProj(){
 }
 
 function updateProject(obj,pid,pNm){
-	var url = "/project/update/"+pid+"/"+pNm;
+	var url = "/project/update";
 	var updatePrj = $.ajax({
 		url : url,
-		type : "get",
-		async:false,
+		data : {projectId:pid,projectName:pNm},
+		type : "POST",
+		async : false,
 		dataType : "json"
 	});
 	

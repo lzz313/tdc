@@ -13,8 +13,8 @@ var tdcListTemplate = [
 						'<div class="tdc_data" tid="@{id}">',
 							'<div class="tdc_info">',
 								'步骤: <input id="step_@{id}" value="@{step}" style="width:25px"/> ',
-						       	'名称: <input id="name_@{id}" value="@{name}" style="width:200px"/> ',
-						       	'地址: <input id="action_@{id}" value="@{url}" style="width:180px"/>',
+						       	'名称: <input id="name_@{id}" value="@{name}" style="width:432px"/><br> ',
+						       	'地址: <input id="action_@{id}" value="@{url}" style="width:500px"/>',
 		                   	   	'method:',
 		                   		'<select id="method_@{id}" >',
 		                   			'<option value="GET">GET</option>',
@@ -196,6 +196,17 @@ function addTdcEvent(){
 	$(".tdc_info_area").each(function(){
 		var o = $(this);
 		calMinAreaRows(o,3);
+	});
+	
+	$(".tdc_data select").change(function(){
+		var val = $(this).val();
+		if(val.toUpperCase() == 'GET'){
+			$(this).parent().parent().children(".tdc_name_value_type_title").hide();
+			$(this).parent().parent().children(".tdc_name_value_type").hide();
+		} else {
+			$(this).parent().parent().children(".tdc_name_value_type_title").show();
+			$(this).parent().parent().children(".tdc_name_value_type").show();
+		}
 	});
 	
 	addTdcDelEvent();
