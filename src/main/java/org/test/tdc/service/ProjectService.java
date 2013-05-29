@@ -31,7 +31,10 @@ public class ProjectService {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<ProjectTO> queryProject(){
-		String queryProeject = "select p.N_ID,p.S_NAME,p.D_CREATE,count(f.N_ID) as fcount from project p left join function f on p.N_ID=f.N_PROJECT_ID group by p.N_ID,p.S_NAME,p.D_CREATE";
+		String queryProeject = "select p.N_ID,p.S_NAME,p.D_CREATE,count(f.N_ID) as fcount " +
+								" from project p left join function f on p.N_ID=f.N_PROJECT_ID " +
+								" group by p.N_ID,p.S_NAME,p.D_CREATE" +
+								" order by p.N_ID";
 		List<ProjectTO> projects = new ArrayList<ProjectTO>();
 		try {
 			projects = (List<ProjectTO>) jdbcTemplateProcessor.findAll(queryProeject, new HashMap<String,Object>(), new ProjectRowMapper());

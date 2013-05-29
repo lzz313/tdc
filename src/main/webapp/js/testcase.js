@@ -212,16 +212,6 @@ function addTdcEvent(){
 	addTdcDelEvent();
 }
 
-function calMinAreaRows(o,minRows){
-	var f_min_w = o.attr('cols');
-	var v = o.val();
-	var f_v_h = v.length/parseInt(f_min_w)+1;
-	var f_lf_h = v.split(/\r?\n/).length;
-	var f_m_h = f_lf_h > f_v_h?f_lf_h:f_v_h;
-	var f_h = f_m_h > minRows?f_m_h:minRows;
-	o.attr('rows',f_h);
-}
-
 function cbSaveTdcDisp(testCase){
 	$("#tdc_"+testCase.tid+" .tdc_title span:first").html(testCase.name);
 	alert("保存成功");

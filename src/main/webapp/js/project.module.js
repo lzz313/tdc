@@ -1,10 +1,3 @@
-String.prototype.format = function(O){
-	var s = this.replace(/\@\{(\w+)\}/g, function(t, _o){
-		return O[_o]==null?'':O[_o];
-	});
-	return s;
-};
-				
 var projectTemplate = [
 						'<div class="project_name" pid=@{id} >',
 							'<a class="project_delete_link" pid=@{id} onclick="deleteProject($(this))">删除</a>',
@@ -27,7 +20,6 @@ var addProjectTemplate = [
 							'</div>'
                           ].join('');
 
-
 function loadProject(){
 	var url = "/project/query";
 	var projects = $.ajax({
@@ -42,7 +34,7 @@ function loadProject(){
 			var projects = data.data.projects;
 			$(".project_list").append(addProjectTemplate);
 			$.each(projects,function(i){
-				$(".project_list").append(projectTemplate.format({name:projects[i].name+'('+projects[i].fcount+')',id:projects[i].id}));
+				$(".project_list").append(projectTemplate.format({name:autoAddEllipsis(projects[i].name,35)+'('+projects[i].fcount+')',id:projects[i].id}));
 				$(".project_list").append(editProjectTemplate.format({
 					value:projects[i].name,
 					pid:projects[i].id
