@@ -31,7 +31,8 @@ var tdcListTemplate = [
 							'<input type="button" tid="@{id}" class="tdc_save_bt" value="保存"/>',
 							'<input type="button" tid="@{id}" class="tdc_copy_bt" value="复制"/>',
 							'<input type="button" tid="@{id}" class="tdc_delete_bt" value="删除"/>',
-							'<input type="button" tid="@{id}" class="tdc_test_bt" value="测试"/>',
+							'<input type="button" tid="@{id}" class="tdc_test_bt" title="JavaScript动态form提交" value="测试"/>',
+							'<input type="button" tid="@{id}" class="tdc_backend_test_bt" title="Java后台模拟form提交" value="后台测试"/>',
 						'</div>',
 					'</div>' 
 				   ].join('');
@@ -77,9 +78,18 @@ function displayTestData(o){
 				addTdc(testCase);
 			});
 			
+			$(".tdc_title_add_bt").click(function(){
+				var fId = $(this).attr("fid");
+				var testCase={id:-(new Date().getTime()),functionId:fId,name:'创建测试用例',url:'',type:'',step:'',data:'{"elem":[{"k":"","v":"","t":""}]}',create:'',status:''};
+				addTdc(testCase);
+				$("#tdc_"+testCase.id+" .tdc_data").show();
+				$("#tdc_"+testCase.id+" .tdc_action").show();
+			});
 			addTdcEvent();
 		}
 	});
+	
+	
 }
 
 function addTdc(testCase){
@@ -164,16 +174,13 @@ function addTdcEvent(){
 		deleteTdc(btObj,tid);
 	});
 	
-	$(".tdc_title_add_bt").click(function(){
-		var fId = $(this).attr("fid");
-		var testCase={id:'',functionId:fId,name:'创建测试用例',url:'',type:'',step:'',data:'{"elem":[{"k":"","v":"","t":""}]}',create:'',status:''};
-		addTdc(testCase);
-		$("#tdc_"+testCase.id+" .tdc_data").show();
-		$("#tdc_"+testCase.id+" .tdc_action").show();
-		addTdcEvent();
+	$(".tdc_test_bt").click(function(){
+		var btObj = $(this);
+		var tid = btObj.attr("tid");
+		testByForm(tid);
 	});
 	
-	$(".tdc_test_bt").click(function(){
+	$(".tdc_backend_test_bt").click(function(){
 		var btObj = $(this);
 		var tid = btObj.attr("tid");
 		test(tid);
@@ -323,6 +330,65 @@ function deleteTdc(obj,tid){
 	});
 }
 
+function testByForm(tid){
+	var domain = $(".select span:first").attr("value");
+	var action = $("#action_"+tid).val();
+	var method = $("#method_"+tid).val();
+	
+	if(action.indexOf("http://") == -1 && action.indexOf("https://") == -1){
+		if(domain == ''||domain == undefined){
+			alert('请选择测试环境');
+			return;
+		}
+		action = domain + action;
+	} else {
+		domain = getActionWithHost("",action);
+	}
+	
+    form = $("<form></form>");
+    form.attr('target',"_blank");
+    form.attr('method',method);
+    
+    if("POST" == method){
+    	form.attr('action',action);
+    	form = postInput(form,tid);
+    } else if("GET" == method){
+    	form = getInput(form,action);
+    }
+    
+    form.appendTo("body");
+    form.css('display','none');
+    form.submit();
+}
+
+function postInput(form,fIdx){
+	var eleNm = fIdx+"_eleName_";
+	var eleVal = fIdx+"_eleName_";
+	
+	var args = new Object();
+	$('input[id^='+eleNm+']').each(function(){
+		idx = $(this).attr("id").split('_')[2];
+		var key = $("#"+eleNm+idx).val();
+		var value = $("#"+eleVal+idx).val();
+		
+		form.append($("<input type='hidden' name="+key+" value="+value+"/>"));
+		
+	});
+	
+	return form;
+}
+
+function getInput(form,url){
+	var params = url.substr(url.indexOf("?")+1);
+	var data = params.split("&");
+	form.attr('action',url.substr(0,url.indexOf("?")));
+	for(var i=0; i<data.length; i++) {
+		var item = data[i].split("=");
+		form.append($("<input type='hidden' name='"+item[0]+"' value='"+item[1]+"'/>"));
+	}
+	return form;
+}
+
 function test(tid){
 	var domain = $(".select span:first").attr("value");
 	var action = $("#action_"+tid).val();
@@ -333,6 +399,8 @@ function test(tid){
 			return;
 		}
 		action = domain + action;
+	} else {
+		domain = getActionWithHost("",action);
 	}
 	
 	var testAction = $.ajax({
@@ -341,6 +409,7 @@ function test(tid){
 		async : false,
 		data : {
 			formData:formData(tid),
+			domain:domain,
 			url:action,
 			method:$("#method_"+tid).val()
 		},

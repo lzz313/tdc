@@ -1,6 +1,7 @@
 package org.test.tdc.controller;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import org.test.tdc.common.HttpClientUtils;
 import org.test.tdc.common.JsonResponse;
 import org.test.tdc.service.HtmlParserService;
 import org.test.tdc.utils.JsonUtils;
+import org.test.tdc.utils.JsoupParser;
 import org.test.tdc.utils.StringUtils;
 
 @Controller
@@ -53,6 +55,7 @@ public class HtmlParserController {
 	@RequestMapping("/test")
 	public @ResponseBody JsonResponse httpPost(HttpServletRequest request){
 		String url = request.getParameter("url");
+		String domain = request.getParameter("domain");
 		String method = request.getParameter("method");
 		String formData = request.getParameter("formData");
 		
@@ -69,10 +72,12 @@ public class HtmlParserController {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
 		}
 		
 		Map<String,Object> result = new HashMap<String,Object>();
-		result.put("content", responseStr);
+		result.put("content", JsoupParser.parse(responseStr,domain));//JsoupParser.parse(responseStr,domain)
 		return new JsonResponse(JsonResponse.CODE_SUCCESS,"请求成功",result);
 	}
 

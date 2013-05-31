@@ -1,6 +1,7 @@
 package org.test.tdc.service;
 
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,8 +30,9 @@ public class HtmlParserService {
 	 * @param args
 	 * @throws IOException 
 	 * @throws ClientProtocolException 
+	 * @throws URISyntaxException 
 	 */
-	public Map<String, Object> parse(String url) throws ClientProtocolException, IOException{
+	public Map<String, Object> parse(String url) throws ClientProtocolException, IOException, URISyntaxException{
 		
 		String response = HttpClientUtils.httpGet(url);
 
@@ -127,6 +129,8 @@ public class HtmlParserService {
 			return null;
 		}
 	}
+	
+	
 
 }
 
