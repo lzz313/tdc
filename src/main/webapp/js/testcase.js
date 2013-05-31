@@ -5,7 +5,7 @@ var addNewTdcBtTemplate = [
 var tdcListTemplate = [
 					'<div class="tdc_item" id="tdc_@{id}">',
 						'<div class="tdc_title">',
-							'<p>@{name}</p>',
+							'<p>@{step} @{name}</p>',
 							'<span style="float:right;">时间:@{create}</span>',
 							'<input type="hidden" id="fid_@{id}" value="@{functionId}"/>',
 							'<input type="hidden" id="status_@{id}" value="@{status}"/>',
