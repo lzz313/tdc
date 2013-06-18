@@ -381,7 +381,8 @@ function postInput(form,fIdx){
 function getInput(form,url){
 	var params = url.substr(url.indexOf("?")+1);
 	var data = params.split("&");
-	form.attr('action',url.substr(0,url.indexOf("?")));
+	var end = url.indexOf("?") > -1 ? url.indexOf("?") : url.length;
+	form.attr('action',url.substr(0,end));
 	for(var i=0; i<data.length; i++) {
 		var item = data[i].split("=");
 		form.append($("<input type='hidden' name='"+item[0]+"' value='"+item[1]+"'/>"));
