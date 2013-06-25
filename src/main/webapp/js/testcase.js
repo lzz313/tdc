@@ -380,7 +380,11 @@ function postInput(form,fIdx){
 }
 
 function getInput(form,url){
-	var params = url.substr(url.indexOf("?")+1);
+	var params = '';
+	if(url.indexOf("?") != -1){
+		params = url.substr(url.indexOf("?")+1);
+	} 
+	
 	var data = params.split("&");
 	var end = url.indexOf("?") > -1 ? url.indexOf("?") : url.length;
 	form.attr('action',url.substr(0,end));
