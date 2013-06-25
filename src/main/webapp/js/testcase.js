@@ -118,6 +118,7 @@ function addTdc(testCase){
 			type:elems[j]?elems[j].t:''
 		}));
 	});
+	addTdcEvent();
 }
 
 function addTdcEvent(){
