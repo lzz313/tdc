@@ -364,7 +364,7 @@ function testByForm(tid){
 
 function postInput(form,fIdx){
 	var eleNm = fIdx+"_eleName_";
-	var eleVal = fIdx+"_eleName_";
+	var eleVal = fIdx+"_eleValue_";
 	
 	var args = new Object();
 	$('input[id^='+eleNm+']').each(function(){
@@ -372,7 +372,7 @@ function postInput(form,fIdx){
 		var key = $("#"+eleNm+idx).val();
 		var value = $("#"+eleVal+idx).val();
 		
-		form.append($("<input type='hidden' name="+key+" value="+value+"/>"));
+		form.append($("<input type='hidden' name='"+key+"' value='"+value+"'/>"));
 		
 	});
 	
