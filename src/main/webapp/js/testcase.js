@@ -157,46 +157,46 @@ function addTdcEvent(){
 		}
 	});
 	
-	$(".tdc_save_bt").click(function(){
+	$(".tdc_save_bt").die().live("click",function(){
 		var btObj = $(this);
 		var tid = btObj.attr("tid");
 		saveTdcData(tid);
 	});
 	
-	$(".tdc_copy_bt").click(function(){
+	$(".tdc_copy_bt").die().live("click",function(){
 		var btObj = $(this);
 		var tid = btObj.attr("tid");
 		copyTdcData(tid);
 	});
 	
-	$(".tdc_delete_bt").click(function(){
+	$(".tdc_delete_bt").die().live("click",function(){
 		var btObj = $(this);
 		var tid = btObj.attr("tid");
 		deleteTdc(btObj,tid);
 	});
 	
-	$(".tdc_test_bt").click(function(){
+	$(".tdc_test_bt").die().live("click",function(){
 		var btObj = $(this);
 		var tid = btObj.attr("tid");
 		testByForm(tid);
 	});
 	
-	$(".tdc_backend_test_bt").click(function(){
+	$(".tdc_backend_test_bt").die().live("click",function(){
 		var btObj = $(this);
 		var tid = btObj.attr("tid");
 		test(tid);
 	});
 	
-	$(".tdc_title_anly_bt").click(function(){
+	$(".tdc_title_anly_bt").die().live("click",function(){
 		$("#tdc_anlysis").show();
 	});
 	
-	$(".tdc_info_area").focus(function(){
+	$(".tdc_info_area").die().live("focus",function(){
 		var o = $(this);
 		calMinAreaRows(o,3);
 	});
 	
-	$(".tdc_info_area").blur(function(){
+	$(".tdc_info_area").die().live("blur",function(){
 		var o = $(this);
 		calMinAreaRows(o,3);
 	});
@@ -206,7 +206,7 @@ function addTdcEvent(){
 		calMinAreaRows(o,3);
 	});
 	
-	$(".tdc_data select").change(function(){
+	$(".tdc_data select").die().live("change",function(){
 		var val = $(this).val();
 		if(val.toUpperCase() == 'GET'){
 			$(this).parent().parent().children(".tdc_name_value_type_title").hide();
