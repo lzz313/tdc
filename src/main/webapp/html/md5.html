@@ -9,11 +9,19 @@
 	<div class="container">
 		<div class="page_head"></div>
 		<div class="page_center">
-			源串：<textarea cols="92" rows="5" id="signStr"></textarea>
+			源串：
+			<textarea cols="92" rows="5" id="signStr"></textarea><br/>
+			校验串：
+			<textarea cols="92" rows="2" id="sign"></textarea>
 			<input type="button" id='md5' value="md5加密"/>
+			<input type="button" id='md5c' value="md5加密比较"/>
 			<input type="button" id='sha1' value="sha1加密"/>
+			<input type="button" id='sha1c' value="sha1加密比较"/><br/>
+			加密串：
 			<p id='result'></p> ===> 
 			<p id='result1'></p>
+			比较结果：
+			<p id='cresult'></p>
 			<input type="button" id='l' value="转小写"/>
 			<input type="button" id='u' value="转大写"/>
 		</div>
@@ -22,14 +30,42 @@
 	<script type="text/javascript" src="/js/md5.js"></script>
 	<script type="text/javascript" src="/js/sha1.js"></script>
 	<script type="text/javascript">
+		function equalsIgnoreCase(str1, str2){   
+		    if(str1.toUpperCase() == str2.toUpperCase()){   
+		        return true;   
+		    }   
+		    return false;   
+		}   
 		$(document).ready(function(){
 			$("#md5").click(function(){
 				if(!$("#signStr").val()){alert("源串不可以为空！");return;}
 				$("#result").html(faultylabs.MD5($("#signStr").val()));
 			});
+			$("#md5c").click(function(){
+				if(!$("#signStr").val()){alert("源串不可以为空！");return;}
+				
+				var fsign = faultylabs.MD5($("#signStr").val());
+				$("#result").html(fsign);
+				var r = "不相同";
+				if(equalsIgnoreCase(fsign,$("#sign").val())){
+					r = "相同"
+				}
+				$("#cresult").html(r);
+			});
 			$("#sha1").click(function(){
 				if(!$("#signStr").val()){alert("源串不可以为空！");return;}
 				$("#result").html(hex_sha1($("#signStr").val()));
+			});
+			$("#sha1c").click(function(){
+				if(!$("#signStr").val()){alert("源串不可以为空！");return;}
+				var fsign = hex_sha1($("#signStr").val());
+				$("#result").html(fsign);
+				
+				var r = "不相同";
+				if(equalsIgnoreCase(fsign,$("#sign").val())){
+					r = "相同"
+				}
+				$("#cresult").html(r);
 			});
 			$("#l").click(function(){
 				$("#result1").html($("#result").html().toLowerCase());
