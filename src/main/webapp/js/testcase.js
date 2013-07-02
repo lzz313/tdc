@@ -76,7 +76,17 @@ function displayTestData(o){
 			$.each(testCases,function(i){
 				var testCase = testCases[i];
 				addTdc(testCase);
+				if(JSON.parse(testCase.data).elem.length == 0){
+					$("#tdc_"+testCase.id+" .tdc_data").append(tdcItemDataTemplate.format({
+						id:testCase.id,
+						j:0,
+						name:'',
+						value:'',
+						type:''
+					}));
+				}
 			});
+			
 			
 			$(".tdc_title_add_bt").click(function(){
 				var fId = $(this).attr("fid");
@@ -214,6 +224,15 @@ function addTdcEvent(){
 		} else {
 			$(this).parent().parent().children(".tdc_name_value_type_title").show();
 			$(this).parent().parent().children(".tdc_name_value_type").show();
+			var tid = $(this).parent().parent().attr("tid");
+			var j = $(this).parent().parent().children(".tdc_name_value_type").length;
+			$(this).parent().parent().append(tdcItemDataTemplate.format({
+				id:tid,
+				j:j,
+				name:'',
+				value:'',
+				type:''
+			}));
 		}
 	});
 	
