@@ -34,7 +34,7 @@ public class ProjectService {
 		String queryProeject = "select p.N_ID,p.S_NAME,p.D_CREATE,count(f.N_ID) as fcount " +
 								" from project p left join function f on p.N_ID=f.N_PROJECT_ID " +
 								" group by p.N_ID,p.S_NAME,p.D_CREATE" +
-								" order by p.N_ID";
+								" order by p.D_CREATE";
 		List<ProjectTO> projects = new ArrayList<ProjectTO>();
 		try {
 			projects = (List<ProjectTO>) jdbcTemplateProcessor.findAll(queryProeject, new HashMap<String,Object>(), new ProjectRowMapper());
@@ -143,7 +143,7 @@ public class ProjectService {
 	 * @return
 	 */
 	public int updateProject(int id,String projectName){
-		String updateProject = "update project set s_name=:name where n_id = :id";
+		String updateProject = "update project set s_name=:name where n_id = :id and D_CREATE = now()";
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("id", id);

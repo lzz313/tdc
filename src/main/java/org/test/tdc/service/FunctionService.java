@@ -49,7 +49,7 @@ public class FunctionService {
 								" from function f left join testcase t on f.n_id = t.n_function_id " +
 								" where f.n_project_id = :pid " +
 								" group by f.n_id,f.n_project_id,f.S_NAME,f.d_create" +
-								" order by f.n_id";
+								" order by f.d_create";
 		List<FunctionTO> functions = new ArrayList<FunctionTO>();
 		try {
 			Map<String,Object> params = new HashMap<String,Object>();
@@ -147,7 +147,7 @@ public class FunctionService {
 	 * @return
 	 */
 	public int updateFunction(int id,String funcName){
-		String updateFunction = "update function set s_name=:name where n_id = :id";
+		String updateFunction = "update function set s_name=:name where n_id = :id and D_CREATE = now()";
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("id", id);

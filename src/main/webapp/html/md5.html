@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>测试数据存储系统-md5sum</title>
+	<link rel="stylesheet" type="text/css" href="/css/tdc.css">
+</head>
+<body>
+	<div class="container">
+		<div class="page_head"></div>
+		<div class="page_center">
+			源串：<textarea cols="92" rows="5" id="signStr"></textarea>
+			<input type="button" id='md5' value="md5加密"/>
+			<input type="button" id='sha1' value="sha1加密"/>
+			<p id='result'></p> ===> 
+			<p id='result1'></p>
+			<input type="button" id='l' value="转小写"/>
+			<input type="button" id='u' value="转大写"/>
+		</div>
+	</div>
+	<script type="text/javascript" src="/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/js/md5.js"></script>
+	<script type="text/javascript" src="/js/sha1.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			$("#md5").click(function(){
+				if(!$("#signStr").val()){alert("源串不可以为空！");return;}
+				$("#result").html(faultylabs.MD5($("#signStr").val()));
+			});
+			$("#sha1").click(function(){
+				if(!$("#signStr").val()){alert("源串不可以为空！");return;}
+				$("#result").html(hex_sha1($("#signStr").val()));
+			});
+			$("#l").click(function(){
+				$("#result1").html($("#result").html().toLowerCase());
+			});
+			$("#u").click(function(){
+				$("#result1").html($("#result").html().toUpperCase());
+			});
+		});
+	</script>
+</body>

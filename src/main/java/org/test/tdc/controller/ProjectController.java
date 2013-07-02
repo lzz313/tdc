@@ -136,7 +136,7 @@ public class ProjectController {
 	 * @return
 	 */
 	@RequestMapping("/update")
-	public @ResponseBody JsonResponse deleteProject(@RequestParam(value = "projectId")final int id,@RequestParam(value = "projectName")final String projectName){
+	public @ResponseBody JsonResponse updateProject(@RequestParam(value = "projectId")final int id,@RequestParam(value = "projectName")final String projectName){
 		int updateProject = projectService.updateProject(id,projectName);
 		
 		Map<String,Object> result = new HashMap<String,Object>();
