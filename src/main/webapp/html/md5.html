@@ -11,6 +11,7 @@
 		<div class="page_center">
 			源串：
 			<textarea cols="92" rows="5" id="signStr"></textarea><br/>
+			<input type="button" id='rm' value="去等号和&"/>
 			校验串：
 			<textarea cols="92" rows="2" id="sign"></textarea>
 			<input type="button" id='md5' value="md5加密"/>
@@ -73,6 +74,17 @@
 			$("#u").click(function(){
 				$("#result1").html($("#result").html().toUpperCase());
 			});
+			$("#rm").click(function(){
+				var arrExt = $("#signStr").val().split("&");
+				arrExt.sort(function(a,b){
+				if (a.toString() > b.toString()) {
+				    return 1;
+				}
+				return -1;
+				});
+				$("#signStr").val(arrExt.join('').replace(/=/g,'').replace(/&/g,''));
+			});
+			
 		});
 	</script>
 </body>

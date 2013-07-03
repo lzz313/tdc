@@ -143,8 +143,8 @@ function addTdcEvent(){
 		}
 	});
 	
-	var j = $(".tdc_name_value_type").length;
-	$(".tdc_name_value_type:last input[type=text]").die().live("blur",function(){
+	
+	$(".tdc_name_value_type:last-of-type input[type=text]").die().live("blur",function(){
 		var obj = $(this).parent();
 		var inputs = obj.children("input[type=text]");
 		var needAppend = true;
@@ -154,6 +154,7 @@ function addTdcEvent(){
 			}
 		});
 		
+		var j = obj.parent().children(".tdc_name_value_type").length;
 		var tid = obj.parent().attr("tid");
 		if(needAppend) {
 			obj.parent().append(tdcItemDataTemplate.format({
