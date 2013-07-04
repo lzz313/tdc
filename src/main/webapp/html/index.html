@@ -17,6 +17,7 @@
 			<div class="select">
 				<span class="select_choice">请选择...</span><span class="select_edit" style="float: right;"></span>
 			</div>
+			<div class="links"> <a href="md5.html" target="_blank">加密页面</a></div>
 		</div>
 		<div class="page_center">
 			<div class="tdc_add">
@@ -69,7 +70,8 @@
 						if(data.code == 1){
 							//$(".project_list").html('');
 							//loadProject();
-							hid_obj.appendTo(ui.item);
+							//hid_obj.appendTo(ui.item);
+							ui.item.after(hid_obj);
 						}
 					});
 				}

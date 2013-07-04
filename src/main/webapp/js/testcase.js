@@ -225,19 +225,34 @@ function addTdcEvent(){
 		} else {
 			$(this).parent().parent().children(".tdc_name_value_type_title").show();
 			$(this).parent().parent().children(".tdc_name_value_type").show();
-			var tid = $(this).parent().parent().attr("tid");
-			var j = $(this).parent().parent().children(".tdc_name_value_type").length;
-			$(this).parent().parent().append(tdcItemDataTemplate.format({
-				id:tid,
-				j:j,
-				name:'',
-				value:'',
-				type:''
-			}));
+			if(isNeedAddNew($(this).parent().parent())){
+				var tid = $(this).parent().parent().attr("tid");
+				var j = $(this).parent().parent().children(".tdc_name_value_type").length;
+				$(this).parent().parent().append(tdcItemDataTemplate.format({
+					id:tid,
+					j:j,
+					name:'',
+					value:'',
+					type:''
+				}));
+			}
 		}
 	});
 	
 	addTdcDelEvent();
+}
+
+function isNeedAddNew(o){
+	var inputs = o.children(".tdc_data .tdc_name_value_type:last").children("input[type=text]");
+	var needAppend = true;
+	$.each(inputs,function(i){
+		if(!$(inputs[i]).val()){
+			needAppend = false;
+			return;
+		}
+	});
+	
+	return needAppend;
 }
 
 function cbSaveTdcDisp(testCase){
