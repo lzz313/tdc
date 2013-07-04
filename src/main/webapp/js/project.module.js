@@ -263,7 +263,7 @@ function addFuncEvent(){
 }
 
 function updateFunction(obj,fid,fNm){
-	var url = "/func/update/"+fid+"/"+fNm;
+	var url = "/func/update/"+fid+"/0/"+fNm;
 	var updateFunc = $.ajax({
 		url : url,
 		type : "get",

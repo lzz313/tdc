@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.test.tdc.dao.JdbcTemplateProcessor;
 import org.test.tdc.dao.rowmapper.FunctionRowMapper;
 import org.test.tdc.pojo.FunctionTO;
+import org.test.tdc.utils.StringUtils;
 
 @Service
 public class FunctionService {
@@ -146,13 +147,21 @@ public class FunctionService {
 	 * @param projectName
 	 * @return
 	 */
-	public int updateFunction(int id,String funcName){
-		String updateFunction = "update function set s_name=:name where n_id = :id and D_CREATE = now()";
+	public int updateFunction(int id,int pid,String funcName){
+		StringBuffer updateFunction = new StringBuffer("update function set d_create=now() ");
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("id", id);
-		params.put("name", funcName);
-		return jdbcTemplateProcessor.update(updateFunction, params);
+		if(!StringUtils.isEmpty(funcName)){
+			updateFunction.append(",s_name=:name");
+			params.put("name", funcName);
+		}
+		if(pid != 0){
+			updateFunction.append(",n_project_id=:pid");
+			params.put("pid",pid);
+		}
+		updateFunction.append(" where n_id = :id");
+		return jdbcTemplateProcessor.update(updateFunction.toString(), params);
 	}
 	
 	public List<Map<String, Object>> queryFunctionWithProject(){

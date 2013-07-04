@@ -31,6 +31,7 @@
 		</div>
 	</div>
 	<script type="text/javascript" src="/js/jquery.min.js"></script>
+	<!--script type="text/javascript" src="/js/jquery-ui.min.js"></script-->
 	<script type="text/javascript" src="/js/common.js"></script>
 	<script type="text/javascript" src="/js/project.module.js"></script>
 	<script type="text/javascript" src="/js/testcase.js"></script>
@@ -41,6 +42,31 @@
 			$("#parseUrl").click(function(){
 				anlysis();
 			});
+			/**
+			
+			$(".project_name").sortable({
+				connectWith:".project_name",
+				cursor: "move",
+				update:function(event,ui){
+					//ui.item
+					var fid = ui.item.attr("fid");
+					var pid = ui.item.parent().attr('pid');
+					var url = "/func/update/"+fid+"/"+pid;
+					var updateFunc = $.ajax({
+						url : url,
+						type : "get",
+						async:false,
+						dataType : "json"
+					});
+					
+					updateFunc.done(function(data){
+						if(data.code == 1){
+							$(".project_list").html('');
+							loadProject();
+						}
+					});
+				}
+			});*/
 		});
 	</script>
 </body>

@@ -108,9 +108,20 @@ public class FunctionController {
 	 * 
 	 * @return
 	 */
-	@RequestMapping("/update/{functionId}/{functionName}")
-	public @ResponseBody JsonResponse updateFunction(@PathVariable("functionId") int id,@PathVariable("functionName") String functionName){
-		int updateFunction = functionService.updateFunction(id,functionName);
+	@RequestMapping("/update/{functionId}/{projectId}/{functionName}")
+	public @ResponseBody JsonResponse updateFunction(@PathVariable("functionId") int id
+													,@PathVariable("projectId") int pid
+													,@PathVariable("functionName") String functionName){
+		int updateFunction = functionService.updateFunction(id,pid,functionName);
+		Map<String, Object> result = new HashMap<String, Object>();
+		result.put("result", updateFunction);
+		return new JsonResponse(JsonResponse.CODE_SUCCESS,"更新功能或模块成功",result);
+	}
+	
+	@RequestMapping("/update/{functionId}/{projectId}")
+	public @ResponseBody JsonResponse updateFunction(@PathVariable("functionId") int id
+													,@PathVariable("projectId") int pid){
+		int updateFunction = functionService.updateFunction(id,pid,"");
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put("result", updateFunction);
 		return new JsonResponse(JsonResponse.CODE_SUCCESS,"更新功能或模块成功",result);

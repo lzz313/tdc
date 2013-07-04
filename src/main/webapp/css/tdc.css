@@ -28,7 +28,7 @@ input[type="button"]{height:25px;border:1px solid #969696;margin-left:1px;cursor
 .project_update_bt,.project_cancle_update_bt,.project_cancle_add_bt,.project_add_bt{width:38px;}
 .project_edit,.function_edit,.project_add,.function_add{display:none;}
 
-.function_name {width:325px;margin: 2px 0 2px 25px;}
+.function_name {width:325px;margin: 2px 0 2px 25px;cursor: move;}
 .function_name p{height:18px; margin:6px 0 0 2px; border-bottom: 1px solid #969696;}
 .function_name a{margin-top:1px;}
 .function_delete{width:32px;float:right;}
