@@ -37,3 +37,4 @@ test data collection
 
 ###启动h2数据库
 java -jar D:/repository/com/h2database/h2/1.3.171/h2-1.3.171.jar -web -webPort 8090 -browser
+java -jar C:/Documents and Settings/Administrator/.m2/repository/com/h2database/h2/1.3.171/h2-1.3.171.jar -web -webPort 8090 -browser

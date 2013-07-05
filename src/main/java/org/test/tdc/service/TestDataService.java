@@ -2,6 +2,8 @@ package org.test.tdc.service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -48,7 +50,7 @@ public class TestDataService {
 					testCaseTO.setType(query.getString("S_TYPE"));
 					testCaseTO.setData(query.getString("S_DATA"));
 					testCaseTO.setExpect(query.getString("S_EXPECT"));
-					testCaseTO.setCreate(query.getDate("D_CREATE"));
+					testCaseTO.setCreate(query.getTimestamp("D_CREATE"));
 					testCaseTO.setStatus(query.getString("S_STATUS"));
 					return testCaseTO;
 				}

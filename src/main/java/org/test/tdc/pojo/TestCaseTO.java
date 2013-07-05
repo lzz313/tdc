@@ -1,5 +1,6 @@
 package org.test.tdc.pojo;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class TestCaseTO  implements BaseTO{
@@ -75,6 +76,10 @@ public class TestCaseTO  implements BaseTO{
 	}
 	public Date getCreate() {
 		return create;
+	}
+	public String getStrCreate(){
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		return sdf.format(create);
 	}
 	public void setCreate(Date create) {
 		this.create = create;

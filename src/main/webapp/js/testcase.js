@@ -28,12 +28,12 @@ var tdcListTemplate = [
 		                   	'<div class="tdc_name_value_type_title"><span>字段名</span><span>字段值</span><span>字段类型</span></div>',
 						'</div>',
 						'<div class="tdc_action">',
-							'<input type="button" tid="@{id}" class="tdc_save_bt" value="保存"/>',
-							'<input type="button" tid="@{id}" class="tdc_copy_bt" value="复制"/>',
-							'<input type="button" tid="@{id}" class="tdc_delete_bt" value="删除"/>',
-							'<input type="button" tid="@{id}" class="tdc_test_bt" title="JavaScript动态form提交" value="测试"/>',
-							'<input type="button" tid="@{id}" class="tdc_backend_test_bt" title="Java后台模拟form提交" value="后台测试"/>',
-							'<input type="button" tid="@{id}" class="tdc_move_bt" value="移动"/>',
+							'<input type="button" tid="@{id}" title="保存当前数据" class="tdc_save_bt" value="保存"/>',
+							'<input type="button" tid="@{id}" title="删除当前用例" class="tdc_delete_bt" value="删除"/>|',
+							'<input type="button" tid="@{id}" title="js直接提交form测试" class="tdc_test_bt" title="JavaScript动态form提交" value="测试"/>',
+							'<input type="button" tid="@{id}" title="后台跳转测试" class="tdc_backend_test_bt" title="Java后台模拟form提交" value="后台测试"/>',
+							'|<input type="button" tid="@{id}" title="复制当前用例" class="tdc_copy_bt" value="复制"/>',
+							'<input type="button" tid="@{id}" title="移动当前用例到其他模块" class="tdc_move_bt" value="移动"/>',
 						'</div>',
 					'</div>' 
 				   ].join('');
@@ -123,7 +123,7 @@ function addTdc(testCase){
 		url:testCase.url,
 		desc:testCase.desc,
 		expect:testCase.expect,
-		create:testCase.create,
+		create:testCase.strCreate,
 		status:testCase.status
 	}));
 	
