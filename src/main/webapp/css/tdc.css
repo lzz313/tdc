@@ -65,3 +65,5 @@ input[type="button"]{height:25px;border:1px solid #969696;margin-left:1px;cursor
 .option,.option_edit{position: relative;width: 298px;border-top:1px solid #000;z-index: 100;display: none;background-color: #fff;}
 .option_edit input{width:115px;}
 .option_edit label{font-size: 5pt;}
+
+#transfer_form select{width:250px;}

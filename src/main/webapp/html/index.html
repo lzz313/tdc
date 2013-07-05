@@ -32,6 +32,7 @@
 		</div>
 	</div>
 	<script type="text/javascript" src="/js/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css">
 	<script type="text/javascript" src="/js/jquery-ui-1.10.3.custom.js"></script>
 	<!--script type="text/javascript" src="/js/jquery-ui.min.js"></script-->
 	<script type="text/javascript" src="/js/common.js"></script>
@@ -73,6 +74,55 @@
 						}
 					});
 				}
+			});
+			
+			$(".container").append(transferForm);
+			loadProjectSelect();
+			
+			$( "#transfer_form" ).dialog({
+				autoOpen: false,
+				height: 300,
+				width: 350,
+				modal: true,
+				buttons: {
+					"转移":function(){
+						var tid = $("#transfer_tid").val();
+						var fid = $("#transfer_function").val();
+						var old_fid = $("#transfer_old_fid").val();
+						
+						if(fid == old_fid){
+							alert("不需要转移");
+							return;
+						}
+						
+						var testcases = $.ajax({
+							url : "/testcase/update",
+							data :{id:tid,functionId:fid},
+							type : "post",
+							async:false,
+							dataType : "json"
+						});
+						
+						testcases.done(function(data){
+							if(data.code == 1){
+								//1.提示  2.页面元素处理
+								$("#tdc_"+tid).remove();
+							}
+						});
+						
+						$(this).dialog("close");
+					},
+					"取消":function(){
+						$( this ).dialog( "close" );
+					}
+				},
+				close: function() {
+				}
+			});
+			
+			$("#transfer_product").change(function(){
+				var fid = $(this).val();
+				loadFunctionSelect(fid);
 			});
 		});
 	</script>

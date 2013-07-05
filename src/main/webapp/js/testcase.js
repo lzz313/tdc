@@ -48,6 +48,17 @@ var tdcItemDataTemplate = [
 							'</div>'
                            ].join('');
 
+var transferForm = [
+                    '<div id="transfer_form" >',
+	                    '<form>',
+	                    	'<input type="hidden" id="transfer_tid" value=""/>',
+	                    	'<input type="hidden" id="transfer_old_fid" value=""/>',
+	                    	'项目:<select class id="transfer_product"></select><br/>',
+	                    	'功能:<select id="transfer_function"></select>',
+	                    '</form>',
+	                 '</div>'
+                    ].join('');
+
 /**
  * @param o  'div.function_name >p'
  */
@@ -119,16 +130,19 @@ function addTdc(testCase){
 	var method_type = testCase.type;
 	$("#method_"+testCase.id).val(method_type.toUpperCase());
 	
-	var elems = JSON.parse(testCase.data).elem;
-	$.each(elems,function(j){
-		$("#tdc_"+testCase.id+" .tdc_data").append(tdcItemDataTemplate.format({
-			id:testCase.id,
-			j:j,
-			name:elems[j]?elems[j].k:'',
-			value:elems[j]?elems[j].v:'',
-			type:elems[j]?elems[j].t:''
-		}));
-	});
+	try{
+		var elems = JSON.parse(testCase.data).elem;
+		$.each(elems,function(j){
+			$("#tdc_"+testCase.id+" .tdc_data").append(tdcItemDataTemplate.format({
+				id:testCase.id,
+				j:j,
+				name:elems[j]?elems[j].k:'',
+				value:elems[j]?elems[j].v:'',
+				type:elems[j]?elems[j].t:''
+			}));
+		});
+	} catch (e){}
+	
 	addTdcEvent();
 }
 
@@ -194,7 +208,9 @@ function addTdcEvent(){
 	});
 	
 	$(".tdc_move_bt").die().live("click",function(){
-		alert("还未实现");
+		$("#transfer_tid").val($(this).attr("tid"));
+		$("#transfer_old_fid").val($("#fid_"+$(this).attr("tid")).val());
+		$("#transfer_form").dialog("open");
 	});
 	
 	$(".tdc_backend_test_bt").die().live("click",function(){
@@ -245,6 +261,51 @@ function addTdcEvent(){
 	});
 
 	addTdcDelEvent();
+}
+
+function loadProjectSelect(){
+	var pId = "transfer_product";
+	var url = "/project/query";
+	var projects = $.ajax({
+		url : url,
+		type : "get",
+		async:false,
+		dataType : "json"
+	});
+	
+	projects.done(function(data){
+		if(data.code == 1){
+			var projects = data.data.projects;
+			addOpt(pId, '请选项目', '');
+			$.each(projects,function(i){
+				addOpt(pId, projects[i].name, projects[i].id);
+			});
+		}
+	});
+}
+
+function loadFunctionSelect(pid){
+	var fId = "transfer_function";
+	$("#"+fId).html('');
+	if(!pid){
+		return;
+	}
+	var url = "/func/query/"+pid;
+	var func = $.ajax({
+		url : url,
+		type : "get",
+		async:false,
+		dataType : "json"
+	});
+	
+	func.done(function(data){
+		if(data.code == 1){
+			var funcs = data.data.functions;
+			$.each(funcs,function(i){
+				addOpt(fId, funcs[i].name, funcs[i].id);
+			});
+		}
+	});
 }
 
 function isNeedAddNew(o){

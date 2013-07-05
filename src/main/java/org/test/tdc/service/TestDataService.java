@@ -122,43 +122,46 @@ public class TestDataService {
 	 * @return
 	 */
 	public int updateTestCase(TestCaseTO testCaseTO){
-		StringBuffer updateTestCaseSql = new StringBuffer("update testcase set " +
-													",S_DATA=:data");
+		StringBuffer updateTestCaseSql = new StringBuffer("update testcase set D_CREATE=:create");
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("id", testCaseTO.getId());
-		params.put("data", new Date());
+		params.put("create", new Date());
 		if(testCaseTO.getFunctionId() != 0){
 			updateTestCaseSql.append(",N_FUNCTION_ID=:functionId");
 			params.put("functionId", testCaseTO.getFunctionId());
 		}
-		if(StringUtils.isEmpty(testCaseTO.getName())){
+		if(!StringUtils.isEmpty(testCaseTO.getName())){
 			updateTestCaseSql.append(",S_NAME=:name ");
 			params.put("name", testCaseTO.getName());
 		}
-		if(StringUtils.isEmpty(testCaseTO.getStep())){
+		if(!StringUtils.isEmpty(testCaseTO.getStep())){
 			updateTestCaseSql.append(",S_STEP=:step");
 			params.put("step", testCaseTO.getStep());
 		}
-		if(StringUtils.isEmpty(testCaseTO.getUrl())){
+		if(!StringUtils.isEmpty(testCaseTO.getUrl())){
 			updateTestCaseSql.append(",S_URL=:url");
 			params.put("url", testCaseTO.getUrl());
 		}
-		if(StringUtils.isEmpty(testCaseTO.getType())){
+		if(!StringUtils.isEmpty(testCaseTO.getType())){
 			updateTestCaseSql.append(",S_TYPE=:type");
 			params.put("type", testCaseTO.getType());
 		}
-		if(StringUtils.isEmpty(testCaseTO.getDesc())){
+		if(!StringUtils.isEmpty(testCaseTO.getDesc())){
 			updateTestCaseSql.append(",S_DESC=:desc");
 			params.put("desc", testCaseTO.getDesc());
 		}
-		if(StringUtils.isEmpty(testCaseTO.getExpect())){
+		if(!StringUtils.isEmpty(testCaseTO.getExpect())){
 			updateTestCaseSql.append(",S_EXPECT=:expect");
 			params.put("expect", testCaseTO.getExpect());
 		}
-		if(StringUtils.isEmpty(testCaseTO.getStatus())){
+		if(!StringUtils.isEmpty(testCaseTO.getStatus())){
 			updateTestCaseSql.append(",S_STATUS=:status ");
 			params.put("status", testCaseTO.getStatus());
+		}
+		if(!StringUtils.isEmpty(testCaseTO.getData())){
+			updateTestCaseSql.append(",S_DATA=:data ");
+			params.put("data", testCaseTO.getData());
 		}
 		updateTestCaseSql.append(" where N_ID = :id");
 		int affectRows = jdbcTemplateProcessor.update(updateTestCaseSql.toString(), params);

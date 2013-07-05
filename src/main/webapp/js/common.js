@@ -12,6 +12,16 @@ String.prototype.format = function(O){
 	return s;
 };
 
+var optionTemplate = [
+						'<option value="@{val}">',
+							'@{name}',
+						'</option>'
+                    ].join('');
+
+function addOpt(elementId,name,value){
+	$("#"+elementId).append(optionTemplate.format({name:name,val:value}));
+};
+
 /**
  * 处理过长的字符串，截取并添加省略号 注：半角长度为1，全角长度为2
  * 
