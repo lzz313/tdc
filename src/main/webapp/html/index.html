@@ -51,6 +51,7 @@
 			$(".project_name").sortable({
 				connectWith:".project_name",
 				cursor: "move",
+				delay:100,
 				start:function(event,ui){
 					hid_obj = ui.item.next().next();
 				},
@@ -68,9 +69,6 @@
 					
 					updateFunc.done(function(data){
 						if(data.code == 1){
-							//$(".project_list").html('');
-							//loadProject();
-							//hid_obj.appendTo(ui.item);
 							ui.item.after(hid_obj);
 						}
 					});

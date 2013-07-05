@@ -33,6 +33,7 @@ var tdcListTemplate = [
 							'<input type="button" tid="@{id}" class="tdc_delete_bt" value="删除"/>',
 							'<input type="button" tid="@{id}" class="tdc_test_bt" title="JavaScript动态form提交" value="测试"/>',
 							'<input type="button" tid="@{id}" class="tdc_backend_test_bt" title="Java后台模拟form提交" value="后台测试"/>',
+							'<input type="button" tid="@{id}" class="tdc_move_bt" value="移动"/>',
 						'</div>',
 					'</div>' 
 				   ].join('');
@@ -192,6 +193,10 @@ function addTdcEvent(){
 		testByForm(tid);
 	});
 	
+	$(".tdc_move_bt").die().live("click",function(){
+		alert("还未实现");
+	});
+	
 	$(".tdc_backend_test_bt").die().live("click",function(){
 		var btObj = $(this);
 		var tid = btObj.attr("tid");
@@ -238,7 +243,7 @@ function addTdcEvent(){
 			}
 		}
 	});
-	
+
 	addTdcDelEvent();
 }
 
@@ -522,9 +527,9 @@ function pushForm(forms){
 	addTdcEvent();
 }
 
-function formData(fIdx){
+function formMapData(fIdx){
 	var eleNm = fIdx+"_eleName_";
-	var eleVal = fIdx+"_eleName_";
+	var eleVal = fIdx+"_eleValue_";
 	
 	var args = new Object();
 	$('input[id^='+eleNm+']').each(function(){
@@ -535,5 +540,35 @@ function formData(fIdx){
 		args[key]=value;
 	});
 	
-	return JSON.stringify(args);
+	return args;
 }
+
+function formData(fIdx){
+	return JSON.stringify(formArrData(fIdx));
+}
+
+function sortArrData(fIdx){
+	var eleNm = fIdx+"_eleName_";
+	var eleVal = fIdx+"_eleValue_";
+	
+	var args = [];
+	$('input[id^='+eleNm+']').each(function(){
+		idx = $(this).attr("id").split('_')[2];
+		var key = $("#"+eleNm+idx).val();
+		var value = $("#"+eleVal+idx).val();
+		
+		args.push(key+"="+value);
+	});
+	args.sort(function(a,b){
+		if (a.toString() > b.toString()) {
+		    return 1;
+		}
+		return -1;
+	});
+	return arrData;
+}
+
+function genSortDataSignStr(fIdx){
+	$("#signStr").val(sortArrData(fIdx).join('').replace(/=/g,'').replace(/&/g,''));
+}
+
