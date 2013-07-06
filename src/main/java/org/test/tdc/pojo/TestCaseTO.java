@@ -1,7 +1,9 @@
 package org.test.tdc.pojo;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import org.codehaus.jackson.map.annotate.JsonSerialize;
+import org.test.tdc.common.DateSerializer;
 
 public class TestCaseTO  implements BaseTO{
 	/**
@@ -77,10 +79,12 @@ public class TestCaseTO  implements BaseTO{
 	public Date getCreate() {
 		return create;
 	}
+	/**
 	public String getStrCreate(){
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 		return sdf.format(create);
-	}
+	}*/
+	@JsonSerialize(using = DateSerializer.class)
 	public void setCreate(Date create) {
 		this.create = create;
 	}

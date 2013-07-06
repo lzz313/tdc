@@ -52,13 +52,13 @@ public class TestCaseDataController {
 	
 	@RequestMapping("/add")
 	public @ResponseBody JsonResponse addTestCase(@RequestParam(value = "functionId") final int functionId,
-												  @RequestParam(value = "name") final String name,
+												  @RequestParam(value = "name",required=false) final String name,
 												  @RequestParam(value = "step",defaultValue="1") final String step,
-												  @RequestParam(value = "url") final String url,
-												  @RequestParam(value = "desc") final String desc,
-												  @RequestParam(value = "expect") final String expect,
+												  @RequestParam(value = "url",required=false) final String url,
+												  @RequestParam(value = "desc",required=false) final String desc,
+												  @RequestParam(value = "expect",required=false) final String expect,
 												  @RequestParam(value = "type") final String type,
-												  @RequestParam(value = "data") final String data){
+												  @RequestParam(value = "data",required=false) final String data){
 		
 		TestCaseTO testCaseTO = new TestCaseTO();
 		testCaseTO.setFunctionId(functionId);
@@ -83,7 +83,7 @@ public class TestCaseDataController {
 	
 	@RequestMapping("/update")
 	public @ResponseBody JsonResponse updateTestCase(@RequestParam(value = "id") final int id,
-													  @RequestParam(value = "functionId",required=false) final int functionId,
+													  @RequestParam(value = "functionId",required=false,defaultValue="0") final int functionId,
 													  @RequestParam(value = "name",required=false) final String name,
 													  @RequestParam(value = "step",required=false) final String step,
 													  @RequestParam(value = "url",required=false) final String url,

@@ -6,7 +6,7 @@ var tdcListTemplate = [
 					'<div class="tdc_item" id="tdc_@{id}">',
 						'<div class="tdc_title">',
 							'<p>@{step} @{name}</p>',
-							'<span style="float:right;">时间:@{create}</span>',
+							'<span style="float:right;">@{create}</span>',
 							'<input type="hidden" id="fid_@{id}" value="@{functionId}"/>',
 							'<input type="hidden" id="status_@{id}" value="@{status}"/>',
 						'</div>',
@@ -43,7 +43,7 @@ var tdcItemDataTemplate = [
 								'<span>参数</span>',
 								'<input id="@{id}_eleName_@{j}" type="text" name="eleName" value="@{name}"/>',
 								'<input id="@{id}_eleValue_@{j}" type="text" name="eleValue" value="@{value}"/>',
-								'<input id="@{id}_eleType_@{j}" type="text" name="eleType" value="@{type}"/>',
+								'<input id="@{id}_eleType_@{j}" type="text" name="eleType" class="type" value="@{type}"/>',
 								'<input class="tdc_name_value_delete_bt" type="button" value="删除"/>',
 							'</div>'
                            ].join('');
@@ -73,6 +73,8 @@ function displayTestData(o){
 	$(".tdc_add").append(addNewTdcBtTemplate.format({
 		functionId:fid
 	}));
+	
+	$("#parseUrl").attr("fid",fid);
 	
 	var testcases = $.ajax({
 		url : url,
@@ -107,6 +109,10 @@ function displayTestData(o){
 				$("#tdc_"+testCase.id+" .tdc_data").show();
 				$("#tdc_"+testCase.id+" .tdc_action").show();
 			});
+			
+			$(".tdc_title_anly_bt").die().live("click",function(){
+				$("#tdc_anlysis").show();
+			});
 			addTdcEvent();
 		}
 	});
@@ -123,7 +129,7 @@ function addTdc(testCase){
 		url:testCase.url,
 		desc:testCase.desc,
 		expect:testCase.expect,
-		create:testCase.strCreate,
+		create:testCase.create,
 		status:testCase.status
 	}));
 	
@@ -219,9 +225,6 @@ function addTdcEvent(){
 		test(tid);
 	});
 	
-	$(".tdc_title_anly_bt").die().live("click",function(){
-		$("#tdc_anlysis").show();
-	});
 	
 	$(".tdc_info_area").die().live("focus",function(){
 		var o = $(this);
@@ -240,12 +243,12 @@ function addTdcEvent(){
 	
 	$(".tdc_data select").die().live("change",function(){
 		var val = $(this).val();
-		if(val.toUpperCase() == 'GET'){
-			$(this).parent().parent().children(".tdc_name_value_type_title").hide();
-			$(this).parent().parent().children(".tdc_name_value_type").hide();
-		} else {
-			$(this).parent().parent().children(".tdc_name_value_type_title").show();
-			$(this).parent().parent().children(".tdc_name_value_type").show();
+		if(val.toUpperCase() == 'POST'){
+			//$(this).parent().parent().children(".tdc_name_value_type_title").hide();
+			//$(this).parent().parent().children(".tdc_name_value_type").hide();
+		//} else {
+			//$(this).parent().parent().children(".tdc_name_value_type_title").show();
+			//$(this).parent().parent().children(".tdc_name_value_type").show();
 			if(isNeedAddNew($(this).parent().parent())){
 				var tid = $(this).parent().parent().attr("tid");
 				var j = $(this).parent().parent().children(".tdc_name_value_type").length;
@@ -334,7 +337,7 @@ function cbCopyTdcDisp(testCase){
 
 function saveTdcData(tid){
 	var url =(!tid||parseInt(tid)<=0)?"/testcase/add":"/testcase/update";
-	saveTdc(tid,url,cbSaveTdcDisp);
+	saveTdc(tid,url);
 }
 
 function copyTdcData(tid){
@@ -354,7 +357,7 @@ function copyTdcData(tid){
 	alert("复制成功");
 }
 
-function saveTdc(tid,url,callback){
+function saveTdc(tid,url){
 	var fId = $("#fid_"+tid).val();
 	var name = $("#name_"+tid).val();
 	var step = $("#step_"+tid).val();
@@ -363,19 +366,20 @@ function saveTdc(tid,url,callback){
 	var expect = $("#expect_"+tid).val();
 	var type = $("#method_"+tid).val();
 	var status = $("#status_"+tid).val();
-	var data = encapElemData(tid);
+	var e_data = encapElemData(tid);
 	
-	var testcases = $.ajax({
+	var savetdc = $.ajax({
 		url : url,
-		data :{id:tid,functionId:fId,name:name,step:step,url:action,desc:desc,type:type,expect:expect,data:data,status:status},
-		type : "post",
+		data :{id:tid,functionId:fId,name:name,step:step,url:action,desc:desc,type:type,expect:expect,data:e_data,status:status},
+		type : "get",
 		async:false,
 		dataType : "json"
 	});
 	
-	testcases.done(function(data){
-		if(data.code == 1){
-			callback(data.data.testCase);
+	savetdc.done(function(s_data){
+		if(s_data.code == 1){
+			$("#tdc_"+s_data.data.testCase.tid+" .tdc_title span:first").html(s_data.data.testCase.name);
+			alert("保存成功");
 		}
 	});
 }
@@ -529,7 +533,7 @@ function test(tid){
 	});
 }
 
-function anlysis(){
+function anlysis(fid){
 	var url = "/parse/form?url="+$("#url").val();
 	$.getJSON(url,function(data){
 		$("#parseForm").html('');
@@ -538,7 +542,7 @@ function anlysis(){
 			if(forms.length == 0){
 				$("#parseForm").append("页面没有找到表单");
 			} else {
-				pushForm(forms);
+				pushForm(fid,forms);
 			}
 		} else {
 			$("#parseForm").append(data.msg);
@@ -556,8 +560,7 @@ function getActionWithHost(action,url){
 	return actionUrl;
 }
 
-function pushForm(forms){
-	var fId = 1;
+function pushForm(fId,forms){
 	var tid;
 	$.each(forms,function(i){
 		tid = -(new Date().getTime());

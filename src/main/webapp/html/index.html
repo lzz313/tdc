@@ -43,7 +43,8 @@
 		$(document).ready(function(){
 			loadProject();
 			$("#parseUrl").click(function(){
-				anlysis();
+				var f_id = $(this).attr("fid");
+				anlysis(f_id);
 			});
 			/**
 			
@@ -96,7 +97,7 @@
 							return;
 						}
 						
-						var testcases = $.ajax({
+						var tc = $.ajax({
 							url : "/testcase/update",
 							data :{id:tid,functionId:fid},
 							type : "post",
@@ -104,8 +105,8 @@
 							dataType : "json"
 						});
 						
-						testcases.done(function(data){
-							if(data.code == 1){
+						tc.done(function(tc_data){
+							if(tc_data.code == 1){
 								//1.提示  2.页面元素处理
 								$("#tdc_"+tid).remove();
 							}
