@@ -30,8 +30,9 @@ var tdcListTemplate = [
 						'<div class="tdc_action">',
 							'<input type="button" tid="@{id}" title="保存当前数据" class="tdc_save_bt" value="保存"/>',
 							'<input type="button" tid="@{id}" title="删除当前用例" class="tdc_delete_bt" value="删除"/>|',
-							'<input type="button" tid="@{id}" title="js直接提交form测试" class="tdc_test_bt" title="JavaScript动态form提交" value="测试"/>',
-							'<input type="button" tid="@{id}" title="后台跳转测试" class="tdc_backend_test_bt" title="Java后台模拟form提交" value="后台测试"/>',
+							'<input type="button" tid="@{id}" title="登录后保存cookie信息" class="tdc_login_bt" value="登录"/>',
+							'<input type="button" tid="@{id}" title="js直接提交form测试" class="tdc_test_bt" value="测试"/>',
+							'<input type="button" tid="@{id}" title="后台跳转测试" class="tdc_backend_test_bt" value="后台测试"/>',
 							'|<input type="button" tid="@{id}" title="复制当前用例" class="tdc_copy_bt" value="复制"/>',
 							'<input type="button" tid="@{id}" title="移动当前用例到其他模块" class="tdc_move_bt" value="移动"/>',
 						'</div>',
@@ -211,6 +212,12 @@ function addTdcEvent(){
 		var btObj = $(this);
 		var tid = btObj.attr("tid");
 		testByForm(tid);
+	});
+	
+	$(".tdc_login_bt").die().live("click",function(){
+		var btObj = $(this);
+		var tid = btObj.attr("tid");
+		test_login(tid);
 	});
 	
 	$(".tdc_move_bt").die().live("click",function(){
@@ -533,6 +540,39 @@ function test(tid){
 	});
 }
 
+function test_login(tid){
+	var domain = $(".select span:first").attr("value");
+	var action = $("#action_"+tid).val();
+	
+	if(action.indexOf("http://") == -1 && action.indexOf("https://") == -1){
+		if(domain == ''||domain == undefined){
+			alert('请选择测试环境');
+			return;
+		}
+		action = domain + action;
+	} else {
+		domain = getActionWithHost("",action);
+	}
+	
+	var testAction = $.ajax({
+		url : "/parse/login",
+		type : "post",
+		async : false,
+		data : {
+			formData:formData(tid),
+			domain:domain,
+			url:action,
+			method:$("#method_"+tid).val()
+		},
+		dataType : "json"
+	});
+	testAction.done(function(data) {
+		newWin = window.open("","_blank");
+		newWin.document.write(data.data.content);
+		newWin.document.close();
+	});
+}
+
 function anlysis(fid){
 	var url = "/parse/form?url="+$("#url").val();
 	$.getJSON(url,function(data){
@@ -608,7 +648,7 @@ function formMapData(fIdx){
 }
 
 function formData(fIdx){
-	return JSON.stringify(formArrData(fIdx));
+	return JSON.stringify(formMapData(fIdx));
 }
 
 function sortArrData(fIdx){

@@ -80,5 +80,30 @@ public class HtmlParserController {
 		result.put("content", JsoupParser.parse(responseStr,domain));//JsoupParser.parse(responseStr,domain)
 		return new JsonResponse(JsonResponse.CODE_SUCCESS,"请求成功",result);
 	}
+	
+	@RequestMapping("/login")
+	public @ResponseBody JsonResponse httpLogin(HttpServletRequest request){
+		String url = request.getParameter("url");
+		String domain = request.getParameter("domain");
+		String method = request.getParameter("method");
+		String formData = request.getParameter("formData");
+		
+		String responseStr = "";
+		try {
+			Map<String,String> nameValuePair = (Map<String, String>) JsonUtils.parseObject(formData);
+			responseStr = HttpClientUtils.login(url,nameValuePair,method);
+			
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		
+		Map<String,Object> result = new HashMap<String,Object>();
+		result.put("content", JsoupParser.parse(responseStr,domain));//JsoupParser.parse(responseStr,domain)
+		return new JsonResponse(JsonResponse.CODE_SUCCESS,"请求成功",result);
+	}
 
 }
