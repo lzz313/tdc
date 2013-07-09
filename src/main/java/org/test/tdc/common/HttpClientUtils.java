@@ -1,8 +1,10 @@
 package org.test.tdc.common;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -13,19 +15,19 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.CookieStore;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.client.params.HttpClientParams;
-import org.apache.http.impl.client.BasicCookieStore;
+import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.impl.cookie.BasicClientCookie;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
 import org.test.tdc.pojo.CookieHolder;
 import org.test.tdc.utils.StringUtils;
@@ -47,21 +49,19 @@ public class HttpClientUtils {
 			hg.addHeader("Content-Type", "text/html;charset=UTF-8");  
 			hg.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31");  
 //			hg.addHeader("Referer",url);
-			//CookieStore cookieStore = new BasicCookieStore();
-			Header[] headers = CookieHolder.getCookies();
-			for (Header header : headers) {
-				//hg.addHeader(header);
-				System.out.println(header.getName()+":"+header.getValue());
-				
-				//BasicClientCookie cookie = new BasicClientCookie(header.getName(), "value");
-				//cookieStore.addCookie(cookie);
-			}
+
+			//httpclient.setCookieStore(CookieHolder.getCookieStore());
+			//httpclient.setCookieSpecs(CookieHolder.getCookieSpecs());
 			
-			httpclient.setCookieStore(CookieHolder.getCookieStore());
+            // Create local HTTP context
+            HttpContext localContext = new BasicHttpContext();
+            // Bind custom cookie store to the local context
+            localContext.setAttribute(ClientContext.COOKIE_STORE, CookieHolder.getCookieStore());
+
 			String charset = "UTF-8";  
 			hg.setURI(new java.net.URI(url));  
 			
-            HttpResponse response = httpclient.execute(hg);  
+            HttpResponse response = httpclient.execute(hg,localContext);  
             HttpEntity entity = response.getEntity();  
             if (entity != null) {  
             	charset = getContentCharSet(entity);
@@ -74,6 +74,7 @@ public class HttpClientUtils {
 		} finally {
 			httpclient.getConnectionManager().shutdown();
 		}
+		
 		return result;
 	}
 	
@@ -156,7 +157,6 @@ public class HttpClientUtils {
 	
 	public static String login(String url,Map<String, String> nameValuePair,String method) throws ClientProtocolException, IOException, URISyntaxException {
 		DefaultHttpClient  httpclient = new DefaultHttpClient();
-//		httpclient.getParams().setParameter("http.protocol.single-cookie-header", true);
 		HttpClientParams.setCookiePolicy(httpclient.getParams(), CookiePolicy.BEST_MATCH);
 		
 		String result = "";
@@ -179,12 +179,12 @@ public class HttpClientUtils {
 				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams,"UTF-8");
 				httpRequest.setEntity(entity);
 				
-				response = httpclient.execute(httpRequest);   
+				response = httpclient.execute(httpRequest);  
 				
 				response.getStatusLine().getStatusCode();
 				
 				CookieHolder.setCookieStore(httpclient.getCookieStore());
-				CookieHolder.setCookies(response.getHeaders("Set-Cookie"));
+				
 			} else {
 				HttpGet httpRequest = new HttpGet(url);
 				//模拟浏览器
@@ -206,6 +206,28 @@ public class HttpClientUtils {
 			httpclient.getConnectionManager().shutdown();
 		}
 		return result;
+	}
+	
+	public static void main(String [] args){
+		Map<String,String> nameValuePair = new HashMap<String,String>();
+		nameValuePair.put("userId", "useradmin");
+		nameValuePair.put("requestFlag", "logon");
+		nameValuePair.put("PWD", "");
+		nameValuePair.put("Encoding", "GBK");
+		nameValuePair.put("remoteIp", "127.0.0.1");
+		try {
+			String r1 = HttpClientUtils.login("http://183.213.19.7:81/logon.logon.submit", nameValuePair, "POST");
+			System.out.println(r1);
+			String r2 = HttpClientUtils.httpGet("http://183.213.19.7:81/QRY.SmsStat.load");
+			System.out.println(r2);
+		} catch (ClientProtocolException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (URISyntaxException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }

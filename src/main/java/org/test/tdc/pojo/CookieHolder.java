@@ -3,6 +3,7 @@ package org.test.tdc.pojo;
 import org.apache.http.Header;
 import org.apache.http.client.CookieStore;
 import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.cookie.CookieSpecRegistry;
 import org.apache.http.protocol.BasicHttpContext;
 import org.apache.http.protocol.HttpContext;
 
@@ -12,7 +13,16 @@ public class CookieHolder {
 	private volatile static CookieHolder cookieHolder;
 	private static HttpContext httpContext;
 	private static CookieStore cookieStore;
+	private static CookieSpecRegistry cookieSpecs;
 	
+	public static CookieSpecRegistry getCookieSpecs() {
+		return cookieSpecs;
+	}
+
+	public static void setCookieSpecs(CookieSpecRegistry cookieSpecs) {
+		CookieHolder.cookieSpecs = cookieSpecs;
+	}
+
 	private static Header[] cookies;
 
 	public static Header[] getCookies() {
