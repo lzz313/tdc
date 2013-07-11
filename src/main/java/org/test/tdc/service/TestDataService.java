@@ -2,8 +2,6 @@ package org.test.tdc.service;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -31,7 +29,7 @@ public class TestDataService {
 	@SuppressWarnings("unchecked")
 	public List<TestCaseTO> queryTestCase(int functionId){
 		
-		String queryTestCaseSql = "select * from TESTCASE where N_FUNCTION_ID = :fid order by s_step";
+		String queryTestCaseSql = "select * from TESTCASE where N_FUNCTION_ID = :fid order by n_step";
 		
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("fid", functionId);
@@ -44,7 +42,7 @@ public class TestDataService {
 					testCaseTO.setId(query.getInt("N_ID"));
 					testCaseTO.setFunctionId(query.getInt("N_FUNCTION_ID"));
 					testCaseTO.setName(query.getString("S_NAME"));
-					testCaseTO.setStep(query.getString("S_STEP"));
+					testCaseTO.setStep(query.getString("N_STEP"));
 					testCaseTO.setUrl(query.getString("S_URL"));
 					testCaseTO.setDesc(query.getString("S_DESC"));
 					testCaseTO.setType(query.getString("S_TYPE"));
@@ -77,7 +75,7 @@ public class TestDataService {
 					TestCaseTO testCaseTO = new TestCaseTO();
 					testCaseTO.setId(query.getInt("N_ID"));
 					testCaseTO.setName(query.getString("S_NAME"));
-					testCaseTO.setStep(query.getString("S_STEP"));
+					testCaseTO.setStep(query.getString("N_STEP"));
 					testCaseTO.setUrl(query.getString("S_URL"));
 					testCaseTO.setDesc(query.getString("S_DESC"));
 					testCaseTO.setType(query.getString("S_TYPE"));
@@ -103,7 +101,7 @@ public class TestDataService {
 	 * @return
 	 */
 	public int createTestCase(TestCaseTO testCaseTO){
-		String createTestCaseSql = "insert into TESTCASE (N_FUNCTION_ID,S_NAME,S_STEP,S_URL,S_DESC,S_TYPE,S_EXPECT,S_DATA,D_CREATE,S_STATUS) " +
+		String createTestCaseSql = "insert into TESTCASE (N_FUNCTION_ID,S_NAME,N_STEP,S_URL,S_DESC,S_TYPE,S_EXPECT,S_DATA,D_CREATE,S_STATUS) " +
 								"values (:functionId,:name,:step,:url,:desc,:type,:expect,:data,now(),'1')";
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("functionId", testCaseTO.getFunctionId());
@@ -138,7 +136,7 @@ public class TestDataService {
 			params.put("name", testCaseTO.getName());
 		}
 		if(!StringUtils.isEmpty(testCaseTO.getStep())){
-			updateTestCaseSql.append(",S_STEP=:step");
+			updateTestCaseSql.append(",N_STEP=:step");
 			params.put("step", testCaseTO.getStep());
 		}
 		if(!StringUtils.isEmpty(testCaseTO.getUrl())){
