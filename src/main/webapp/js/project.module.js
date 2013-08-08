@@ -32,15 +32,22 @@ function loadProject(){
 	projects.done(function(data){
 		if(data.code == 1){
 			var projects = data.data.projects;
-			$(".project_list").append(addProjectTemplate);
-			$.each(projects,function(i){
-				$(".project_list").append(projectTemplate.format({name:autoAddEllipsis(projects[i].name,35)+'('+projects[i].fcount+')',id:projects[i].id}));
-				$(".project_list").append(editProjectTemplate.format({
-					value:projects[i].name,
-					pid:projects[i].id
-				}));
-			});
+			var projectList = addProjectTemplate;
+			//$(".project_list").append(addProjectTemplate);
 			
+			$.each(projects,function(i){
+				projectList += projectTemplate.format({name:autoAddEllipsis(projects[i].name,35)+'('+projects[i].fcount+')',id:projects[i].id});
+				projectList += editProjectTemplate.format({
+									value:projects[i].name,
+									pid:projects[i].id
+								});
+				//$(".project_list").append(projectTemplate.format({name:autoAddEllipsis(projects[i].name,35)+'('+projects[i].fcount+')',id:projects[i].id}));
+				//$(".project_list").append(editProjectTemplate.format({
+				//	value:projects[i].name,
+				//	pid:projects[i].id
+				//}));
+			});
+			$(".project_list").append(projectList);
 			addProjectEvent();
 		}
 	});
@@ -212,14 +219,21 @@ function loadFunctions(obj,pid){
 			var funcs = data.data.functions;
 			var funcAdd = obj.children(".function_add");
 			if(!funcAdd[0]) obj.append(addFuncTemplate);
-			$.each(funcs,function(i){
-				obj.append(funcTemplate.format({fname:funcs[i].name+'('+funcs[i].tcount+')',fid:funcs[i].id}));
-				obj.append(editFuncTemplate.format({
-					value:funcs[i].name,
-					fid:funcs[i].id
-				}));
-			});
 			
+			var funcList = "";
+			$.each(funcs,function(i){
+				funcList += funcTemplate.format({fname:funcs[i].name+'('+funcs[i].tcount+')',fid:funcs[i].id});
+				funcList += editFuncTemplate.format({
+								value:funcs[i].name,
+								fid:funcs[i].id
+							});
+				//obj.append(funcTemplate.format({fname:funcs[i].name+'('+funcs[i].tcount+')',fid:funcs[i].id}));
+				//obj.append(editFuncTemplate.format({
+				//	value:funcs[i].name,
+				//	fid:funcs[i].id
+				//}));
+			});
+			obj.append(funcList);
 			addFuncEvent();
 		}
 	});

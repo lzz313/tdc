@@ -617,7 +617,16 @@ function pushForm(fId,forms){
 		$("#method_"+tid).val(forms[i].method.toUpperCase());
 		
 		var inputs = forms[i].inputs;
+		var tdcList = "";
 		$.each(inputs,function(j){
+			tdcList += tdcItemDataTemplate.format({
+							id:i,
+							j:j,
+							name:inputs[j].name,
+							value:inputs[j].value,
+							type:inputs[j].type
+						});
+			/**
 			$("#tdc_"+tid+" .tdc_data").append(tdcItemDataTemplate.format({
 				id:i,
 				j:j,
@@ -625,7 +634,9 @@ function pushForm(fId,forms){
 				value:inputs[j].value,
 				type:inputs[j].type
 			}));
+			*/
 		});
+		$("#tdc_"+tid+" .tdc_data").append(tdcList);
 						
 	});
 	addTdcEvent();
