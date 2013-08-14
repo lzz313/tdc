@@ -20,7 +20,7 @@ var addProjectTemplate = [
 							'</div>'
                           ].join('');
 
-function loadProject(){
+(function loadProject(){
 	var url = "/project/query";
 	var projects = $.ajax({
 		url : url,
@@ -32,60 +32,64 @@ function loadProject(){
 	projects.done(function(data){
 		if(data.code == 1){
 			var projects = data.data.projects;
-			var projectList = addProjectTemplate;
+			var projectList = [],projectList.push(addProjectTemplate);
 			//$(".project_list").append(addProjectTemplate);
 			
 			$.each(projects,function(i){
-				projectList += projectTemplate.format({name:autoAddEllipsis(projects[i].name,35)+'('+projects[i].fcount+')',id:projects[i].id});
-				projectList += editProjectTemplate.format({
+				projectList.push(projectTemplate.format({name:autoAddEllipsis(projects[i].name,35)+'('+projects[i].fcount+')',id:projects[i].id}));
+				projectList.push(editProjectTemplate.format({
 									value:projects[i].name,
 									pid:projects[i].id
-								});
+								}));
 				//$(".project_list").append(projectTemplate.format({name:autoAddEllipsis(projects[i].name,35)+'('+projects[i].fcount+')',id:projects[i].id}));
 				//$(".project_list").append(editProjectTemplate.format({
 				//	value:projects[i].name,
 				//	pid:projects[i].id
 				//}));
 			});
-			$(".project_list").append(projectList);
+			$(".project_list").append(projectList.join(''));
 			addProjectEvent();
 		}
 	});
-}
+})();
 //定义setTimeout执行方法
 var pTimeFn = null;
 function addProjectEvent(){
 	$("div.project_name >p").dblclick(function(){
 		clearTimeout(pTimeFn);
 		//编辑项目
-		$(this).parent().hide();
-		$(this).parent().next().show();
+		var p = $(this).parent();
+		p.hide();
+		p.next().show();
 		
 		$(".project_update_bt").click(function(){
-			var pid = $(this).attr("pid");
-			var pNm = $(this).prev().val();
-			updateProject($(this),pid,pNm);
+			var t = $(this);
+			var pid = t.attr("pid");
+			var pNm = t.prev().val();
+			updateProject(t,pid,pNm);
 		});
 		
 		$(".project_cancle_update_bt").click(function(){
-			$(this).parent().hide();
-			$(this).parent().prev().show();
+			var p = $(this).parent();
+			p.hide();
+			p.prev().show();
 		});
 	});
 	
 	//添加显示隐藏模块事件
 	$("div.project_name >p").die().live("click",function(){
 		var p = $(this);
+		var pParent = p.parent();
 		// 取消上次延时未执行的方法
 	    clearTimeout(pTimeFn);
 	    //执行延时
 	    pTimeFn = setTimeout(function(){
-			var obj = p.parent().children(".function_name");
-			var addBt = p.parent().children(".function_add_link");
-			var funcAdd = p.parent().children(".function_add");
-			var funcEdit = p.parent().children(".function_edit");
+			var obj = pParent.children(".function_name");
+			var addBt = pParent.children(".function_add_link");
+			var funcAdd = pParent.children(".function_add");
+			var funcEdit = pParent.children(".function_edit");
 			if(obj.length==0){
-				loadFunctions(p.parent(),p.parent().attr("pid"));
+				loadFunctions(pParent,pParent.attr("pid"));
 			} else if(obj.length>0 && obj.is(":hidden")){
 				obj.show("normal");
 				cancleAllEditFunc(funcEdit);
@@ -220,20 +224,22 @@ function loadFunctions(obj,pid){
 			var funcAdd = obj.children(".function_add");
 			if(!funcAdd[0]) obj.append(addFuncTemplate);
 			
-			var funcList = "";
+			var funcList = [];
 			$.each(funcs,function(i){
-				funcList += funcTemplate.format({fname:funcs[i].name+'('+funcs[i].tcount+')',fid:funcs[i].id});
-				funcList += editFuncTemplate.format({
+				funcList.push(funcTemplate.format({
+												fname:funcs[i].name+'('+funcs[i].tcount+')'
+												,fid:funcs[i].id}));
+				funcList.push(editFuncTemplate.format({
 								value:funcs[i].name,
 								fid:funcs[i].id
-							});
+							}));
 				//obj.append(funcTemplate.format({fname:funcs[i].name+'('+funcs[i].tcount+')',fid:funcs[i].id}));
 				//obj.append(editFuncTemplate.format({
 				//	value:funcs[i].name,
 				//	fid:funcs[i].id
 				//}));
 			});
-			obj.append(funcList);
+			obj.append(funcList.join(''));
 			addFuncEvent();
 		}
 	});
@@ -244,18 +250,21 @@ function addFuncEvent(){
 	$("div.function_name >p").dblclick(function(){
 		 clearTimeout(fTimeFn);
 		//编辑项目
-		$(this).parent().hide();
-		$(this).parent().next().show();
+		var p = $(this).parent();
+		p.hide();
+		p.next().show();
 		
 		$(".function_cancle_update_bt").click(function(){
-			$(this).parent().hide();
-			$(this).parent().prev().show();
+			var p = $(this).parent();
+			p.hide();
+			p.prev().show();
 		});
 		
 		$(".function_update_bt").click(function(){
-			var fid = $(this).attr("fid");
-			var fNm = $(this).prev().val();
-			updateFunction($(this),fid,fNm);
+			var t = $(this);
+			var fid = t.attr("fid");
+			var fNm = t.prev().val();
+			updateFunction(t,fid,fNm);
 		});
 	});
 	
@@ -271,8 +280,9 @@ function addFuncEvent(){
 	});
 	
 	$(".function_cancle_add_bt").click(function(){
-		$(this).parent().hide();
-		$(this).parent().parent().children(".function_add_link").show();
+		var p = $(this).parent();
+		p.hide();
+		p.parent().children(".function_add_link").show();
 	});
 }
 
@@ -309,8 +319,9 @@ function showAddFunction(obj,pid){
 }
 
 function addFunction(obj){
-	var pid = obj.parent().parent().attr("pid");
-	var fNm = obj.parent().children("#newFunction").val();
+	var parent = obj.parent();
+	var pid = parent.parent().attr("pid");
+	var fNm = parent.children("#newFunction").val();
 	
 	if(!fNm){
 		alert('模块名称不可以为空！');
@@ -328,12 +339,12 @@ function addFunction(obj){
 	addFunc.done(function(data){
 		if(data.code == 1){
 			var func = data.data.functions[0];
-			obj.parent().parent().append(funcTemplate.format({fname:func.name,fid:func.id}));
-			obj.parent().parent().append(editFuncTemplate.format({
+			parent.parent().append(funcTemplate.format({fname:func.name,fid:func.id}));
+			parent.parent().append(editFuncTemplate.format({
 				value:func.name,
 				fid:func.id
 			}));
-			obj.parent().children("#newFunction").val('');
+			parent.children("#newFunction").val('');
 			addFuncEvent();
 		}
 	});

@@ -42,7 +42,7 @@
 	<script type="text/javascript" src="/js/jquery.min.js"></script>
 	<script type="text/javascript">
 		$(document).ready(function(){
-			loadProject();
+			//loadProject();使用自调用写法
 			$("#parseUrl").click(function(){
 				var f_id = $(this).attr("fid");
 				anlysis(f_id);
@@ -79,7 +79,7 @@
 			});
 			
 			$(".container").append(transferForm);
-			loadProjectSelect();
+			//loadProjectSelect();使用自调用写法
 			
 			$( "#transfer_form" ).dialog({
 				autoOpen: false,

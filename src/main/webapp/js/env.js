@@ -46,7 +46,8 @@ function loadEnvi(pid){
 }
 
 function saveOrDispEnvi(){
-	if($(this).is('hidden')){
+	var obj = $(this);
+	if(obj.is('hidden')){
 		$(".select .option").each(function(){
 			var val = $(this).attr("value");
 			var name = $(this).html();
@@ -55,14 +56,14 @@ function saveOrDispEnvi(){
 			$(this).next().children(".envi_ipt_name").val(name);
 		});
 	} else {
-		var id = $(this).children(".envi_ipt_id").val();
-		var pid = $(this).children(".envi_ipt_pid").val();
-		var domain = $(this).children(".envi_ipt_val").val();
-		var name = $(this).children(".envi_ipt_name").val();
+		var id = obj.children(".envi_ipt_id").val();
+		var pid = obj.children(".envi_ipt_pid").val();
+		var domain = obj.children(".envi_ipt_val").val();
+		var name = obj.children(".envi_ipt_name").val();
 		//添加delete
 		var url =id?"/domain/update":"/domain/add";
 		
-		var init = $(this).children(".envi_ipt_val").attr("init");
+		var init = obj.children(".envi_ipt_val").attr("init");
 		if(init == domain && !id){
 			return;
 		}
@@ -79,7 +80,6 @@ function saveOrDispEnvi(){
 			dataType : "json"
 		});
 		
-		var obj = $(this);
 		saveEnvi.done(function(data){
 			obj.prev().html(name);
 			obj.prev().attr("value",domain);
@@ -105,7 +105,7 @@ function addOptionEvent(){
 	$(".select .option").click(function(){
 		$(".select span:first").attr("value",$(this).attr("value"));
 		$(".select span:first").html($(this).html());
-		$(".select .option").hide();
+		$(".select").find(".option").hide();
 	});
 }
 
