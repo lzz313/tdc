@@ -35,6 +35,7 @@ var tdcListTemplate = [
 							'<input type="button" tid="@{id}" title="后台跳转测试" class="tdc_backend_test_bt" value="后台测试"/>',
 							'|<input type="button" tid="@{id}" title="复制当前用例" class="tdc_copy_bt" value="复制"/>',
 							'<input type="button" tid="@{id}" title="移动当前用例到其他模块" class="tdc_move_bt" value="移动"/>',
+							'<input type="button" tid="@{id}" title="生成加密串" class="tdc_sign_bt" onclick="genSign(@{id})" value="sign"/>',
 						'</div>',
 					'</div>' 
 				   ].join('');
@@ -488,6 +489,7 @@ function testByForm(tid){
 function postInput(form,fIdx){
 	var eleNm = fIdx+"_eleName_";
 	var eleVal = fIdx+"_eleValue_";
+	var eleType = fIdx+"_eleType_";
 	
 	var args = new Object(),
 		formElements = [];
@@ -495,6 +497,11 @@ function postInput(form,fIdx){
 		idx = $(this).attr("id").split('_')[2];
 		var key = $("#"+eleNm+idx).val();
 		var value = $("#"+eleVal+idx).val();
+		var type = $("#"+eleType+idx).val();
+		
+		if(equalsIgnoreCase("key",type)){
+			return true;
+		}
 		
 		formElements.push("<input type='hidden' name='"+key+"' value='"+value+"'/>");
 		//form.append($("<input type='hidden' name='"+key+"' value='"+value+"'/>"));
@@ -521,6 +528,56 @@ function getInput(form,url){
 	}
 	form.append(formElements.join(''));
 	return form;
+}
+
+function genSign(tid){
+	var eleNm = tid+"_eleName_";
+	var eleVal = tid+"_eleValue_";
+	var eleType = tid+"_eleType_";
+	
+	var keyVal,singId;
+	var arrElems = [];
+	$('input[id^='+eleNm+']').each(function(){
+		idx = $(this).attr("id").split('_')[2];
+		var key = $("#"+eleNm+idx).val();
+		var value = $("#"+eleVal+idx).val();
+		var type = $("#"+eleType+idx).val();
+		
+		if(equalsIgnoreCase("sign",type)){
+			singId = eleVal+idx;
+			return true;
+		}
+		
+		if(equalsIgnoreCase("key",type)){
+			keyVal = value;
+			return true;
+		}
+		
+		if(equalsIgnoreCase("ns", type)){
+			return true;
+		}
+		
+		arrElems.push(key+''+value);
+		
+	});
+	
+	arrElems.sort(function(a,b){
+		if (a.toString() > b.toString()) {
+            return 1;
+        }
+        return -1;
+	});
+	console.log(arrElems.join('')+keyVal);
+	var hash = faultylabs.MD5(arrElems.join('')+keyVal);
+	$("#"+singId).val(hash);
+	console.log(hash);
+}
+
+function equalsIgnoreCase(str1, str2){   
+    if(str1.toUpperCase() == str2.toUpperCase()){   
+        return true;   
+    }   
+    return false;   
 }
 
 function test(tid){

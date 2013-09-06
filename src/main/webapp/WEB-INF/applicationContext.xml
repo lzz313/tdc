@@ -51,6 +51,7 @@
 	            <property name="password" value="654321"/>
 	         </bean>
 	    </constructor-arg>
+	    <!--<property name="activeConnections">2</property> max conn default 10 -->
 	</bean> 
 	
 	<task:annotation-driven/> 

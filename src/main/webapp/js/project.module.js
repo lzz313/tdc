@@ -32,7 +32,8 @@ var addProjectTemplate = [
 	projects.done(function(data){
 		if(data.code == 1){
 			var projects = data.data.projects;
-			var projectList = [],projectList.push(addProjectTemplate);
+			var projectList = [];
+			projectList.push(addProjectTemplate);
 			//$(".project_list").append(addProjectTemplate);
 			
 			$.each(projects,function(i){
