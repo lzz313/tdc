@@ -113,7 +113,7 @@ function displayTestData(o){
 			});
 			
 			$(".tdc_title_anly_bt").die().live("click",function(){
-				$("#tdc_anlysis").show();
+				$("#tdc_anlysis").toggle();
 			});
 			addTdcEvent();
 		}
