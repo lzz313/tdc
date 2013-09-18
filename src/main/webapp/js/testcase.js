@@ -35,7 +35,7 @@ var tdcListTemplate = [
 							'<input type="button" tid="@{id}" title="后台跳转测试" class="tdc_backend_test_bt" value="后台测试"/>',
 							'|<input type="button" tid="@{id}" title="复制当前用例" class="tdc_copy_bt" value="复制"/>',
 							'<input type="button" tid="@{id}" title="移动当前用例到其他模块" class="tdc_move_bt" value="移动"/>',
-							'<input type="button" tid="@{id}" title="生成加密串" class="tdc_sign_bt" onclick="genSign(@{id})" value="sign"/>',
+							'<input type="button" tid="@{id}" title="生成加密串" class="tdc_sign_bt" value="sign"/>',
 						'</div>',
 					'</div>' 
 				   ].join('');
@@ -223,6 +223,12 @@ function addTdcEvent(){
 		testByForm(tid);
 	});
 	
+	$(".tdc_sign_bt").die().live("click",function(){
+		var btObj = $(this);
+		var tid = btObj.attr("tid");
+		genSign(tid);
+	});
+	
 	$(".tdc_login_bt").die().live("click",function(){
 		var btObj = $(this);
 		var tid = btObj.attr("tid");
@@ -395,7 +401,7 @@ function saveTdc(tid,url){
 	
 	savetdc.done(function(s_data){
 		if(s_data.code == 1){
-			console.log(s_data);
+			//console.log(s_data);
 			//s_data.data.testCase.tid
 			$("#tdc_"+tid+" .tdc_title p:first").html(s_data.data.testCase.step + " " +s_data.data.testCase.name);
 			$("#tdc_"+tid+" .tdc_title span:first").html(s_data.data.testCase.create);
@@ -415,6 +421,14 @@ function saveTdc(tid,url){
 			
 			$.each(bts,function(i){
 				$(bts[i]).attr("tid",newId);
+			});
+			
+			var iptVals = $("#tdc_"+newId+" .tdc_data input[type=text]");
+			$.each(iptVals,function(i){
+				var oId = $(iptVals[i]).attr("id");
+				var regTid = new RegExp(tid);
+				//console.log("oId:"+oId+",nId:"+oId.replace(regTid,newId));
+				$(iptVals[i]).attr("id",oId.replace(regTid,newId));
 			});
 			
 			alert("保存成功");
