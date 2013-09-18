@@ -113,8 +113,8 @@ public class TestDataService {
 		params.put("expect", testCaseTO.getExpect());
 		params.put("data", testCaseTO.getData());
 
-		int affectRows = jdbcTemplateProcessor.update(createTestCaseSql, params);
-		return affectRows;
+		int id = jdbcTemplateProcessor.saveAndGetId(createTestCaseSql, params);
+		return id;
 	}
 	
 	/**

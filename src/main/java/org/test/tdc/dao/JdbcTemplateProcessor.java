@@ -7,7 +7,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.namedparam.SqlParameterSource;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -54,6 +58,14 @@ public class JdbcTemplateProcessor {
 	
 	public int update(String sql,Map<String,Object> params){
 		return this.namedParameterJdbcTemplate.update(sql, params);
+	}
+	
+	public int saveAndGetId(String sql,Map<String,Object> params){
+		KeyHolder keyHolder = new GeneratedKeyHolder();  
+		this.namedParameterJdbcTemplate.update(sql, new MapSqlParameterSource(params),keyHolder);
+		
+		int generatedId = keyHolder.getKey().intValue();   
+	    return generatedId; 
 	}
 	
 }

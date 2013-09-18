@@ -1,5 +1,7 @@
 package org.test.tdc.controller;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -70,15 +72,12 @@ public class TestCaseDataController {
 		testCaseTO.setExpect(expect);
 		testCaseTO.setData(data);
 		
-		int affectRows = testDataService.createTestCase(testCaseTO);
-		if(affectRows == 1){
-			Map<String,Object> result = new HashMap<String,Object>();
-			
-			result.put("testCase", testCaseTO);
-			return new JsonResponse(JsonResponse.CODE_SUCCESS,"添加测试用例成功",result);
-		} else {
-			return new JsonResponse(JsonResponse.CODE_FAILED,"添加测试用例失败");
-		}
+		int id = testDataService.createTestCase(testCaseTO);
+		Map<String,Object> result = new HashMap<String,Object>();
+		testCaseTO.setId(id);
+		testCaseTO.setCreate(new Date());
+		result.put("testCase", testCaseTO);
+		return new JsonResponse(JsonResponse.CODE_SUCCESS,"添加测试用例成功",result);
 	}
 	
 	@RequestMapping("/update")

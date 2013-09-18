@@ -177,16 +177,14 @@ function addTdcEvent(){
 	});
 	
 	
-	$(".tdc_name_value_type:last-of-type input[type=text]").die().live("blur",function(){
+	$(".tdc_name_value_type:last-of-type input[type=text]").die().live("focus",function(){
 		var obj = $(this).parent();
 		var inputs = obj.children("input[type=text]");
 		var needAppend = true;
-		$.each(inputs,function(i){
-			if(!$(inputs[i]).val()){
-				needAppend = false;
-			}
-		});
-		
+		if( !$(inputs[0]).val() || !$(inputs[1]).val() ){
+			needAppend = false;
+		}
+				
 		var j = obj.parent().children(".tdc_name_value_type").length;
 		var tid = obj.parent().attr("tid");
 		if(needAppend) {
@@ -397,7 +395,28 @@ function saveTdc(tid,url){
 	
 	savetdc.done(function(s_data){
 		if(s_data.code == 1){
-			$("#tdc_"+s_data.data.testCase.tid+" .tdc_title span:first").html(s_data.data.testCase.name);
+			console.log(s_data);
+			//s_data.data.testCase.tid
+			$("#tdc_"+tid+" .tdc_title p:first").html(s_data.data.testCase.step + " " +s_data.data.testCase.name);
+			$("#tdc_"+tid+" .tdc_title span:first").html(s_data.data.testCase.create);
+			
+			var newId = s_data.data.testCase.id;
+			$("#tdc_"+tid).attr("id","tdc_"+newId);
+			$("#fid_"+tid).attr("id","fid_"+newId);
+			$("#name_"+tid).attr("id","name_"+newId);
+			$("#step_"+tid).attr("id","step_"+newId);
+			$("#action_"+tid).attr("id","action_"+newId);
+			$("#desc_"+tid).attr("id","desc_"+newId);
+			$("#expect_"+tid).attr("id","expect_"+newId);
+			$("#method_"+tid).attr("id","method_"+newId);
+			$("#status_"+tid).attr("id","status_"+newId);
+			$("#tdc_"+newId+" .tdc_data").attr("tid",newId);
+			var bts = $("#tdc_"+newId+" .tdc_action").children("input[type=button]");
+			
+			$.each(bts,function(i){
+				$(bts[i]).attr("tid",newId);
+			});
+			
 			alert("保存成功");
 		}
 	});
