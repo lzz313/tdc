@@ -29,13 +29,13 @@ var tdcListTemplate = [
 						'</div>',
 						'<div class="tdc_action">',
 							'<input type="button" tid="@{id}" title="保存当前数据" class="tdc_save_bt" value="保存"/>',
-							'<input type="button" tid="@{id}" title="删除当前用例" class="tdc_delete_bt" value="删除"/>|',
-							'<input type="button" tid="@{id}" title="登录后保存cookie信息" class="tdc_login_bt" value="登录"/>',
-							'<input type="button" tid="@{id}" title="js直接提交form测试" class="tdc_test_bt" value="测试"/>',
-							'<input type="button" tid="@{id}" title="后台跳转测试" class="tdc_backend_test_bt" value="后台测试"/>',
-							'|<input type="button" tid="@{id}" title="复制当前用例" class="tdc_copy_bt" value="复制"/>',
+							'<input type="button" tid="@{id}" title="复制当前用例" class="tdc_copy_bt" value="复制"/>',
 							'<input type="button" tid="@{id}" title="移动当前用例到其他模块" class="tdc_move_bt" value="移动"/>',
-							'<input type="button" tid="@{id}" title="生成加密串" class="tdc_sign_bt" value="sign"/>',
+							'<input type="button" tid="@{id}" title="删除当前用例" class="tdc_delete_bt" value="删除"/>|',
+							//'<input type="button" tid="@{id}" title="登录后保存cookie信息" class="tdc_login_bt" value="登录"/>',
+							'<input type="button" tid="@{id}" title="js直接提交form测试" class="tdc_test_bt" value="测试"/>',
+							//'<input type="button" tid="@{id}" title="后台跳转测试" class="tdc_backend_test_bt" value="后台测试"/>',
+							'|<input type="button" tid="@{id}" title="生成加密串" class="tdc_sign_bt" value="sign"/>',
 						'</div>',
 					'</div>' 
 				   ].join('');
@@ -62,6 +62,7 @@ var transferForm = [
                     ].join('');
 
 /**
+ * 显示测试数据
  * @param o  'div.function_name >p'
  */
 function displayTestData(o){
@@ -122,6 +123,10 @@ function displayTestData(o){
 	
 }
 
+/**
+ * 添加测试数据
+ * @param testCase
+ */
 function addTdc(testCase){
 	$(".tdc_list").append(tdcListTemplate.format({
 		id:testCase.id,
@@ -164,6 +169,9 @@ function addTdc(testCase){
 	addTdcEvent();
 }
 
+/**
+ * 添加TestData的事件
+ */
 function addTdcEvent(){
 	$(".tdc_title").die().live("click",function(){
 		var o = $(this).next();
@@ -229,11 +237,13 @@ function addTdcEvent(){
 		genSign(tid);
 	});
 	
+	/**
 	$(".tdc_login_bt").die().live("click",function(){
 		var btObj = $(this);
 		var tid = btObj.attr("tid");
 		test_login(tid);
 	});
+	*/
 	
 	$(".tdc_move_bt").die().live("click",function(){
 		$("#transfer_tid").val($(this).attr("tid"));
@@ -241,12 +251,13 @@ function addTdcEvent(){
 		$("#transfer_form").dialog("open");
 	});
 	
+	/**
 	$(".tdc_backend_test_bt").die().live("click",function(){
 		var btObj = $(this);
 		var tid = btObj.attr("tid");
 		test(tid);
 	});
-	
+	*/
 	
 	$(".tdc_info_area").die().live("focus",function(){
 		var o = $(this);
@@ -266,11 +277,6 @@ function addTdcEvent(){
 	$(".tdc_data select").die().live("change",function(){
 		var val = $(this).val();
 		if(val.toUpperCase() == 'POST'){
-			//$(this).parent().parent().children(".tdc_name_value_type_title").hide();
-			//$(this).parent().parent().children(".tdc_name_value_type").hide();
-		//} else {
-			//$(this).parent().parent().children(".tdc_name_value_type_title").show();
-			//$(this).parent().parent().children(".tdc_name_value_type").show();
 			var obj = $(this).parent().parent();
 			if(isNeedAddNew(obj)){
 				var tid = obj.attr("tid");
@@ -289,6 +295,9 @@ function addTdcEvent(){
 	addTdcDelEvent();
 }
 
+/**
+ * TDC移动时加载项目列表
+ */
 (function loadProjectSelect(){
 	var pId = "transfer_product";
 	var url = "/project/query";
@@ -310,6 +319,9 @@ function addTdcEvent(){
 	});
 })();
 
+/**
+ * TDC移动时加载模块列表
+ */
 function loadFunctionSelect(pid){
 	var fId = "transfer_function";
 	$("#"+fId).html('');
@@ -334,6 +346,11 @@ function loadFunctionSelect(pid){
 	});
 }
 
+/**
+ * 判断是否需要添加新的输入字段框
+ * @param o
+ * @returns {Boolean}
+ */
 function isNeedAddNew(o){
 	var inputs = o.children(".tdc_data .tdc_name_value_type:last").children("input[type=text]");
 	var needAppend = true;
@@ -363,6 +380,10 @@ function saveTdcData(tid){
 	saveTdc(tid,url);
 }
 
+/**
+ * 复制TDC数据
+ * @param tid
+ */
 function copyTdcData(tid){
 	var fId = $("#fid_"+tid).val();
 	var name = $("#name_"+tid).val();
@@ -380,6 +401,11 @@ function copyTdcData(tid){
 	alert("复制成功");
 }
 
+/**
+ * 保存TDC数据
+ * @param tid
+ * @param url
+ */
 function saveTdc(tid,url){
 	var fId = $("#fid_"+tid).val();
 	var name = $("#name_"+tid).val();
@@ -436,6 +462,9 @@ function saveTdc(tid,url){
 	});
 }
 
+/**
+ * 添加TDC删除按钮事件
+ */
 function addTdcDelEvent(){
 	$(".tdc_name_value_delete_bt").die().live("click",(function(){
 		if(!confirm("确定删除!")){
@@ -445,6 +474,11 @@ function addTdcDelEvent(){
 	}));
 }
 
+/**
+ * 封装字段为json格式
+ * @param tid
+ * @returns
+ */
 function encapElemData(tid){
 	var elemObjs = $("#tdc_"+tid+" .tdc_data .tdc_name_value_type");
 	var data ={elem:''};
@@ -470,6 +504,7 @@ function encapElemData(tid){
 	return JSON.stringify(data);
 }
 
+//删除TDC
 function deleteTdc(obj,tid){
 	var url ="/testcase/delete/"+tid;
 	
@@ -488,6 +523,7 @@ function deleteTdc(obj,tid){
 	});
 }
 
+//前台组装form提交测试
 function testByForm(tid){
 	var domain = $(".select span:first").attr("value");
 	var action = $("#action_"+tid).val();
@@ -563,6 +599,7 @@ function getInput(form,url){
 	return form;
 }
 
+//生成加密串
 function genSign(tid){
 	var eleNm = tid+"_eleName_";
 	var eleVal = tid+"_eleValue_";
@@ -605,7 +642,7 @@ function genSign(tid){
 	$("#"+singId).val(hash);
 	console.log(hash);
 }
-
+//判断字符是否相等
 function equalsIgnoreCase(str1, str2){   
     if(str1.toUpperCase() == str2.toUpperCase()){   
         return true;   
@@ -678,7 +715,7 @@ function test_login(tid){
 		newWin.document.close();
 	});
 }
-
+//提取url页面中的form表单信息
 function anlysis(fid){
 	var url = "/parse/form?url="+$("#url").val();
 	$.getJSON(url,function(data){
@@ -695,7 +732,7 @@ function anlysis(fid){
 		}
 	});	
 }
-
+//为form 相对url的加上域名变为绝对地址
 function getActionWithHost(action,url){
 	var actionUrl = action;
 	if(action.toLowerCase().indexOf('http') !=0){
@@ -767,7 +804,7 @@ function formMapData(fIdx){
 function formData(fIdx){
 	return JSON.stringify(formMapData(fIdx));
 }
-
+//按字段名排序key1=value1,key2=value2 
 function sortArrData(fIdx){
 	var eleNm = fIdx+"_eleName_";
 	var eleVal = fIdx+"_eleValue_";
@@ -788,7 +825,7 @@ function sortArrData(fIdx){
 	});
 	return arrData;
 }
-
+//删除=和&
 function genSortDataSignStr(fIdx){
 	$("#signStr").val(sortArrData(fIdx).join('').replace(/=/g,'').replace(/&/g,''));
 }
