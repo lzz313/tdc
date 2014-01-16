@@ -39,6 +39,11 @@ public class HtmlParserService {
 		Map<String, Object> result = htmlFormParser(response);
 		return result;
 	}
+	
+	public String getHtml(String url) throws ClientProtocolException, IOException, URISyntaxException{
+		String response = HttpClientUtils.httpGet(url);
+		return response;
+	}
 
 	public Map<String, Object> htmlFormParser(String content) {
 		Map<String, Object> result = new HashMap<String, Object>();

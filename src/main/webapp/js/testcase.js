@@ -299,7 +299,7 @@ function addTdcEvent(){
 /**
  * TDC移动时加载项目列表
  */
-(function loadProjectSelect(){
+function loadProjectSelect(){
 	var pId = "transfer_product";
 	var url = "/project/query";
 	var projects = $.ajax({
@@ -318,7 +318,7 @@ function addTdcEvent(){
 			});
 		}
 	});
-})();
+};
 
 /**
  * TDC移动时加载模块列表
