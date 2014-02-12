@@ -278,7 +278,7 @@ public class HttpClientUtils {
 		nameValuePair.put("password", "q123456");
 		nameValuePair.put("captcha", "1231");
 		nameValuePair.put("lt", "LT-31-3Ws7t7VBixVJ6etLIqO1lLeVWVEHGf");
-		nameValuePair.put("execution", "e2s1");
+		nameValuePair.put("execution", "e2s2");
 		nameValuePair.put("_eventId", "submit");
 		try {
 			String r1 = HttpClientUtils.login("https://sso.woniu.com/login", nameValuePair, "POST");
