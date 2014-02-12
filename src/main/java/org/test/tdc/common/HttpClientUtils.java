@@ -3,10 +3,18 @@ package org.test.tdc.common;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import org.apache.http.Header;
 import org.apache.http.HeaderElement;
@@ -15,6 +23,7 @@ import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.ParseException;
 import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
 import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
@@ -22,6 +31,8 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.params.CookiePolicy;
 import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.client.protocol.ClientContext;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.ssl.SSLSocketFactory;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -61,6 +72,9 @@ public class HttpClientUtils {
 			String charset = "UTF-8";  
 			hg.setURI(new java.net.URI(url));  
 			
+			if(url.indexOf("https") > 0){
+				supportHttps(httpclient);
+			}
             HttpResponse response = httpclient.execute(hg,localContext);  
             HttpEntity entity = response.getEntity();  
             if (entity != null) {  
@@ -146,8 +160,13 @@ public class HttpClientUtils {
 
 			ResponseHandler<String> responseHandler = new BasicResponseHandler();
 			
+			if(url.indexOf("https") > 0){
+				supportHttps(httpclient);
+			}
 			result = httpclient.execute(hp, responseHandler);
 			
+		} catch (Exception e){
+			e.printStackTrace();
 		} finally {
 			httpclient.getConnectionManager().shutdown();
 		}
@@ -179,6 +198,9 @@ public class HttpClientUtils {
 				UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams,"UTF-8");
 				httpRequest.setEntity(entity);
 				
+				if(url.indexOf("https") > 0){
+					supportHttps(httpclient);
+				}
 				response = httpclient.execute(httpRequest);  
 				
 				response.getStatusLine().getStatusCode();
@@ -202,24 +224,67 @@ public class HttpClientUtils {
             	result = EntityUtils.toString(entity, charset);  
             }  
             
+		} catch (Exception e){
+			e.printStackTrace();
 		} finally {
 			httpclient.getConnectionManager().shutdown();
 		}
 		return result;
 	}
 	
+	/**
+	 * 支持Https
+	 * 
+	 * @param httpClient
+	 * @throws NoSuchAlgorithmException
+	 * @throws KeyManagementException
+	 */
+	private static void supportHttps(HttpClient httpClient) throws NoSuchAlgorithmException, KeyManagementException{
+		// First create a trust manager that won't care.
+		X509TrustManager trustManager = new X509TrustManager() {
+			public void checkClientTrusted(X509Certificate[] chain,
+					String authType) throws CertificateException {
+				// Don't do anything.
+			}
+
+			public void checkServerTrusted(X509Certificate[] chain,
+					String authType) throws CertificateException {
+				// Don't do anything.
+			}
+
+			public X509Certificate[] getAcceptedIssuers() {
+				// Don't do anything.
+				return null;
+			}
+
+		};
+		// Now put the trust manager into an SSLContext.
+		SSLContext sslcontext = SSLContext.getInstance("SSL");
+		sslcontext.init(null, new TrustManager[] { trustManager }, null);
+
+		// Use the above SSLContext to create your socket factory
+		// (I found trying to extend the factory a bit difficult due to a
+		// call to createSocket with no arguments, a method which doesn't
+		// exist anywhere I can find, but hey-ho).
+		SSLSocketFactory sf = new SSLSocketFactory(sslcontext);
+		sf.setHostnameVerifier(SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER);
+		
+		httpClient.getConnectionManager().getSchemeRegistry().register(new Scheme("https", sf, 443));
+	}
+	
 	public static void main(String [] args){
 		Map<String,String> nameValuePair = new HashMap<String,String>();
-		nameValuePair.put("userId", "useradmin");
-		nameValuePair.put("requestFlag", "logon");
-		nameValuePair.put("PWD", "");
-		nameValuePair.put("Encoding", "GBK");
-		nameValuePair.put("remoteIp", "127.0.0.1");
+		nameValuePair.put("username", "uniq123");
+		nameValuePair.put("password", "q123456");
+		nameValuePair.put("captcha", "1231");
+		nameValuePair.put("lt", "LT-31-3Ws7t7VBixVJ6etLIqO1lLeVWVEHGf");
+		nameValuePair.put("execution", "e2s1");
+		nameValuePair.put("_eventId", "submit");
 		try {
-			String r1 = HttpClientUtils.login("http://183.213.19.7:81/logon.logon.submit", nameValuePair, "POST");
+			String r1 = HttpClientUtils.login("https://sso.woniu.com/login", nameValuePair, "POST");
 			System.out.println(r1);
-			String r2 = HttpClientUtils.httpGet("http://183.213.19.7:81/QRY.SmsStat.load");
-			System.out.println(r2);
+//			String r2 = HttpClientUtils.httpGet("https://sso.woniu.com/login");
+//			System.out.println(r2);
 		} catch (ClientProtocolException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
