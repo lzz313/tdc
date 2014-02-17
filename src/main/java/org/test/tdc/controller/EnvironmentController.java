@@ -72,7 +72,7 @@ public class EnvironmentController{
 	
 	@RequestMapping("/delete/{id}")
 	public @ResponseBody JsonResponse deleteDomain(@PathVariable("id") final int id){
-		int affectRows = environmentService.deleteDomian(id);
+		int affectRows = environmentService.deleteDomain(id);
 		if(affectRows == 1){
 			Map<String,Object> result = new HashMap<String,Object>();
 			result.put("id", id);

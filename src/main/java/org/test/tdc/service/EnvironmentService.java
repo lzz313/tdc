@@ -72,12 +72,12 @@ public class EnvironmentService {
 	 * @param id
 	 * @return
 	 */
-	public int deleteDomian(int id){
-		String deleteDomianSql = "delete from ENVIRONMENT where n_id = :id";
+	public int deleteDomain(int id){
+		String deleteDomainSql = "delete from ENVIRONMENT where n_id = :id";
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("id", id);
-		return jdbcTemplateProcessor.update(deleteDomianSql, params);
+		return jdbcTemplateProcessor.update(deleteDomainSql, params);
 	}
 	
 	/**
