@@ -143,7 +143,7 @@ public class ProjectService {
 	 * @return
 	 */
 	public int updateProject(int id,String projectName){
-		String updateProject = "update project set s_name=:name where n_id = :id and D_CREATE = now()";
+		String updateProject = "update project set s_name=:name where n_id = :id ";
 		
 		Map<String,Object> params = new HashMap<String,Object>();
 		params.put("id", id);
