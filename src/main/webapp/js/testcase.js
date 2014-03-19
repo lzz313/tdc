@@ -593,7 +593,7 @@ function getInput(form,url){
 	var end = url.indexOf("?") > -1 ? url.indexOf("?") : url.length;
 	form.attr('action',url.substr(0,end));
 	var formElements = [];
-	for(var i=0; i<data.length; i++) {
+	for(var i=0; i<data.length && !!data[0]; i++) {
 		var item = data[i].split("=");
 		formElements.push("<input type='hidden' name='"+item[0]+"' value='"+item[1]+"'/>");
 		//form.append($("<input type='hidden' name='"+item[0]+"' value='"+item[1]+"'/>"));
