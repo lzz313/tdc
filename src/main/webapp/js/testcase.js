@@ -554,7 +554,8 @@ function testByForm(tid){
     	form.submit();
     } else if("GET" == method){
     	//form = getInput(form,action);
-    	window.location(urlGet(action,tid));
+    	//window.location = urlGet(action,tid);
+    	window.open(urlGet(action,tid),'_blank');
     }
     
     
@@ -602,13 +603,15 @@ function urlGet(url,fIdx){
 			return true;
 		}
 		
-		urlParams.push("&"+key+"="+value);
-		
+		if(!!key && !!value){
+			urlParams.push("&"+key+"="+value);
+		}
+
 	});
 
 	if(url.indexOf("?") != -1){
 		url = url+urlParams.join('');
-	} else {
+	} else if(!!urlParams.join('')){
 		url = url+"?"+urlParams.join('').substr(1);
 	}
 
