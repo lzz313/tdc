@@ -611,6 +611,8 @@ function urlGet(url,fIdx){
 	} else {
 		url = url+"?"+urlParams.join('').substr(1);
 	}
+
+	return url;
 }
 
 function getInput(form,url){
