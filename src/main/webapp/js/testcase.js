@@ -542,20 +542,22 @@ function testByForm(tid){
 		domain = getActionWithHost("",action);
 	}
 	
-    form = $("<form></form>");
-    form.attr('target',"_blank");
-    form.attr('method',method);
-    
     if("POST" == method){
+    	form = $("<form></form>");
+    	form.attr('target',"_blank");
+    	form.attr('method',method);
     	form.attr('action',action);
     	form = postInput(form,tid);
+
+    	form.appendTo("body");
+    	form.css('display','none');
+    	form.submit();
     } else if("GET" == method){
-    	form = getInput(form,action);
+    	//form = getInput(form,action);
+    	window.location(urlGet(action,tid));
     }
     
-    form.appendTo("body");
-    form.css('display','none');
-    form.submit();
+    
 }
 
 function postInput(form,fIdx){
@@ -581,6 +583,34 @@ function postInput(form,fIdx){
 	});
 	form.append(formElements.join(''));
 	return form;
+}
+
+function urlGet(url,fIdx){
+		var eleNm = fIdx+"_eleName_";
+	var eleVal = fIdx+"_eleValue_";
+	var eleType = fIdx+"_eleType_";
+	
+	var args = new Object(),
+		urlParams = [];
+	$('input[id^='+eleNm+']').each(function(){
+		idx = $(this).attr("id").split('_')[2];
+		var key = $("#"+eleNm+idx).val();
+		var value = $("#"+eleVal+idx).val();
+		var type = $("#"+eleType+idx).val();
+		
+		if(equalsIgnoreCase("key",type)){
+			return true;
+		}
+		
+		urlParams.push("&"+key+"="+value);
+		
+	});
+
+	if(url.indexOf("?") != -1){
+		url = url+urlParams.join('');
+	} else {
+		url = url+"?"+urlParams.join('').substr(1);
+	}
 }
 
 function getInput(form,url){
