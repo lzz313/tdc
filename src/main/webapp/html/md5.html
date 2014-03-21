@@ -17,7 +17,8 @@
 			<input type="button" id='md5' value="md5加密"/>
 			<input type="button" id='md5c' value="md5加密比较"/>
 			<input type="button" id='sha1' value="sha1加密"/>
-			<input type="button" id='sha1c' value="sha1加密比较"/><br/>
+			<input type="button" id='sha1c' value="sha1加密比较"/>
+			<input type="button" id='b64' value="base64加密"/><br/>
 			加密串：
 			<p id='result'></p> ===> 
 			<p id='result1'></p>
@@ -30,6 +31,7 @@
 	<script type="text/javascript" src="/js/jquery.min.js"></script>
 	<script type="text/javascript" src="/js/md5.js"></script>
 	<script type="text/javascript" src="/js/sha1.js"></script>
+	<script type="text/javascript" src="/js/base64.js"></script>
 	<script type="text/javascript">
 		function equalsIgnoreCase(str1, str2){   
 		    if(str1.toUpperCase() == str2.toUpperCase()){   
@@ -83,6 +85,11 @@
 				return -1;
 				});
 				$("#signStr").val(arrExt.join('').replace(/=/g,'').replace(/&/g,''));
+			});
+			$("#b64").click(function(){
+				if(!$("#signStr").val()){alert("源串不可以为空！");return;}
+				var b64 = new Base64();  
+				$("#result").html(b64.encode($("#signStr").val()));
 			});
 			
 		});
