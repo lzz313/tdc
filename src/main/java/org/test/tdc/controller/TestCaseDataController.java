@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.test.tdc.common.JsonResponse;
 import org.test.tdc.pojo.TestCaseTO;
 import org.test.tdc.service.TestDataService;
+import org.test.tdc.utils.StringUtils;
 
 @Controller
 @RequestMapping("/testcase")
@@ -65,7 +66,7 @@ public class TestCaseDataController {
 		TestCaseTO testCaseTO = new TestCaseTO();
 		testCaseTO.setFunctionId(functionId);
 		testCaseTO.setName(name);
-		testCaseTO.setStep(step);
+		testCaseTO.setStep(StringUtils.isEmpty(step)?"1":step);
 		testCaseTO.setUrl(url);
 		testCaseTO.setType(type);
 		testCaseTO.setDesc(desc);

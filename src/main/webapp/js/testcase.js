@@ -211,6 +211,7 @@ function addTdcEvent(){
 	$(".tdc_save_bt").die().live("click",function(){
 		var btObj = $(this);
 		var tid = btObj.attr("tid");
+		//$(".tdc_save_bt").die();
 		saveTdcData(tid);
 	});
 	
