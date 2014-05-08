@@ -1,7 +1,6 @@
 package org.test.tdc.common;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URISyntaxException;
 import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
@@ -33,6 +32,7 @@ import org.apache.http.client.params.HttpClientParams;
 import org.apache.http.client.protocol.ClientContext;
 import org.apache.http.conn.scheme.Scheme;
 import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
@@ -171,6 +171,50 @@ public class HttpClientUtils {
 			httpclient.getConnectionManager().shutdown();
 		}
 
+		return result;
+	}
+	
+	public static String httpPostBody(String url,String body) throws ClientProtocolException, IOException, URISyntaxException {
+		DefaultHttpClient httpclient = new DefaultHttpClient();
+		HttpClientParams.setCookiePolicy(httpclient.getParams(), CookiePolicy.BEST_MATCH);
+
+		String result = "";
+		try {
+			HttpPost hp = new HttpPost(url);
+
+			httpclient.getParams().setParameter("http.protocol.content-charset", "utf-8");
+			// 连接超时
+			httpclient.getParams().setParameter(CoreConnectionPNames.CONNECTION_TIMEOUT, 5000);
+			// 读取超时
+			httpclient.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 5000);
+
+
+			hp = new HttpPost(url);
+			//添加http头信息  模拟浏览器
+			hp.addHeader("Content-Type", "text/html;charset=UTF-8");  
+			hp.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31");  
+			hp.addHeader("Referer",url);
+//			Header[] headers = CookieHolder.getCookies();
+//			for (Header header : headers) {
+//				hp.addHeader(header.getName(),header.getValue());
+//			}
+			
+			StringEntity entity = new StringEntity(body,"UTF-8");
+			hp.setEntity(entity);
+
+			ResponseHandler<String> responseHandler = new BasicResponseHandler();
+			
+			if(url.indexOf("https") > 0){
+				supportHttps(httpclient);
+			}
+			result = httpclient.execute(hp, responseHandler);
+			
+		} catch (Exception e){
+			e.printStackTrace();
+		} finally {
+			httpclient.getConnectionManager().shutdown();
+		}
+		
 		return result;
 	}
 	

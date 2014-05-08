@@ -62,6 +62,7 @@ input[type="button"]{height:25px;border:1px solid #969696;margin-left:1px;cursor
 .tdc_name_value_type_title span{margin: 0 85px 0 30px;}
 .tdc_name_value_type input{height:18px;  margin:1px 1px 1px 0;}
 .tdc_name_value_type .type{width:60px}
+.tdc_name_value_type .desc{width:180px}
 /***/.tdc_info_area {max-width:680px;}
 
 .select{position:absolute;margin-top:3px; display: inline-block;width: 300px;border:1px solid #969696;}
