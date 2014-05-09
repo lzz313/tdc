@@ -65,6 +65,11 @@ input[type="button"]{height:25px;border:1px solid #969696;margin-left:1px;cursor
 .tdc_name_value_type .desc{width:180px}
 /***/.tdc_info_area {max-width:680px;}
 
+.tdc_header_name_value_type{display:none;}
+.tdc_header_name_value_type input{height:18px;  margin:1px 1px 1px 0;}
+.tdc_header_name_value_type .type{width:60px}
+.tdc_header_name_value_type .desc{width:180px}
+
 .select{position:absolute;margin-top:3px; display: inline-block;width: 300px;border:1px solid #969696;}
 .select_choice{padding-right:210px;}
 .select_edit{float: right;width:20px;}
@@ -74,3 +79,6 @@ input[type="button"]{height:25px;border:1px solid #969696;margin-left:1px;cursor
 .option_edit label{font-size: 5pt;}
 
 #transfer_form select{width:250px;}
+
+.span_choice{border-bottom: 1px solid red;}
+.http{height:17px;margin:5px 20px 5px 10px;border-bottom: 1px solid #969696;}

@@ -12,7 +12,7 @@ var tdcListTemplate = [
 						'</div>',
 						'<div class="tdc_data" tid="@{id}">',
 							'<div class="tdc_info">',
-								'步骤: <input id="step_@{id}" value="@{step}" style="width:25px" disabled="disabled"/> ',
+								'序号: <input id="step_@{id}" value="@{step}" style="width:25px" disabled="disabled"/> ',
 						       	'名称: <input id="name_@{id}" value="@{name}" style="width:432px" disabled="disabled"/><br> ',
 						       	'地址: <input id="action_@{id}" value="@{url}" style="width:500px" disabled="disabled"/>',
 		                   	   	'method:',
@@ -20,10 +20,15 @@ var tdcListTemplate = [
 		                   			'<option value="GET">GET</option>',
 		                   			'<option value="POST">POST</option>',
 		                   		'</select>',
-		                   		'<p>测试说明:</p>',
-		                   		'<textarea cols="92" rows="3" class="tdc_info_area" id="desc_@{id}">@{desc}</textarea>',
-		                   		'<p>期望:</p>',
-		                   		'<textarea cols="92" rows="3" class="tdc_info_area" id="expect_@{id}">@{expect}</textarea>',
+		                   		'<p>接口说明:</p>',
+		                   		'<textarea cols="92" rows="3" class="tdc_info_area" id="desc_@{id}" readonly>@{desc}</textarea>',
+		                   		'<p>返回说明:</p>',
+		                   		'<textarea cols="92" rows="3" class="tdc_info_area" id="expect_@{id}" readonly>@{expect}</textarea>',
+		                   	'</div>',
+		                   	'<div class="http">',
+		                   		'<span name="http_header" style="float:left;display:block;width:220px;text-align:center">Http头</span>',
+		                   		'<span name="http_params" class="span_choice" style="float:left;display:block;width:220px;text-align:center;">表单参数</span>',
+		                   		'<span name="http_body" style="float:right;width:220px;text-align:center">Http Body</span>',
 		                   	'</div>',
 		                   	'<div class="tdc_name_value_type_title"><span>字段名</span><span style="margin-right:200px">字段值</span><span>字段类型</span><span>字段描述</span></div>',
 						'</div>',
@@ -52,12 +57,23 @@ var tdcItemDataTemplate = [
 							'</div>'
                            ].join('');
 
+var tdcHeaderDataTemplate = [
+ 							'<div class="tdc_header_name_value_type" dtlId="@{j}">',
+ 								'<span>参数</span>',
+ 								'<input id="@{id}_eleHeaderName_@{j}" type="text" name="eleHeaderName" value="@{name}"/>',
+ 								'<input id="@{id}_eleHeaderValue_@{j}" type="text" name="eleHeaderValue" value="@{value}"/>',
+ 								'<input id="@{id}_eleHeaderType_@{j}" type="text" name="eleHeaderType" class="type" value="@{type}"/>',
+ 								'<input id="@{id}_eleHeaderDesc_@{j}" type="text" name="eleHeaderDesc" class="desc" value="@{desc}"/>',
+ 								//'<input class="tdc_header_name_value_delete_bt" type="button" value="删除"/>',
+ 							'</div>'
+                           ].join('');
+
 var transferForm = [
                     '<div id="transfer_form" >',
 	                    '<form>',
 	                    	'<input type="hidden" id="transfer_tid" value=""/>',
 	                    	'<input type="hidden" id="transfer_old_fid" value=""/>',
-	                    	'项目:<select class id="transfer_product"></select><br/>',
+	                    	'项目:<select id="transfer_product"></select><br/>',
 	                    	'功能:<select id="transfer_function"></select>',
 	                    '</form>',
 	                 '</div>'

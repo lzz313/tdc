@@ -1,5 +1,14 @@
 /**
  * 显示测试数据
+ * {
+ *  "elem":
+ * 		[
+ * 			{"k":"orderno","v":"20132028-206-007-0000000238","t":"input"},
+ * 			{"k":"account","v":"liuyf_0002","t":"input"}
+ * 		],
+ * 	"header_elem":[],
+ * 	"body":""
+ * }
  * @param o  'div.function_name >p'
  */
 function displayTestData(o){
@@ -30,8 +39,21 @@ function displayTestData(o){
 			$.each(testCases,function(i){
 				var testCase = testCases[i];
 				addTdc(testCase);
-				if(JSON.parse(testCase.data).elem.length == 0){
+				
+				var tc_data = JSON.parse(testCase.data);
+				if(tc_data.elem.length == 0){
 					$("#tdc_"+testCase.id+" .tdc_data").append(tdcItemDataTemplate.format({
+						id:testCase.id,
+						j:0,
+						name:'',
+						value:'',
+						type:'',
+						desc:''
+					}));
+				}
+				
+				if(!tc_data.header_elem || tc_data.header_elem.length == 0){
+					$("#tdc_"+testCase.id+" .tdc_data").append(tdcHeaderDataTemplate.format({
 						id:testCase.id,
 						j:0,
 						name:'',
@@ -45,7 +67,7 @@ function displayTestData(o){
 			
 			$(".tdc_title_add_bt").click(function(){
 				var fId = $(this).attr("fid");
-				var testCase={id:-(new Date().getTime()),functionId:fId,name:'创建测试用例',url:'',type:'',step:'',data:'{"elem":[{"k":"","v":"","t":""}]}',create:'',status:''};
+				var testCase={id:-(new Date().getTime()),functionId:fId,name:'创建测试用例',url:'',type:'',step:'',data:'{"elem":[{"k":"","v":"","t":""}],"header_elem":[{"k":"","v":"","t":""}]}',create:'',status:''};
 				addTdc(testCase);
 				$("#tdc_"+testCase.id+" .tdc_data").show();
 				$("#tdc_"+testCase.id+" .tdc_action").show();
@@ -81,7 +103,9 @@ function addTdc(testCase){
 	$("#method_"+testCase.id).val(method_type.toUpperCase());
 	
 	try{
-		var elems = JSON.parse(testCase.data).elem,
+		var tc_data = JSON.parse(testCase.data);
+		var elems = tc_data.elem,
+			header_elems = tc_data.header_elem?tc_data.header_elem:{"k":"","v":"","t":"","d":""},
 		    tdcItemList = [];
 		$.each(elems,function(j){
 			tdcItemList.push(tdcItemDataTemplate.format({
@@ -92,6 +116,7 @@ function addTdc(testCase){
 								type:elems[j]?elems[j].t:'',
 								desc:elems[j]?elems[j].d:''
 							}));
+			
 			/**
 			$("#tdc_"+testCase.id+" .tdc_data").append(tdcItemDataTemplate.format({
 				id:testCase.id,
@@ -102,6 +127,18 @@ function addTdc(testCase){
 			}));
 			*/
 		});
+		
+		$.each(header_elems,function(j){
+			tdcItemList.push(tdcHeaderDataTemplate.format({
+				id:testCase.id,
+				j:j,
+				name:header_elems[j]?header_elems[j].k:'',
+				value:header_elems[j]?header_elems[j].v:'',
+				type:header_elems[j]?header_elems[j].t:'',
+				desc:header_elems[j]?header_elems[j].d:''
+			}));
+		});
+		
 		$("#tdc_"+testCase.id+" .tdc_data").append(tdcItemList.join(''));
 	} catch (e){console.log(e.message);}
 	addTdcEvent();
@@ -231,7 +268,7 @@ function addTdcEvent(){
 			}
 		}
 	});
-
+	showTab();
 	addTdcDelEvent();
 }
 
@@ -421,8 +458,9 @@ function addTdcDelEvent(){
  */
 function encapElemData(tid){
 	var elemObjs = $("#tdc_"+tid+" .tdc_data .tdc_name_value_type");
-	var data ={elem:''};
-	var elem = [];
+	var elemHeaderObjs = $("#tdc_"+tid+" .tdc_data .tdc_header_name_value_type");
+	var data ={elem:'',header_elem:'',body:''};
+	var elem = [],headerElem = [];
 	var ElemObj = {'k':'','v':'','t':'','d':''};
 	
 	$.each(elemObjs,function(i){
@@ -441,7 +479,24 @@ function encapElemData(tid){
 		}
 	});
 	
+	$.each(elemHeaderObjs,function(i){
+		var elemHeaderObj = $(elemHeaderObjs[i]);
+		var name = elemObj.children("input[name='eleName']");
+		var value = elemObj.children("input[name='eleValue']");
+		var type = elemObj.children("input[name='eleType']");
+		var desc = elemObj.children("input[name='eleDesc']");
+		if(name.val()){//&&!!value.val()&&!!type.val()
+			var elemObj = {};
+			elemObj.k = name.val();
+			elemObj.v = value.val();
+			elemObj.t = type.val();
+			elemObj.d = desc.val();
+			headerElem[i] = elemObj;
+		}
+	});
+	
 	data.elem = elem;
+	data.header_elem = headerElem;
 	
 	return JSON.stringify(data);
 }
@@ -807,5 +862,27 @@ function sortArrData(fIdx){
 //删除=和&
 function genSortDataSignStr(fIdx){
 	$("#signStr").val(sortArrData(fIdx).join('').replace(/=/g,'').replace(/&/g,''));
+}
+
+function showTab(){
+	$(".http span").die().live("click",function(){
+		$(this).parent().children("span").removeClass('span_choice');
+		$(this).addClass('span_choice');
+		
+		if($(this).attr("name")=='http_params'){
+			$(this).parent().parent().children(".tdc_name_value_type").show();
+			$(this).parent().parent().children(".tdc_header_name_value_type").hide();
+		} else if($(this).attr("name")=='http_header'){
+			$(this).parent().parent().children(".tdc_name_value_type").hide();
+			$(this).parent().parent().children(".tdc_header_name_value_type").show();
+		} else if($(this).attr("name")=='http_body'){
+			$(this).parent().parent().children(".tdc_name_value_type").hide();
+			$(this).parent().parent().children(".tdc_header_name_value_type").hide();
+		}
+		
+	});
+	//console.log($(this).text());
+	
+	
 }
 
