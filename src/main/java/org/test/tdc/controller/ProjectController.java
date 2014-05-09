@@ -26,7 +26,7 @@ import org.test.tdc.service.ProjectService;
 @RequestMapping("/project")
 public class ProjectController {
 	
-	@Resource
+	@Resource(name="projectServiceH2")
 	private ProjectService projectService;
 	
 	/**

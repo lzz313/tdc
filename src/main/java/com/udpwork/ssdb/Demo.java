@@ -8,7 +8,7 @@ public class Demo {
 		SSDB ssdb = null;
 		Response resp;
 		byte[] b;
-		ssdb = new SSDB("10.17.0.22", 8080);
+		ssdb = new SSDB("10.17.0.23", 881);
 		
 		/* kv */
 		System.out.println("---- kv -----");

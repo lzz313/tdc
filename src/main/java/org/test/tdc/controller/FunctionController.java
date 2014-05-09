@@ -21,9 +21,10 @@ import org.test.tdc.service.ProjectService;
 @RequestMapping("/func")
 public class FunctionController {
 	
-	@Resource
+	@Resource(name="functionServiceH2")
 	private FunctionService functionService;
-	@Resource
+	
+	@Resource(name="projectServiceH2")
 	private ProjectService projectService;
 	
 	/**

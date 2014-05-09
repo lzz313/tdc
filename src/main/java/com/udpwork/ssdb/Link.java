@@ -15,12 +15,20 @@ public class Link {
 		this(host, port, 0);
 	}
 
-	public Link(String host, int port, int timeout_ms) throws Exception{
-		sock = new Socket(host, port);
-		if(timeout_ms > 0){
-			sock.setSoTimeout(timeout_ms);
+	public Link(String host, int port, int timeout_ms){
+		try {
+		
+			sock = new Socket(host, port);
+			if(timeout_ms > 0){
+				sock.setSoTimeout(timeout_ms);
+			}
+			sock.setTcpNoDelay(true);
+		
+		} catch (Exception e) {
+			
+		} finally {
+			
 		}
-		sock.setTcpNoDelay(true);
 	}
 	
 	public void close(){

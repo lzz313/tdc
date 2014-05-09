@@ -1,5 +1,7 @@
 package org.test.tdc.utils;
 
+import java.util.List;
+
 import com.alibaba.fastjson.JSON;
 
 
@@ -12,6 +14,10 @@ public class JsonUtils {
 	
 	public static final String toJSONString(Object obj){
 		return JSON.toJSONString(obj);
+	}
+	
+	public static final <T> List<T> parseArray(String jsonStr, Class<T> cls){
+		return JSON.parseArray(jsonStr,cls);
 	}
 	
 	public static final <T> Object parseObject(String jsonStr, Class<T> cls){

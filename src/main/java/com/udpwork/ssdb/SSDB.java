@@ -12,11 +12,11 @@ package com.udpwork.ssdb;
 public class SSDB{
 	public Link link;
 
-	public SSDB(String host, int port) throws Exception{
+	public SSDB(String host, int port){
 		this(host, port, 0);
 	}
 
-	public SSDB(String host, int port, int timeout_ms) throws Exception{
+	public SSDB(String host, int port, int timeout_ms){
 		link = new Link(host, port, timeout_ms);
 	}
 	
