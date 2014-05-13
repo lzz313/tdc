@@ -30,7 +30,7 @@ var tdcListTemplate = [
 		                   		'<span name="http_params" class="span_choice" style="float:left;display:block;width:220px;text-align:center;">表单参数</span>',
 		                   		'<span name="http_body" style="float:right;width:220px;text-align:center">Http Body</span>',
 		                   	'</div>',
-		                   	'<div class="tdc_name_value_type_title"><span>字段名</span><span>字段值</span><span>字段类型</span><span>字段描述</span></div>',
+		                   	'<div class="tdc_name_value_type_title"><span>字段名</span><span style="margin-right:160px">字段值</span><span>字段类型</span><span>字段描述</span></div>',
 						'</div>',
 						'<div class="tdc_action">',
 							'<input type="button" tid="@{id}" title="生成加密串" class="tdc_sign_bt" value="sign"/>',
@@ -41,7 +41,7 @@ var tdcListTemplate = [
 							'<input type="button" tid="@{id}" title="移动当前用例到其他模块" class="tdc_move_bt" value="移动"/>',
 							'<input type="button" tid="@{id}" title="删除当前用例" class="tdc_delete_bt" value="删除"/>',
 							//'<input type="button" tid="@{id}" title="登录后保存cookie信息" class="tdc_login_bt" value="登录"/>',
-							//'<input type="button" tid="@{id}" title="后台跳转测试" class="tdc_backend_test_bt" value="后台测试"/>',
+							'<input type="button" tid="@{id}" title="后台跳转测试" class="tdc_backend_test_bt" value="后台测试"/>',
 						'</div>',
 					'</div>' 
 				   ].join('');
@@ -49,8 +49,8 @@ var tdcListTemplate = [
 var tdcItemDataTemplate = [
 							'<div class="tdc_name_value_type" dtlId="@{j}">',
 								'<span>参数</span>',
-								'<input id="@{id}_eleName_@{j}" type="text" name="eleName" value="@{name}"/>',
-								'<input id="@{id}_eleValue_@{j}" type="text" name="eleValue" value="@{value}"/>',
+								'<input id="@{id}_eleName_@{j}" type="text" name="eleName" style="width:100px" value="@{name}"/>',
+								'<input id="@{id}_eleValue_@{j}" type="text" name="eleValue" style="width:260px" value="@{value}"/>',
 								'<input id="@{id}_eleType_@{j}" type="text" name="eleType" class="type" value="@{type}"/>',
 								'<input id="@{id}_eleDesc_@{j}" type="text" name="eleDesc" class="desc" value="@{desc}"/>',
 								'<input class="tdc_name_value_delete_bt" type="button" value="删除"/>',
@@ -60,8 +60,8 @@ var tdcItemDataTemplate = [
 var tdcHeaderDataTemplate = [
 							'<div class="tdc_header_name_value_type" dtlId="@{j}">',
 								'<span>参数</span>',
-								'<input id="@{id}_eleHeaderName_@{j}" type="text" name="eleHeaderName" value="@{name}"/>',
-								'<input id="@{id}_eleHeaderValue_@{j}" type="text" name="eleHeaderValue" value="@{value}"/>',
+								'<input id="@{id}_eleHeaderName_@{j}" type="text" name="eleHeaderName" style="width:100px" value="@{name}"/>',
+								'<input id="@{id}_eleHeaderValue_@{j}" type="text" name="eleHeaderValue" style="width:260px" value="@{value}"/>',
 								'<input id="@{id}_eleHeaderType_@{j}" type="text" name="eleHeaderType" class="type" value="@{type}"/>',
 								'<input id="@{id}_eleHeaderDesc_@{j}" type="text" name="eleHeaderDesc" class="desc" value="@{desc}"/>',
 								'<input class="tdc_header_name_value_delete_bt" type="button" value="删除"/>',

@@ -124,7 +124,7 @@ public class HttpClientUtils {
         return charset;  
     }
 
-	public static String httpPost(String url, Map<String, String> nameValuePair)
+	public static String httpPost(String url, Map<String, String> nameValuePair,Map<String, String> headerPair)
 			throws ClientProtocolException, IOException {
 		DefaultHttpClient httpclient = new DefaultHttpClient();
 		HttpClientParams.setCookiePolicy(httpclient.getParams(), CookiePolicy.BEST_MATCH);
@@ -151,8 +151,14 @@ public class HttpClientUtils {
 			hp.addHeader("User-Agent", "Mozilla/5.0 (Windows NT 5.1) AppleWebKit/537.31 (KHTML, like Gecko) Chrome/26.0.1410.64 Safari/537.31");  
 			hp.addHeader("Referer",url);
 			Header[] headers = CookieHolder.getCookies();
-			for (Header header : headers) {
-				hp.addHeader(header.getName(),header.getValue());
+			if(headers != null){
+				for (Header header : headers) {
+					hp.addHeader(header.getName(),header.getValue());
+				}
+			}
+			
+			for (Map.Entry<String, String> entry : headerPair.entrySet()) {
+				hp.addHeader(entry.getKey(), entry.getValue());
 			}
 			
 			UrlEncodedFormEntity entity = new UrlEncodedFormEntity(formparams,"UTF-8");

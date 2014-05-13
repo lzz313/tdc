@@ -56,7 +56,7 @@ function addProjectEvent(){
 	});
 	
 	//添加显示隐藏模块事件
-	$("div.project_name >p").die().live("click",function(){
+	$("div.project_name >p").die().on("click",function(){
 		var p = $(this);
 		var pParent = p.parent();
 		// 取消上次延时未执行的方法

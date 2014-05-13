@@ -105,7 +105,7 @@ function addTdc(testCase){
 	try{
 		var tc_data = JSON.parse(testCase.data);
 		var elems = tc_data.elem,
-			header_elems = tc_data.header_elem?tc_data.header_elem:{"k":"","v":"","t":"","d":""},
+			header_elems = tc_data.header_elem?tc_data.header_elem:[],
 		    tdcItemList = [];
 		$.each(elems,function(j){
 			tdcItemList.push(tdcItemDataTemplate.format({
@@ -128,14 +128,14 @@ function addTdc(testCase){
 			*/
 		});
 		
-		$.each(header_elems,function(j){
+		$.each(header_elems,function(i){
 			tdcItemList.push(tdcHeaderDataTemplate.format({
 				id:testCase.id,
-				j:j,
-				name:header_elems[j]?header_elems[j].k:'',
-				value:header_elems[j]?header_elems[j].v:'',
-				type:header_elems[j]?header_elems[j].t:'',
-				desc:header_elems[j]?header_elems[j].d:''
+				j:i,
+				name:header_elems[i]?header_elems[i].k:'',
+				value:header_elems[i]?header_elems[i].v:'',
+				type:header_elems[i]?header_elems[i].t:'',
+				desc:header_elems[i]?header_elems[i].d:''
 			}));
 		});
 		
@@ -148,7 +148,7 @@ function addTdc(testCase){
  * 添加TestData的事件
  */
 function addTdcEvent(){
-	$(".tdc_title").die().live("click",function(){
+	$(".tdc_title").die().on("click",function(){
 		var o = $(this).next();
 		if(o.is(":hidden")){
 			o.show();
@@ -228,13 +228,13 @@ function addTdcEvent(){
 		$("#transfer_form").dialog("open");
 	});
 	
-	/**
+	/***/
 	$(".tdc_backend_test_bt").die().live("click",function(){
 		var btObj = $(this);
 		var tid = btObj.attr("tid");
 		test(tid);
 	});
-	*/
+	
 	
 	$(".tdc_info_area").die().live("focus",function(){
 		var o = $(this);
@@ -481,10 +481,10 @@ function encapElemData(tid){
 	
 	$.each(elemHeaderObjs,function(i){
 		var elemHeaderObj = $(elemHeaderObjs[i]);
-		var name = elemObj.children("input[name='eleName']");
-		var value = elemObj.children("input[name='eleValue']");
-		var type = elemObj.children("input[name='eleType']");
-		var desc = elemObj.children("input[name='eleDesc']");
+		var name = elemObj.children("input[name='eleHeaderName']");
+		var value = elemObj.children("input[name='eleHeaderValue']");
+		var type = elemObj.children("input[name='eleHeaderType']");
+		var desc = elemObj.children("input[name='eleHeaderDesc']");
 		if(name.val()){//&&!!value.val()&&!!type.val()
 			var elemObj = {};
 			elemObj.k = name.val();
@@ -704,6 +704,7 @@ function test(tid){
 		async : false,
 		data : {
 			formData:formData(tid),
+			headerData:headerData(tid),
 			domain:domain,
 			url:action,
 			method:$("#method_"+tid).val()
@@ -823,6 +824,17 @@ function formMapData(fIdx){
 	var eleNm = fIdx+"_eleName_";
 	var eleVal = fIdx+"_eleValue_";
 	
+	return mapData(eleNm,eleVal);
+}
+
+function headerMapData(fIdx){
+	var eleNm = fIdx+"_eleHeaderName_";
+	var eleVal = fIdx+"_eleHeaderValue_";
+	
+	return mapData(eleNm,eleVal);
+}
+
+function mapData(eleNm,eleVal){
 	var args = new Object();
 	$('input[id^='+eleNm+']').each(function(){
 		idx = $(this).attr("id").split('_')[2];
@@ -837,6 +849,10 @@ function formMapData(fIdx){
 
 function formData(fIdx){
 	return JSON.stringify(formMapData(fIdx));
+}
+
+function headerData(fIdx){
+	return JSON.stringify(headerMapData(fIdx));
 }
 //按字段名排序key1=value1,key2=value2 
 function sortArrData(fIdx){
@@ -882,7 +898,5 @@ function showTab(){
 		
 	});
 	//console.log($(this).text());
-	
-	
 }
 

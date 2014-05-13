@@ -36,12 +36,12 @@ var tdcListTemplate = [
 							'<input type="button" tid="@{id}" title="生成加密串" class="tdc_sign_bt" value="sign"/>',
 							//'<input type="button" tid="@{id}" title="保存当前数据" class="tdc_save_bt" value="保存"/>',
 							'<input type="button" tid="@{id}" title="js直接提交form测试" class="tdc_test_bt" value="测试"/>',
-							//'|',
+							'|',
 							//'<input type="button" tid="@{id}" title="复制当前用例" class="tdc_copy_bt" value="复制"/>',
 							//'<input type="button" tid="@{id}" title="移动当前用例到其他模块" class="tdc_move_bt" value="移动"/>',
 							//'<input type="button" tid="@{id}" title="删除当前用例" class="tdc_delete_bt" value="删除"/>',
 							//'<input type="button" tid="@{id}" title="登录后保存cookie信息" class="tdc_login_bt" value="登录"/>',
-							//'<input type="button" tid="@{id}" title="后台跳转测试" class="tdc_backend_test_bt" value="后台测试"/>',
+							'<input type="button" tid="@{id}" title="后台跳转测试" class="tdc_backend_test_bt" value="后台测试"/>',
 						'</div>',
 					'</div>' 
 				   ].join('');
@@ -60,10 +60,10 @@ var tdcItemDataTemplate = [
 var tdcHeaderDataTemplate = [
  							'<div class="tdc_header_name_value_type" dtlId="@{j}">',
  								'<span>参数</span>',
- 								'<input id="@{id}_eleHeaderName_@{j}" type="text" name="eleHeaderName" value="@{name}"/>',
- 								'<input id="@{id}_eleHeaderValue_@{j}" type="text" name="eleHeaderValue" value="@{value}"/>',
- 								'<input id="@{id}_eleHeaderType_@{j}" type="text" name="eleHeaderType" class="type" value="@{type}"/>',
- 								'<input id="@{id}_eleHeaderDesc_@{j}" type="text" name="eleHeaderDesc" class="desc" value="@{desc}"/>',
+ 								'<input id="@{id}_eleHeaderName_@{j}" type="text" name="eleHeaderName" value="@{name}" disabled="disabled"/>',
+ 								'<input id="@{id}_eleHeaderValue_@{j}" type="text" name="eleHeaderValue" style="width:260px" value="@{value}"/>',
+ 								'<input id="@{id}_eleHeaderType_@{j}" type="text" name="eleHeaderType" class="type" value="@{type}" disabled="disabled"/>',
+ 								'<span>@{desc}</span>',
  								//'<input class="tdc_header_name_value_delete_bt" type="button" value="删除"/>',
  							'</div>'
                            ].join('');

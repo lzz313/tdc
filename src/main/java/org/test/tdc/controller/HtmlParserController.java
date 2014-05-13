@@ -58,12 +58,14 @@ public class HtmlParserController {
 		String domain = request.getParameter("domain");
 		String method = request.getParameter("method");
 		String formData = request.getParameter("formData");
+		String headerData = request.getParameter("headerData");
 		
 		String responseStr = "";
 		try {
 			if("post".equalsIgnoreCase(method)){
 				Map<String,String> nameValuePair = (Map<String, String>) JsonUtils.parseObject(formData);
-				responseStr = HttpClientUtils.httpPost(url, nameValuePair);
+				Map<String,String> headerNameValuePair = (Map<String, String>) JsonUtils.parseObject(headerData);
+				responseStr = HttpClientUtils.httpPost(url, nameValuePair,headerNameValuePair);
 			} else if("get".equalsIgnoreCase(method)){
 				responseStr = HttpClientUtils.httpGet(url);
 			}
