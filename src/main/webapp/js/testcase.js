@@ -42,7 +42,7 @@ function displayTestData(o){
 				
 				var tc_data = JSON.parse(testCase.data);
 				if(tc_data.elem.length == 0){
-					$("#tdc_"+testCase.id+" .tdc_data").append(tdcItemDataTemplate.format({
+					$("#tdc_"+testCase.id+" .tdc_data .http_param").append(tdcItemDataTemplate.format({
 						id:testCase.id,
 						j:0,
 						name:'',
@@ -53,7 +53,7 @@ function displayTestData(o){
 				}
 				
 				if(!tc_data.header_elem || tc_data.header_elem.length == 0){
-					$("#tdc_"+testCase.id+" .tdc_data").append(tdcHeaderDataTemplate.format({
+					$("#tdc_"+testCase.id+" .tdc_data .http_header").append(tdcHeaderDataTemplate.format({
 						id:testCase.id,
 						j:0,
 						name:'',
@@ -106,7 +106,8 @@ function addTdc(testCase){
 		var tc_data = JSON.parse(testCase.data);
 		var elems = tc_data.elem,
 			header_elems = tc_data.header_elem?tc_data.header_elem:[],
-		    tdcItemList = [];
+		    tdcItemList = [],
+		    tdcHeaderItemList = [];
 		$.each(elems,function(j){
 			tdcItemList.push(tdcItemDataTemplate.format({
 								id:testCase.id,
@@ -129,7 +130,7 @@ function addTdc(testCase){
 		});
 		
 		$.each(header_elems,function(i){
-			tdcItemList.push(tdcHeaderDataTemplate.format({
+			tdcHeaderItemList.push(tdcHeaderDataTemplate.format({
 				id:testCase.id,
 				j:i,
 				name:header_elems[i]?header_elems[i].k:'',
@@ -139,7 +140,8 @@ function addTdc(testCase){
 			}));
 		});
 		
-		$("#tdc_"+testCase.id+" .tdc_data").append(tdcItemList.join(''));
+		$("#tdc_"+testCase.id+" .tdc_data .http_param").append(tdcItemList.join(''));
+		$("#tdc_"+testCase.id+" .tdc_data .http_header").append(tdcHeaderItemList.join(''));
 	} catch (e){console.log(e.message);}
 	addTdcEvent();
 }
@@ -148,7 +150,7 @@ function addTdc(testCase){
  * 添加TestData的事件
  */
 function addTdcEvent(){
-	$(".tdc_title").die().on("click",function(){
+	$(".tdc_title").die().live("click",function(){
 		var o = $(this).next();
 		if(o.is(":hidden")){
 			o.show();
@@ -172,6 +174,29 @@ function addTdcEvent(){
 		var tid = obj.parent().attr("tid");
 		if(needAppend) {
 			obj.parent().append(tdcItemDataTemplate.format({
+				id:tid,
+				j:j,
+				name:'',
+				value:'',
+				type:'',
+				desc:''
+			}));
+			addTdcDelEvent();
+		}
+	});
+	
+	$(".tdc_header_name_value_type:last-of-type input[type=text]").die().live("focus",function(){
+		var obj = $(this).parent();
+		var inputs = obj.children("input[type=text]");
+		var needAppend = true;
+		if( !$(inputs[0]).val() || !$(inputs[1]).val() ){
+			needAppend = false;
+		}
+				
+		var j = obj.parent().children(".tdc_header_name_value_type").length;
+		var tid = obj.parent().attr("tid");
+		if(needAppend) {
+			obj.parent().append(tdcHeaderDataTemplate.format({
 				id:tid,
 				j:j,
 				name:'',
@@ -481,10 +506,10 @@ function encapElemData(tid){
 	
 	$.each(elemHeaderObjs,function(i){
 		var elemHeaderObj = $(elemHeaderObjs[i]);
-		var name = elemObj.children("input[name='eleHeaderName']");
-		var value = elemObj.children("input[name='eleHeaderValue']");
-		var type = elemObj.children("input[name='eleHeaderType']");
-		var desc = elemObj.children("input[name='eleHeaderDesc']");
+		var name = elemHeaderObj.children("input[name='eleHeaderName']");
+		var value = elemHeaderObj.children("input[name='eleHeaderValue']");
+		var type = elemHeaderObj.children("input[name='eleHeaderType']");
+		var desc = elemHeaderObj.children("input[name='eleHeaderDesc']");
 		if(name.val()){//&&!!value.val()&&!!type.val()
 			var elemObj = {};
 			elemObj.k = name.val();
@@ -886,14 +911,14 @@ function showTab(){
 		$(this).addClass('span_choice');
 		
 		if($(this).attr("name")=='http_params'){
-			$(this).parent().parent().children(".tdc_name_value_type").show();
-			$(this).parent().parent().children(".tdc_header_name_value_type").hide();
+			$(this).parent().parent().find(".tdc_name_value_type").show();
+			$(this).parent().parent().find(".tdc_header_name_value_type").hide();
 		} else if($(this).attr("name")=='http_header'){
-			$(this).parent().parent().children(".tdc_name_value_type").hide();
-			$(this).parent().parent().children(".tdc_header_name_value_type").show();
+			$(this).parent().parent().find(".tdc_name_value_type").hide();
+			$(this).parent().parent().find(".tdc_header_name_value_type").show();
 		} else if($(this).attr("name")=='http_body'){
-			$(this).parent().parent().children(".tdc_name_value_type").hide();
-			$(this).parent().parent().children(".tdc_header_name_value_type").hide();
+			$(this).parent().parent().find(".tdc_name_value_type").hide();
+			$(this).parent().parent().find(".tdc_header_name_value_type").hide();
 		}
 		
 	});
