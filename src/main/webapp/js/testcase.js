@@ -83,6 +83,26 @@ function displayTestData(o){
 }
 
 /**
+ * 自动加载参数
+ * @param tid testcase的id
+ * @param str pNm1=pVal&pNm2=pVal2&pNm3=pVal3
+ */
+function autoLoadTdc(tid,str){
+	var paramArr = str.split('&');
+	$.each(paramArr,function(i){
+		var paramValue = paramArr[i].split('=');
+		$("#tdc_"+tid+" .tdc_data .http_param").append(tdcItemDataTemplate.format({
+			id:testCase.id,
+			j:0,
+			name:paramValue[0],
+			value:paramValue[1],
+			type:'',
+			desc:''
+		}));
+	});
+}
+
+/**
  * 添加测试数据
  * @param testCase
  */
@@ -205,6 +225,7 @@ function addTdcEvent(){
 				desc:''
 			}));
 			addTdcDelEvent();
+			$(this).parent().parent().find(".tdc_header_name_value_type").show();
 		}
 	});
 	
@@ -658,8 +679,8 @@ function getInput(form,url){
 	return form;
 }
 
-//生成加密串
-function genSign(tid){
+//生成加密串,eq 字段和值链接符号, split 每个字段和值的链接符号
+function genSign(tid,eq,split){
 	var eleNm = tid+"_eleName_";
 	var eleVal = tid+"_eleValue_";
 	var eleType = tid+"_eleType_";
@@ -686,7 +707,7 @@ function genSign(tid){
 			return true;
 		}
 		
-		arrElems.push(key+''+value);
+		arrElems.push(key+eq+value);
 		
 	});
 	
@@ -696,10 +717,13 @@ function genSign(tid){
         }
         return -1;
 	});
-	console.log(arrElems.join('')+keyVal);
-	var hash = faultylabs.MD5(arrElems.join('')+keyVal);
+	console.log(arrElems.join(split)+keyVal);
+	var hash = faultylabs.MD5(arrElems.join(split)+split+keyVal);
 	$("#"+singId).val(hash);
 	console.log(hash);
+}
+function genSign(tid){
+	genSign(tid,'','')
 }
 //判断字符是否相等
 function equalsIgnoreCase(str1, str2){   
