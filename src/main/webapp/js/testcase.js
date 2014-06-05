@@ -680,7 +680,7 @@ function getInput(form,url){
 }
 
 //生成加密串,eq 字段和值链接符号, split 每个字段和值的链接符号
-function genSign(tid,eq,split){
+function genSign1(tid,eq,split){
 	var eleNm = tid+"_eleName_";
 	var eleVal = tid+"_eleValue_";
 	var eleType = tid+"_eleType_";
@@ -723,7 +723,7 @@ function genSign(tid,eq,split){
 	console.log(hash);
 }
 function genSign(tid){
-	genSign(tid,'','')
+	genSign1(tid,'','');
 }
 //判断字符是否相等
 function equalsIgnoreCase(str1, str2){   
