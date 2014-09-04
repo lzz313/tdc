@@ -6,7 +6,7 @@ package org.test.tdc.utils;
  */
 public class StringUtils {
 	public static boolean isEmpty(String str){
-		if(str == null || str == ""){
+		if(str == null || "".equals(str)){
 			return true;
 		}else{
 			return false;
