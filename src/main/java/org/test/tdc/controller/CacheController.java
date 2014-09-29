@@ -2,19 +2,17 @@ package org.test.tdc.controller;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.collections.map.SingletonMap;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.test.tdc.cache.CacheManager;
-import org.test.tdc.common.JsonResponse;
 import org.test.tdc.utils.JsonUtils;
+import org.test.tdc.utils.StringUtils;
 
 /**
  * 项目操作方法
@@ -41,7 +39,9 @@ public class CacheController {
 			,@RequestParam(value = "v") final String value
 			,@RequestParam(value="callback",required=false) String callback, HttpServletResponse response){
 		cacheManager.put(key, value);
-		writeJsonp(callback, response, new SingletonMap("msg", "添加成功"));
+		Map<String,Object> m = new HashMap<String, Object>();
+		m.put("msg", "添加成功");
+		writeJsonp(callback, response, m);
 	}
 	
 	/**
@@ -57,7 +57,9 @@ public class CacheController {
 			,@RequestParam(value="callback",required=false) String callback, HttpServletResponse response){
 		String object = (String) cacheManager.get(key);
 		
-		writeJsonp(callback, response, new SingletonMap("value", object));
+		Map<String,Object> m = new HashMap<String, Object>();
+		m.put("value", object);
+		writeJsonp(callback, response, m);
 	}
 	
 	/**
