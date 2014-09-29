@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8" />
+	<title>测试数据存储系统-md5sum</title>
+	<link rel="stylesheet" type="text/css" href="/css/tdc.css">
+	<meta name="keywords" content="md5,sha1,base64加解密,大小写转换,字符串比较" />
+	<meta name="description" content="小工具">
+	<meta name="author" content="lzz313" />
+	<meta name="copyright" content="Copyright (c) 2014 lzz313" />
+</head>
+<body>
+	<div class="container">
+		<div class="page_head"></div>
+		<div class="page_center">
+			源串：
+			<textarea cols="92" rows="5" id="signStr"></textarea><br/>
+			<input type="button" id='rm' value="去等号和&"/>
+			校验串：
+			<textarea cols="92" rows="2" id="sign"></textarea>
+			<input type="button" id='md5' value="md5加密"/>
+			<input type="button" id='md5c' value="md5加密比较"/>
+			<input type="button" id='sha1' value="sha1加密"/>
+			<input type="button" id='sha1c' value="sha1加密比较"/>
+			<input type="button" id='b64' value="base64加密"/>
+			<input type="button" id='bd64' value="base64解密"/><br/>
+			加密串：
+			<p id='result'></p> ===> 
+			<p id='result1'></p>
+			比较结果：
+			<p id='cresult'></p>
+			<input type="button" id='l' value="转小写"/>
+			<input type="button" id='u' value="转大写"/>
+			
+			<p style="margin-top:20px;border-top: 1px solid #000;"/>
+			大小写转换
+			<textarea cols="92" rows="2" id="uOrl"></textarea>
+			<input type="button" id='l2' value="转小写"/>
+			<input type="button" id='u2' value="转大写"/>
+			<p id='result2'></p>
+			
+			<p style="margin-top:20px;border-top: 1px solid #000;"/>
+			两串比较
+			<textarea cols="92" rows="2" id="s1"></textarea>
+			<textarea cols="92" rows="2" id="t1"></textarea>
+			<input type="button" id='eq' value="相等？"/>
+			<input type="button" id='eq2' value="忽略大小写相等？"/>
+			<p id="eq_result"></p>
+			
+		</div>
+	</div>
+	<script type="text/javascript" src="/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/js/md5.js"></script>
+	<script type="text/javascript" src="/js/sha1.js"></script>
+	<script type="text/javascript" src="/js/base64.js"></script>
+	<script type="text/javascript">
+		function equalsIgnoreCase(str1, str2){   
+		    if(str1.toUpperCase() == str2.toUpperCase()){   
+		        return true;   
+		    }   
+		    return false;   
+		}   
+		$(document).ready(function(){
+			$("#md5").click(function(){
+				if(!$("#signStr").val()){alert("源串不可以为空！");return;}
+				$("#result").html(faultylabs.MD5($("#signStr").val()));
+			});
+			$("#md5c").click(function(){
+				if(!$("#signStr").val()){alert("源串不可以为空！");return;}
+				
+				var fsign = faultylabs.MD5($("#signStr").val());
+				$("#result").html(fsign);
+				var r = "不相同";
+				if(equalsIgnoreCase(fsign,$("#sign").val())){
+					r = "相同"
+				}
+				$("#cresult").html(r);
+			});
+			$("#sha1").click(function(){
+				if(!$("#signStr").val()){alert("源串不可以为空！");return;}
+				$("#result").html(hex_sha1($("#signStr").val()));
+			});
+			$("#sha1c").click(function(){
+				if(!$("#signStr").val()){alert("源串不可以为空！");return;}
+				var fsign = hex_sha1($("#signStr").val());
+				$("#result").html(fsign);
+				
+				var r = "不相同";
+				if(equalsIgnoreCase(fsign,$("#sign").val())){
+					r = "相同"
+				}
+				$("#cresult").html(r);
+			});
+			$("#l").click(function(){
+				$("#result1").html($("#result").html().toLowerCase());
+			});
+			$("#u").click(function(){
+				$("#result1").html($("#result").html().toUpperCase());
+			});
+			
+			$("#l2").click(function(){
+				$("#result2").html($("#uOrl").val().toLowerCase());
+			});
+			$("#u2").click(function(){
+				$("#result2").html($("#uOrl").val().toUpperCase());
+			});
+			
+			$("#rm").click(function(){
+				var arrExt = $("#signStr").val().split("&");
+				arrExt.sort(function(a,b){
+				if (a.toString() > b.toString()) {
+				    return 1;
+				}
+				return -1;
+				});
+				$("#signStr").val(arrExt.join('').replace(/=/g,'').replace(/&/g,''));
+			});
+			$("#b64").click(function(){
+				if(!$("#signStr").val()){alert("源串不可以为空！");return;}
+				var b64 = new Base64();  
+				$("#result").html(b64.encode($("#signStr").val()));
+			});
+			
+			$("#bd64").click(function(){
+				if(!$("#signStr").val()){alert("源串不可以为空！");return;}
+				var b64 = new Base64();  
+				$("#result").html(b64.decode($("#signStr").val()));
+			});
+			
+			$("#eq").click(function(){
+				if($("#s1").val()==$("#t1").val()){
+					$("#eq_result").html("两个串相同"+$("#s1").val()+"="+$("#t1").val());
+				} else {
+					var r = c2str($("#s1").val(),$("#t1").val());
+					$("#eq_result").html(r[0]+"<br>"+r[1]);
+					console.log(c2str($("#s1").val(),$("#t1").val()));
+				}
+				
+			});
+			
+			$("#eq2").click(function(){
+				if($("#s1").val().toLowerCase()==$("#t1").val().toLowerCase()){
+					$("#eq_result").html("两个串相同"+$("#s1").val()+"="+$("#t1").val());
+				} else {
+					var r = c2strIgnore($("#s1").val(),$("#t1").val());
+					$("#eq_result").html(r[0]+"<br>"+r[1]);
+					console.log(c2strIgnore($("#s1").val(),$("#t1").val()));
+				}
+				
+			});
+			
+			function c2str(s1,s2){
+				var ss1='',ss2='';
+				var l = (s1.length > s2.length)?s1.length:s2.length;
+				for(var i=0;i<l;i++){
+					if(s1.charAt(i) == s2.charAt(i)){
+						ss1=ss1+s1.charAt(i);
+						ss2=ss2+s2.charAt(i);
+					} else {
+						ss1=ss1+'<font color="red">'+s1.charAt(i)+"</font>";
+						ss2=ss2+'<font color="red">'+s2.charAt(i)+"</font>";
+					}
+				}
+				
+				return [ss1,ss2];
+			}
+			
+			function c2strIgnore(s1,s2){
+				var ss1='',ss2='';
+				var l = (s1.length > s2.length)?s1.length:s2.length;
+				for(var i=0;i<l;i++){
+					if(s1.charAt(i).toLowerCase() == s2.charAt(i).toLowerCase()){
+						ss1=ss1+s1.charAt(i);
+						ss2=ss2+s2.charAt(i);
+					} else {
+						ss1=ss1+'<font color="red">'+s1.charAt(i)+"</font>";
+						ss2=ss2+'<font color="red">'+s2.charAt(i)+"</font>";
+					}
+				}
+				
+				return [ss1,ss2];
+			}
+			
+		});
+	</script>
+</body>

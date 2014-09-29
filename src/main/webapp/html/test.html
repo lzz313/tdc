@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>Remote Preview</title>
+    <meta name="apple-mobile-web-app-title" content="Remote">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png">
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        border: 0;
+      }
+      html, body {
+        height: 100%;
+      }
+      body {
+        position: relative;
+      }
+      iframe {
+        position: absolute;
+        height: 101.5%; /* Fixes the bottom margin on IE9 Mobile */
+        width: 100%;
+        left: 0;
+        top: 0;
+      }
+    </style>
+    <!--
+    <script src="jquery.js"></script>
+    -->
+    <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+      /*global $ */
+
+      /**
+       * Check if it's an URL.
+       * @return boolean
+       */
+      function isUrl(url) {
+        var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+        return regexp.test(url);
+      }
+
+      function isAndroidEmulator() {
+        return window.location.href.match('10.0.2.2');
+      }
+
+      function sanitizeUrl(url) {
+        var sanitizedUrl;
+        if(isAndroidEmulator() && url.match(/localhost/i)) {
+            sanitizedUrl = url.split('localhost').join('10.0.2.2');
+        } else {
+          sanitizedUrl = url;
+        }
+        return sanitizedUrl;
+      }
+
+      function remotePreview() {
+          //alert(parent.main.location.href);
+          var uploadUrl = document.getElementById("myiframe").contentWindow.location.href;
+          $.getJSON("http://localhost:83/cache/set?k=url&callback=?&v=" + uploadUrl,  function (data) {
+        	 	console.log(data.value); 
+          });
+          
+          setTimeout(remotePreview, 1100);
+
+        }
+
+      $(remotePreview);
+      //alert();
+      //(function aa(){console.log('bb');} )();
+    </script>
+  </head>
+  <body>
+    <iframe id='myiframe' src="http://imprest.woniu.com" frameborder="0" scrolling="yes" marginheight="0" marginwidth="0">
+
+    </iframe>
+  </body>
+</html>

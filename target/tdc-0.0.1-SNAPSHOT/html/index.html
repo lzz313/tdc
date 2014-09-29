@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>测试数据存储系统</title>
+	<link rel="stylesheet" type="text/css" href="/css/tdc.css">
+	<link rel="stylesheet" type="text/css" href="http://code.jquery.com/ui/1.10.3/themes/start/jquery-ui.css">
+	<meta name="description" content="Http接口测试工具">
+	<meta name="author" content="lzz313" />
+</head>
+<body>
+	<div class="container">
+		<div class="page_head"></div>
+		<div class="page_left">
+			<p class="left_title">项目列表<a class="project_add_link" onclick="showAddProject()">新加项目</a></p>
+			<div class="project_list"></div>
+		</div>
+		<div class="page_envi">
+			<p class="envi_tips">环境：</p>
+			<div class="select">
+				<span class="select_choice">请选择...</span><span class="select_edit" style="float: right;"></span>
+			</div>
+			<div class="links"> <a href="md5.html" target="_blank">加密页面</a></div>
+		</div>
+		<div class="page_center">
+			<div class="tdc_add">
+				<p>测试步骤</p>
+			</div>
+			<div class="tdc_list"></div>
+			<div id="tdc_anlysis" style="display:none;">
+				地址：<input type="text" id="url" style="width: 550px"/><input type="button" id='parseUrl' value="分析页面表单"/>
+				<div id="parseForm" action="">
+				</div>	
+			</div>
+		</div>
+	</div>
+	
+	<!--script type="text/javascript" src="/js/jquery-ui.min.js"></script-->
+	<script type="text/javascript" src="/js/jquery.min.js"></script>
+	<script type="text/javascript" src="/js/common.js"></script>
+	<script type="text/javascript" src="/js/project.module.template.wr.js"></script>
+	<script type="text/javascript" src="/js/project.module.js"></script>
+	<script type="text/javascript" src="/js/tc_template_wr.js"></script>
+	<script type="text/javascript" src="/js/testcase.js"></script>
+	<script type="text/javascript" src="/js/env.js"></script>
+	<script type="text/javascript" src="/js/jquery-ui-1.10.3.custom.js"></script>
+	<script type="text/javascript" src="/js/md5.js"></script>
+	<script type="text/javascript">
+		$(document).ready(function(){
+			//loadProject();使用自调用写法
+			$("#parseUrl").click(function(){
+				var f_id = $(this).attr("fid");
+				anlysis(f_id);
+			});
+			/**
+			
+			*/
+			var hid_obj;
+			$(".project_name").sortable({
+				connectWith:".project_name",
+				cursor: "move",
+				delay:100,
+				start:function(event,ui){
+					hid_obj = ui.item.next().next();
+				},
+				receive:function(event,ui){
+					//ui.item
+					var fid = ui.item.attr("fid");
+					var pid = ui.item.parent().attr('pid');
+					var url = "/func/update/"+fid+"/"+pid;
+					var updateFunc = $.ajax({
+						url : url,
+						type : "get",
+						async:false,
+						dataType : "json"
+					});
+					
+					updateFunc.done(function(data){
+						if(data.code == 1){
+							ui.item.after(hid_obj);
+						}
+					});
+				}
+			});
+			
+			$(".container").append(transferForm);
+			loadProjectSelect();//使用自调用写法
+			
+			$( "#transfer_form" ).dialog({
+				autoOpen: false,
+				title:'转移测试数据',
+				height: 160,
+				width: 320,
+				modal: true,
+				buttons: {
+					"转移":function(){
+						var tid = $("#transfer_tid").val();
+						var fid = $("#transfer_function").val();
+						var old_fid = $("#transfer_old_fid").val();
+						
+						if(fid == old_fid){
+							alert("不需要转移");
+							return;
+						}
+						
+						var tc = $.ajax({
+							url : "/testcase/update",
+							data :{id:tid,functionId:fid},
+							type : "post",
+							async:false,
+							dataType : "json"
+						});
+						
+						tc.done(function(tc_data){
+							if(tc_data.code == 1){
+								//1.提示  2.页面元素处理
+								$("#tdc_"+tid).remove();
+							}
+						});
+						
+						$(this).dialog("close");
+					},
+					"取消":function(){
+						$( this ).dialog( "close" );
+					}
+				},
+				close: function() {
+				}
+			});
+			
+			$("#transfer_product").change(function(){
+				var fid = $(this).val();
+				loadFunctionSelect(fid);
+			});
+		});
+	</script>
+</body>
