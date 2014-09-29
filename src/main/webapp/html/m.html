@@ -59,7 +59,7 @@
       function remotePreview() {
           //alert(parent.main.location.href);
           
-          $.getJSON("http://localhost:83/cache/get?k=url&callback=?",  function (data) {
+          $.getJSON("http://192.168.5.120:8080/cache/get?k=url&callback=?",  function (data) {
               // Remove whitespace from the beginning and end
               var newUrl = $.trim(data.value);
 				console.log(data.value);
@@ -89,7 +89,7 @@
     </script>
   </head>
   <body>
-    <iframe id='myiframe' src="http://imprest.woniu.com" frameborder="0" scrolling="yes" marginheight="0" marginwidth="0">
+    <iframe id='myiframe' src="http://192.168.5.120:8080" frameborder="0" scrolling="yes" marginheight="0" marginwidth="0">
 
     </iframe>
   </body>
