@@ -2,7 +2,8 @@
 <html lang="en">
   <head>
     <meta charset="utf-8">
-    <title>Remote Preview</title>
+    <title>sync-browser</title>
+
     <meta name="apple-mobile-web-app-title" content="Remote">
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <link rel="apple-touch-icon-precomposed" href="apple-touch-icon-precomposed.png">
@@ -28,11 +29,13 @@
     </style>
     <!--
     <script src="jquery.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
     -->
+    
     <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
+    
     <script>
       /*global $ */
-	  var cache_url = "http://127.0.0.1:83";	
       
       /**
        * Check if it's an URL.
@@ -60,7 +63,7 @@
       function remotePreview() {
           //alert(parent.main.location.href);
           
-          $.getJSON(cache_url+"/cache/get?k=url&callback=?",  function (data) {
+          $.getJSON("/cache/get?k=url",  function (data) {
               // Remove whitespace from the beginning and end
               var newUrl = $.trim(data.value);
 				console.log(data.value);
@@ -85,8 +88,7 @@
         }
 
       $(remotePreview);
-      //alert();
-      //(function aa(){console.log('bb');} )();
+
     </script>
   </head>
   <body>
