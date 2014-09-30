@@ -3,11 +3,11 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.test</groupId>
-	<artifactId>tdc</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<artifactId>sync-browser</artifactId>
+	<version>1.0</version>
 	<packaging>war</packaging>
 
-	<name>tdc</name>
+	<name>sync-browser</name>
 	<url>http://maven.apache.org</url>
 
 	<properties>
