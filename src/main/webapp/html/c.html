@@ -82,7 +82,7 @@
       function remotePreview() {
           //alert(parent.main.location.href);
           var uploadUrl = document.getElementById("myiframe").contentWindow.location.href;
-          $.getJSON(cache_url+"/cache/set?k=url&callback=?&v=" + uploadUrl,  function (data) {
+          $.getJSON(cache_url+"/cache/set?k=url&v=" + uploadUrl+"&callback=?",  function (data) {
         	 	console.log(data.value); 
           });
           
