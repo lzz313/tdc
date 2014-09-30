@@ -32,7 +32,7 @@
     <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
     <script>
       /*global $ */
-      var cache_url = "http://192.168.5.120:8080";
+      var cache_url = "http://127.0.0.1:83";
 
       /**
        * Check if it's an URL.
@@ -56,7 +56,29 @@
         }
         return sanitizedUrl;
       }
+	
+      (function initUrl(){
+    	  $.getJSON(cache_url+"/cache/get?k=url&callback=?",  function (data) {
+              // Remove whitespace from the beginning and end
+              var newUrl = $.trim(data.value);
+				console.log(data.value);
+              // Check URL against regexp and stop if false
+              if (!isUrl(newUrl)) {
+                setTimeout(remotePreview, 1100);
+                console.log('error: there seems to be some errors in the URL');
+                return;
+              }
 
+              newUrl = sanitizeUrl(newUrl);
+
+              // If there is a new valid URL
+              if ($('iframe').attr('src') !== newUrl) {
+                $('iframe').attr('src', newUrl);
+              }
+
+          });
+      })();
+      
       function remotePreview() {
           //alert(parent.main.location.href);
           var uploadUrl = document.getElementById("myiframe").contentWindow.location.href;
