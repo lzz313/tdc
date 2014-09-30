@@ -32,7 +32,8 @@
     <script src="http://libs.baidu.com/jquery/1.9.1/jquery.min.js"></script>
     <script>
       /*global $ */
-
+	  var cache_url = "http://192.168.5.120:8080";	
+      
       /**
        * Check if it's an URL.
        * @return boolean
@@ -59,7 +60,7 @@
       function remotePreview() {
           //alert(parent.main.location.href);
           
-          $.getJSON("http://192.168.5.120:8080/cache/get?k=url&callback=?",  function (data) {
+          $.getJSON(cache_url+"/cache/get?k=url&callback=?",  function (data) {
               // Remove whitespace from the beginning and end
               var newUrl = $.trim(data.value);
 				console.log(data.value);
@@ -89,7 +90,7 @@
     </script>
   </head>
   <body>
-    <iframe id='myiframe' src="http://192.168.5.120:8080" frameborder="0" scrolling="yes" marginheight="0" marginwidth="0">
+    <iframe id='myiframe' src="" frameborder="0" scrolling="yes" marginheight="0" marginwidth="0">
 
     </iframe>
   </body>

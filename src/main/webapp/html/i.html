@@ -2,15 +2,33 @@
 <html>
 <head>
 	<meta charset="utf-8" />
-	<title>测试数据存储系统</title>
+	<title>浏览器同步控制工具</title>
 	<link rel="stylesheet" type="text/css" href="/css/tdc.css">
 </head>
 <body>
 	<div class="container">
 		<ul>
 			<li>
-				<a href="/html/md5.html">md5/sha1加密、base64加解密、大小写转换、字符串比较</a>
+				浏览器同步控制工具分两部分，控制页面，被控制页面<br>
+				控制页面<a href="/html/c.html">c.html</a> 需要下载放到测试项目相同域名下，控制的浏览器打开该页面;<br>
+				被控制页面 <a href="/html/m.html">m.html</a> 需要下载放到测试项目相同域名下，被控制的浏览器打开该页面。<br>
+				<br>
+				修改c.html和m.html中的cache_url为对应的服务的服务器地址，例如:http://127.0.0.1:8080<br><br>
+			</li>
+			<li>
+				输入开始测试地址  <input type="text" value="" id="start_url" style="width:350px"/> <input id="start_bt" type="button" value="确定">
 			</li>
 		</ul>
 	</div>
+	
+	<script type="text/javascript" src="/js/jquery.min.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			$("#start_bt").click(function(){
+				$.getJSON("/cache/set?k=url&callback=?&v=" + $("#start_url").val(),  function (data) {
+	        	 	alert(data.msg);
+	          });
+			});
+		});
+	</script>
 </body>

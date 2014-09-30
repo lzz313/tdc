@@ -40,7 +40,7 @@ public class CacheController {
 			,@RequestParam(value="callback",required=false) String callback, HttpServletResponse response){
 		cacheManager.put(key, value);
 		Map<String,Object> m = new HashMap<String, Object>();
-		m.put("msg", "添加成功");
+		m.put("msg", "success");
 		writeJsonp(callback, response, m);
 	}
 	
