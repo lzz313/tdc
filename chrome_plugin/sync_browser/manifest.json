@@ -1,0 +1,17 @@
+﻿{
+	"name": "终端浏览器同步工具",
+	"manifest_version": 2,
+	"version": "1.0",
+	"description": "终端浏览器同步工具",
+	"browser_action": {
+		"default_icon": "icon.gif"
+	},
+	"permissions": [
+	"http://*/*",
+    "tabs"
+	],
+	"background": {
+	  "matches": ["http://*/*"],
+      "scripts": [ "jquery.min.js","config.js", "sync.js" ]
+    }
+}
