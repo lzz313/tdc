@@ -57,3 +57,13 @@ chrome.browserAction.onClicked.addListener(function (tab) {
 	}
     
 });
+
+var buffer;
+chrome.webRequest.onBeforeRequest.addListener(function(d) {
+    if (d.requestBody && d.requestBody.raw) {
+        buffer = d.requestBody.raw[0].bytes;
+        console.log(buffer);
+    }   
+}, {
+    urls: ['*://imprest.woniu.com/*']
+}, ['requestBody']);
