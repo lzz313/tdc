@@ -7,8 +7,11 @@
 		"default_icon": "start.jpg"
 	},
 	"permissions": [
-	"http://*/*",
-    "tabs"
+		"alarms",
+		"webRequestBlocking",
+		"webRequest",
+		"http://*/*",
+    	"tabs"
 	],
 	"icons": {
       "32": "start.jpg"

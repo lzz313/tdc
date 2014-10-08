@@ -47,6 +47,8 @@ chrome.browserAction.onClicked.addListener(function (tab) {
 		chrome.browserAction.setIcon({path:"stop" + ".jpg"});
 		chrome.browserAction.setTitle({title:'结束浏览器同步'});
 //		chrome.browserAction.setBadgeText({text:'stop'});
+		
+		
 	} else {
 		//alert('结束同步');
 		clearTimeout(t);
@@ -58,12 +60,16 @@ chrome.browserAction.onClicked.addListener(function (tab) {
     
 });
 
-var buffer;
-chrome.webRequest.onBeforeRequest.addListener(function(d) {
-    if (d.requestBody && d.requestBody.raw) {
-        buffer = d.requestBody.raw[0].bytes;
-        console.log(buffer);
-    }   
-}, {
-    urls: ['*://imprest.woniu.com/*']
-}, ['requestBody']);
+//chrome.webRequest.onBeforeRequest.addListener(
+//	function (details) {
+//		//alert(details.method);
+//		//alert(details['requestBody']);
+//		if(details.method == 'POST' && details.type == 'main_frame'){
+//			alert(details['requestBody']);
+//			console.log(details['requestBody']);
+//		}
+//	}
+//, {urls: ["http://*/*"]}
+//, ["blocking","requestBody"]);
+
+
