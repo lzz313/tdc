@@ -61,29 +61,58 @@
       }
 
       function remotePreview() {
-          //alert(parent.main.location.href);
-          
+    	  $.ajax({
+    		  url: "/cache/get?k=url",
+    		  cache: false,
+    		  dataType: "json",
+    		  success: function(data) {
+    			//alert(data.value);
+                  var newUrl = $.trim(data.value);
+    				//console.log(data.value);
+                  // Check URL against regexp and stop if false
+                  if (!isUrl(newUrl)) {
+                    setTimeout(remotePreview, 1100);
+                    //console.log('error: there seems to be some errors in the URL');
+                    return;
+                  }
+
+                  newUrl = sanitizeUrl(newUrl);
+
+                  // If there is a new valid URL
+                  
+                  if ($('iframe').attr('src') !== newUrl) {
+                    $('iframe').attr('src', newUrl);
+                  }
+
+                  // Watch for changes
+                  setTimeout(remotePreview, 1100);
+    		  }
+    	  });
+    	  
+    	  /**
           $.getJSON("/cache/get?k=url",  function (data) {
               // Remove whitespace from the beginning and end
+              //alert(data.value);
               var newUrl = $.trim(data.value);
-				console.log(data.value);
+				//console.log(data.value);
               // Check URL against regexp and stop if false
               if (!isUrl(newUrl)) {
                 setTimeout(remotePreview, 1100);
-                console.log('error: there seems to be some errors in the URL');
+                //console.log('error: there seems to be some errors in the URL');
                 return;
               }
 
               newUrl = sanitizeUrl(newUrl);
 
               // If there is a new valid URL
+              
               if ($('iframe').attr('src') !== newUrl) {
                 $('iframe').attr('src', newUrl);
               }
 
               // Watch for changes
               setTimeout(remotePreview, 1100);
-            });
+            });**/
 
         }
 
