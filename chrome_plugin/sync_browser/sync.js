@@ -34,16 +34,26 @@ function remotePreview() {
 }
 
 var t;
+chrome.browserAction.setIcon({path:"start" + ".jpg"});
+chrome.browserAction.setTitle({title:'开始浏览器同步'});
+//chrome.browserAction.setBadgeText({text:'start'});
 //document.getElementById("start_btn").addEventListener("click",showUrl);
 chrome.browserAction.onClicked.addListener(function (tab) {
 	if(flag  === 'undefined' || flag == 'stop'){
-		alert('开始同步');
+		//alert('开始同步');
 		flag = 'start';
 		showUrl();
+		
+		chrome.browserAction.setIcon({path:"stop" + ".jpg"});
+		chrome.browserAction.setTitle({title:'结束浏览器同步'});
+//		chrome.browserAction.setBadgeText({text:'stop'});
 	} else {
-		alert('结束同步');
+		//alert('结束同步');
 		clearTimeout(t);
 		flag = 'stop';
+		chrome.browserAction.setIcon({path:"start" + ".jpg"});
+		chrome.browserAction.setTitle({title:'开启浏览器同步'});
+//		chrome.browserAction.setBadgeText({text:'start'});
 	}
     
 });
