@@ -34,11 +34,11 @@
 
 ----------
 
-1.需要按照chrome插件，插件目录为chrome_plugin，可以直接安装sync_browser.crx
-2.启动web服务
-3.插件点击"选项" 修改缓存服务地址，默认为http://127.0.0.1:8080，根据实际情况修改
-4.需要同步的浏览器打开http://localhost:8080/html/m.html地址
-5.在安装了sync_browser插件的chrome浏览器操作即可同步
+1. 需要按照chrome插件，插件目录为chrome_plugin，可以直接安装sync_browser.crx
+2. 启动web服务
+3. 插件点击"选项" 修改缓存服务地址，默认为http://127.0.0.1:8080，根据实际情况修改
+4. 需要同步的浏览器打开http://localhost:8080/html/m.html地址
+5. 在安装了sync_browser插件的chrome浏览器操作即可同步
 
 ###联系方式
 
