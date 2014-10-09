@@ -19,5 +19,6 @@
 	"background": {
 	  "matches": ["http://*/*"],
       "scripts": [ "jquery.min.js","config.js", "sync.js" ]
-    }
+    },
+    "options_page" : "popup.html"
 }
