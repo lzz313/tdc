@@ -1,7 +1,6 @@
 浏览器同步测试工具
 ===
 
-
 ###功能
 
 ----------
@@ -37,9 +36,9 @@
 
 1.需要按照chrome插件，插件目录为chrome_plugin，可以直接安装sync_browser.crx
 2.启动web服务
-3.修改config.js文件中的cache_url，默认为http://localhost:8080
+3.插件点击"选项" 修改缓存服务地址，默认为http://127.0.0.1:8080，根据实际情况修改
 4.需要同步的浏览器打开http://localhost:8080/html/m.html地址
-5.在安装了chrome插件的chrome浏览器操作
+5.在安装了sync_browser插件的chrome浏览器操作即可同步
 
 ###联系方式
 
